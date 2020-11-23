@@ -16,3 +16,10 @@ To run the iOS project, launch the `SampleApp.xcworkspace` and run the project o
 ```
 npx react-native run-ios
 ```
+
+## Android
+
+Run the below command from the project's root directory to run the app on an emulator or real device.
+```
+npx react-native run-android
+```
