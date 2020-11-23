@@ -131,11 +131,14 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.sampleapp"
+        applicationId "com.blueshift.reads"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        buildConfigField 'String', 'API_KEY', '"5dfe3c9aee8b375bcc616079b08156d9"'
+
     }
     splits {
         abi {
@@ -187,6 +190,8 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation "com.blueshift:android-sdk:3.1.7"
+    implementation 'com.google.firebase:firebase-messaging:21.0.0'
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
@@ -215,4 +220,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+apply plugin: 'com.google.gms.google-services'; applyNativeModulesAppBuildGradle(project)

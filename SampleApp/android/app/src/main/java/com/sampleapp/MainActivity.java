@@ -2,6 +2,7 @@ package com.sampleapp;
 
 import android.os.Bundle;
 
+import com.blueshift.Blueshift;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
@@ -37,5 +38,17 @@ public class MainActivity extends ReactActivity {
                 return new RNGestureHandlerEnabledRootView(MainActivity.this);
             }
         };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Blueshift.getInstance(this).registerForInAppMessages(this);
+    }
+
+    @Override
+    protected void onStop() {
+        Blueshift.getInstance(this).unregisterForInAppMessages(this);
+        super.onStop();
     }
 }
