@@ -29,3 +29,4 @@ npx react-native run-android
 ![Screenshot_1](https://user-images.githubusercontent.com/974499/99996596-f8cce080-2de1-11eb-9f6a-6fdb8c9af611.png)
 ![Screenshot_2](https://user-images.githubusercontent.com/974499/99996610-fc606780-2de1-11eb-90ed-c19463cf5239.png)
 ![Screenshot_3](https://user-images.githubusercontent.com/974499/99997673-82c97900-2de3-11eb-80ee-26caf5e6f43b.png)
+![Image from iOS](https://user-images.githubusercontent.com/974499/99998674-0e8fd500-2de5-11eb-95fc-6b1a604f8684.png)
