@@ -10,13 +10,13 @@
 # Ignore all logfiles and tempfiles.
 **xcshareddata**
 **xcuserdata**
-
+**node_modules**
 
 # Index files
 
 # Ignore IDE files
 
 */coverage
-*/Pods
+**/Pods
 
 .DS_Store

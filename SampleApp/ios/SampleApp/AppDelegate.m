@@ -59,11 +59,22 @@ static void InitializeFlipper(UIApplication *application) {
   [super application:application didFinishLaunchingWithOptions:launchOptions];
 
   BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
-  config.apiKey = @"5dfe3c9aee8b375bcc616079b08156d9";
-  config.debug = YES;
+  config.apiKey = @"YOUR API KEY";
+  #ifdef DEBUG
+    config.debug = YES;
+  #endif
   config.enableInAppNotification = YES;
+  
+  // Enable manual display of in-app notifications
+  config.inAppManualTriggerEnabled = YES;
+  
   [BlueShift initWithConfiguration:config];
+  
+  // Configure SDK with auto integration
   [BlueShift autoIntegration];
+  
+  // Register for receiving inApp messages on all screens
+  [[BlueShift sharedInstance] registerForInAppMessage:@"AllScreens"];
   return YES;
 }
 

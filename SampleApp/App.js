@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button} from 'react-native';
 export default class App extends Component{
   setEmailId = () => {
-    NativeModules.BlueshiftBridge.setUserEmailId(this.state.emailId)
+    NativeModules.BlueshiftBridge.setUserInfoEmailId(this.state.emailId)
   };
   setCustomerId = () => {
-    NativeModules.BlueshiftBridge.setUserCustomerId(this.state.customerId)
+    NativeModules.BlueshiftBridge.setUserInfoCustomerId(this.state.customerId)
   };
   identify = () => {
     NativeModules.BlueshiftBridge.identifyWithDetails({})
@@ -24,12 +24,6 @@ export default class App extends Component{
   };
   setEnablePush = () => {
     NativeModules.BlueshiftBridge.setEnablePush(this.state.switchValue)
-  };
-  registerForInApp = () => {
-    NativeModules.BlueshiftBridge.registerForInApp("ReactNativeTestScreen")
-  };
-  unregisterForInApp = () => {
-    NativeModules.BlueshiftBridge.unregisterForInApp()
   };
   fetchInAppNotification = () => {
     NativeModules.BlueshiftBridge.fetchInAppNotification()
@@ -95,20 +89,6 @@ render() {
      <Button
         onPress={this.trackScreenView}
        title="Track screen view"
-       color="#FF6347" />
-       </View>
-
-    <View style={styles.welcome}>
-     <Button
-        onPress={this.registerForInApp}
-       title="Register for in-app"
-       color="#FF6347" />
-       </View>
-
-    <View style={styles.welcome}>
-     <Button
-        onPress={this.unregisterForInApp}
-       title="Unregister for in-app"
        color="#FF6347" />
        </View>
 

@@ -18,10 +18,6 @@ class BlueshiftBridge: NSObject {
     BlueShift.sharedInstance()?.identifyUser(withDetails: details, canBatchThisEvent: false)
   }
   
-  @objc func identifyWithEmail(_ email: String, details: Dictionary<AnyHashable, Any>) {
-    BlueShift.sharedInstance()?.identifyUser(withEmail: email, andDetails: details, canBatchThisEvent: false)
-  }
-  
   @objc func trackCustomEvent(_ eventName: String, details: Dictionary<AnyHashable, Any> ,canBatchThisEvent: Bool) {
       BlueShift.sharedInstance()?.trackEvent(forEventName: eventName, andParameters: details, canBatchThisEvent: canBatchThisEvent)
   }
@@ -33,12 +29,12 @@ class BlueshiftBridge: NSObject {
   }
 
   // MARK: Set user info
-  @objc func setUserEmailId(_ emailId: String) {
+  @objc func setUserInfoEmailId(_ emailId: String) {
     BlueShiftUserInfo.sharedInstance()?.email = emailId
     BlueShiftUserInfo.sharedInstance()?.save()
   }
   
-  @objc func setUserCustomerId(_ customerId: String) {
+  @objc func setUserInfoCustomerId(_ customerId: String) {
     BlueShiftUserInfo.sharedInstance()?.retailerCustomerID = customerId
     BlueShiftUserInfo.sharedInstance()?.save()
   }
@@ -62,17 +58,7 @@ class BlueshiftBridge: NSObject {
     BlueShiftDeviceData.current()?.currentLocation = location
   }
 
-  // MARK: Inapp notifications
-  @objc func registerForInApp(_ displayPage: String) {
-    DispatchQueue.main.async {
-      BlueShift.sharedInstance()?.registerFor(inAppMessage: displayPage)
-    }
-  }
-  
-  @objc func unregisterForInApp() {
-    BlueShift.sharedInstance()?.unregisterForInAppMessage()
-  }
-
+  //MARK: In-app notificatins
   @objc func fetchInAppNotification() {
     BlueShift.sharedInstance()?.fetchInAppNotification(fromAPI: (() -> Void)? {}, failure: ((Error?) -> Void)?{_ in
     })
