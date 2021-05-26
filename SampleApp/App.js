@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button, Alert, Platform, Linking} from 'react-native';
+import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button, Alert, Platform, Linking, NativeEventEmitter} from 'react-native';
+const emitter = Platform.OS === 'ios' ? new NativeEventEmitter(NativeModules.BlueshiftReactEventsManager) : DeviceEventEmitter
+
 export default class App extends Component{
 
   componentDidMount() { // B
@@ -8,6 +10,7 @@ export default class App extends Component{
       this.navigate(url);
     });
   } else {
+      emitter.addListener("PushNotificationClickedNotification", this.handlePush);
       Linking.addEventListener('url', this.handleOpenURL);
     }
   }
@@ -30,6 +33,23 @@ export default class App extends Component{
       ]
     );
   }
+
+  handlePush = (event) => { 
+    console.log("PushNotificationClickedNotification event received");
+    console.log(event);
+    Alert.alert(
+      "Push notification click event received",
+      "",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+  };
 
 
   setEmailId = () => {
@@ -54,7 +74,10 @@ export default class App extends Component{
     NativeModules.BlueshiftBridge.registerForRemoteNotification()
   };
   setEnablePush = () => {
-    NativeModules.BlueshiftBridge.setEnablePush(this.state.switchValue)
+    NativeModules.BlueshiftBridge.setEnablePush(this.state.enablePushSwitchValue)
+  };
+  setEnableInApp = () => {
+    NativeModules.BlueshiftBridge.setEnableInApp(this.state.enableInAppSwitchValue)
   };
   fetchInAppNotification = () => {
     NativeModules.BlueshiftBridge.fetchInAppNotification()
@@ -62,10 +85,17 @@ export default class App extends Component{
   displayInAppNotification = () => {
     NativeModules.BlueshiftBridge.displayInAppNotification()
   };
+  registerForInApp = () => {
+    NativeModules.BlueshiftBridge.registerForInAppNotification("index")
+  };
+  unRegisterForInApp = () => {
+    NativeModules.BlueshiftBridge.unregisterForInAppMessage()
+  };
   state = {  
-        switchValue: false,
+        enablePushSwitchValue: false,
+        enableInAppSwitchValue: false,
         emailId: "",
-        customEvent: "bsft_send_me_push",
+        customEvent: "bsft_send_me_image_push",
         customerId: ""  
     };  
 
@@ -132,11 +162,21 @@ render() {
 
     <View style={styles.welcome}>
     <Switch  
-    value={this.state.switchValue}  
-    onValueChange ={(switchValue)=>this.setState({switchValue})}/>  
+    value={this.state.enablePushSwitchValue}  
+    onValueChange ={(enablePushSwitchValue)=>this.setState({enablePushSwitchValue})}/>  
      <Button
         onPress={this.setEnablePush}
        title="Set enablePush"
+       color="#FF6347" />
+     </View>
+
+     <View style={styles.welcome}>
+    <Switch  
+    value={this.state.enableInAppSwitchValue}  
+    onValueChange ={(enableInAppSwitchValue)=>this.setState({enableInAppSwitchValue})}/>  
+     <Button
+        onPress={this.setEnableInApp}
+       title="Set enableInApp"
        color="#FF6347" />
      </View>
 
@@ -162,9 +202,22 @@ render() {
        color="#FF6347" />
        </View>
 
+ <View style={styles.welcome}>
+     <Button
+        onPress={this.registerForInApp}
+       title="Register For in-app notifications"
+       color="#FF6347" />
+       </View>
+
+ <View style={styles.welcome}>
+     <Button
+        onPress={this.unRegisterForInApp}
+       title="Un-register for in-app notifications"
+       color="#FF6347" />
+       </View>
+
       </ScrollView>
     </SafeAreaView>
-
  );
 }
 }

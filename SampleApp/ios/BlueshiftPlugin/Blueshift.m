@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "React/RCTBridgeModule.h"
+
 @interface RCT_EXTERN_MODULE(BlueshiftBridge, NSObject)
 RCT_EXTERN_METHOD(identifyWithDetails:(NSDictionary *)details)
 RCT_EXTERN_METHOD(trackCustomEvent:(NSString *)eventName details:(NSDictionary *) details canBatchThisEvent:(BOOL)canBatchThisEvent)

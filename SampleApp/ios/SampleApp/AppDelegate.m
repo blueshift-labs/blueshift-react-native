@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import "BlueshiftReactEventsManager.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -63,10 +64,13 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (void)initialiseBlueshift {
   BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
-  config.apiKey = @"YOUR API KEY";
+  config.apiKey = @"5dfe3c9aee8b375bcc616079b08156d9";
   config.debug = YES;
   config.enableInAppNotification = YES;
+  config.enableInAppNotification = YES;
+  config.userNotificationDelegate = self;
   config.blueshiftUniversalLinksDelegate = self;
+  config.appGroupID = @"group.blueshift.reads";
   [BlueShift initWithConfiguration:config];
 }
 
@@ -86,15 +90,22 @@ static void InitializeFlipper(UIApplication *application) {
 
 #pragma mark - UserNotificationCenter delegate methods
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
+  NSDictionary* userInfo = notification.request.content.userInfo;
+  if([[BlueShift sharedInstance]isBlueshiftPushNotification:userInfo]) {
     [[BlueShift sharedInstance].userNotificationDelegate handleUserNotificationCenter:center willPresentNotification:notification withCompletionHandler:^(UNNotificationPresentationOptions options) {
-        completionHandler(options);
+      completionHandler(options);
     }];
+  }
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+  NSDictionary* userInfo = response.notification.request.content.userInfo;
+  if([[BlueShift sharedInstance]isBlueshiftPushNotification:userInfo]) {
     [[BlueShift sharedInstance].userNotificationDelegate handleUserNotification:center didReceiveNotificationResponse:response withCompletionHandler:^{
-        completionHandler();
+      completionHandler();
     }];
+  }
+  [self fireNotificationClickEventToReactJS:response.notification.request.content.userInfo];
 }
 
 #pragma mark - open url and user activity methods
@@ -121,10 +132,10 @@ static void InitializeFlipper(UIApplication *application) {
 }
 
 -(void)didFailLinkProcessingWithError:(NSError *)error url:(NSURL *)url {
-//  NSLog(error);
+  [RCTLinkingManager application:UIApplication.sharedApplication openURL:url options:@{}];
 }
 
--(void)applicationDidEnterBackground:(UIApplication *)application {
-  NSLog(@"foreground");
+- (void)fireNotificationClickEventToReactJS:(NSDictionary*)userInfo {
+  [[NSNotificationCenter defaultCenter] postNotificationName:PushNotificationClickedNotification object:nil userInfo:userInfo];
 }
 @end

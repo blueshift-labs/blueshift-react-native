@@ -3,4 +3,6 @@
 //
 
 #import "React/RCTBridgeModule.h"
+#import <React/RCTEventEmitter.h>
+
 #import <BlueShift-iOS-SDK/BlueShift.h>
