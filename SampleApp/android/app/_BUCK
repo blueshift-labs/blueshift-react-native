@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.blueshift.reads",
+    package = "com.sampleapp",
 )
 
 android_resource(
     name = "res",
-    package = "com.blueshift.reads",
+    package = "com.sampleapp",
     res = "src/main/res",
 )
 

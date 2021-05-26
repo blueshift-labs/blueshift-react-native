@@ -3,13 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <BlueShift-iOS-SDK/BlueShift.h>
-
-#import <UMCore/UMModuleRegistry.h>
-#import <UMReactNativeAdapter/UMNativeModulesProxy.h>
-#import <UMReactNativeAdapter/UMModuleRegistryAdapter.h>
-#import <EXSplashScreen/EXSplashScreenService.h>
-#import <UMCore/UMModuleRegistryProvider.h>
+#import <React/RCTLinkingManager.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -30,13 +24,6 @@ static void InitializeFlipper(UIApplication *application) {
 }
 #endif
 
-@interface AppDelegate () <RCTBridgeDelegate>
-
-@property (nonatomic, strong) UMModuleRegistryAdapter *moduleRegistryAdapter;
-@property (nonatomic, strong) NSDictionary *launchOptions;
-
-@end
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -44,73 +31,100 @@ static void InitializeFlipper(UIApplication *application) {
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
-  
-  self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
-  self.launchOptions = launchOptions;
+
+  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
+                                                   moduleName:@"SampleApp"
+                                            initialProperties:nil];
+
+  if (@available(iOS 13.0, *)) {
+      rootView.backgroundColor = [UIColor systemBackgroundColor];
+  } else {
+      rootView.backgroundColor = [UIColor whiteColor];
+  }
+
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  #ifdef DEBUG
-    [self initializeReactNativeApp];
-  #else
-    EXUpdatesAppController *controller = [EXUpdatesAppController sharedInstance];
-    controller.delegate = self;
-    [controller startAndShowLaunchScreen:self.window];
-  #endif
-
-  [super application:application didFinishLaunchingWithOptions:launchOptions];
-
-  BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
-  config.apiKey = @"YOUR API KEY";
-  #ifdef DEBUG
-    config.debug = YES;
-  #endif
-  config.enableInAppNotification = YES;
-  
-  // Enable manual display of in-app notifications
-  config.inAppManualTriggerEnabled = YES;
-  
-  [BlueShift initWithConfiguration:config];
-  
-  // Configure SDK with auto integration
-  [BlueShift autoIntegration];
-  
-  // Register for receiving inApp messages on all screens
-  [[BlueShift sharedInstance] registerForInAppMessage:@"AllScreens"];
-  return YES;
-}
-
-- (RCTBridge *)initializeReactNativeApp
-{
-  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:self.launchOptions];
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"main" initialProperties:nil];
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
-
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [self initialiseBlueshift];
+  return YES;
+}
 
-  return bridge;
- }
-
-- (NSArray<id<RCTBridgeModule>> *)extraModulesForBridge:(RCTBridge *)bridge
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
-  NSArray<id<RCTBridgeModule>> *extraModules = [_moduleRegistryAdapter extraModulesForBridge:bridge];
-  // If you'd like to export some custom RCTBridgeModules that are not Expo modules, add them here!
-  return extraModules;
-}
-
-- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge {
- #ifdef DEBUG
+#if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
- #else
-  return [[EXUpdatesAppController sharedInstance] launchAssetUrl];
- #endif
+#else
+  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
 }
 
-- (void)appController:(EXUpdatesAppController *)appController didStartWithSuccess:(BOOL)success {
-  appController.bridge = [self initializeReactNativeApp];
-  EXSplashScreenService *splashScreenService = (EXSplashScreenService *)[UMModuleRegistryProvider getSingletonModuleForClass:[EXSplashScreenService class]];
-  [splashScreenService showSplashScreenFor:self.window.rootViewController];
+- (void)initialiseBlueshift {
+  BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
+  config.apiKey = @"YOUR API KEY";
+  config.debug = YES;
+  config.enableInAppNotification = YES;
+  config.blueshiftUniversalLinksDelegate = self;
+  [BlueShift initWithConfiguration:config];
 }
 
+#pragma mark - remote notification delegate methods
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
+    [[BlueShift sharedInstance].appDelegate registerForRemoteNotification:deviceToken];
+    NSLog(@"device token %@", deviceToken);
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
+    [[BlueShift sharedInstance].appDelegate failedToRegisterForRemoteNotificationWithError:error];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler {
+    [[BlueShift sharedInstance].appDelegate handleRemoteNotification:userInfo forApplication:application fetchCompletionHandler:handler];
+}
+
+#pragma mark - UserNotificationCenter delegate methods
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
+    [[BlueShift sharedInstance].userNotificationDelegate handleUserNotificationCenter:center willPresentNotification:notification withCompletionHandler:^(UNNotificationPresentationOptions options) {
+        completionHandler(options);
+    }];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+    [[BlueShift sharedInstance].userNotificationDelegate handleUserNotification:center didReceiveNotificationResponse:response withCompletionHandler:^{
+        completionHandler();
+    }];
+}
+
+#pragma mark - open url and user activity methods
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  BOOL val = [RCTLinkingManager application:app openURL:url options:options];
+  return val;
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+  if (userActivity.webpageURL != nil && [[BlueShift sharedInstance] isBlueshiftUniversalLinkURL:userActivity.webpageURL]) {
+    [[BlueShift sharedInstance].appDelegate handleBlueshiftUniversalLinksForActivity: userActivity];
+  } else {
+    [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+  }
+  return YES;
+}
+
+-(void)didCompleteLinkProcessing:(NSURL *)url {
+  [RCTLinkingManager application:UIApplication.sharedApplication openURL:url options:@{}];
+}
+
+-(void)didStartLinkProcessing {
+//  NSLog(@"didStartLinkProcessing");
+}
+
+-(void)didFailLinkProcessingWithError:(NSError *)error url:(NSURL *)url {
+//  NSLog(error);
+}
+
+-(void)applicationDidEnterBackground:(UIApplication *)application {
+  NSLog(@"foreground");
+}
 @end

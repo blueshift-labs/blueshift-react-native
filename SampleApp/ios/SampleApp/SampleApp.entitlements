@@ -4,9 +4,9 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
-	<key>com.apple.security.application-groups</key>
+	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>group.blueshift.reads</string>
+		<string>applinks:universallinks.blueshiftreads.com</string>
 	</array>
 </dict>
 </plist>

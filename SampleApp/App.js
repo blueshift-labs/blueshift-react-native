@@ -1,6 +1,37 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button} from 'react-native';
+import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button, Alert, Platform, Linking} from 'react-native';
 export default class App extends Component{
+
+  componentDidMount() { // B
+  if (Platform.OS === 'android') {
+    Linking.getInitialURL().then(url => {
+      this.navigate(url);
+    });
+  } else {
+      Linking.addEventListener('url', this.handleOpenURL);
+    }
+  }
+  
+  componentWillUnmount() { // C
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+  
+  handleOpenURL = (event) => { // D
+    Alert.alert(
+      "Deep Link URL",
+      event.url,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+  }
+
+
   setEmailId = () => {
     NativeModules.BlueshiftBridge.setUserInfoEmailId(this.state.emailId)
   };
@@ -34,7 +65,7 @@ export default class App extends Component{
   state = {  
         switchValue: false,
         emailId: "",
-        customEvent: "",
+        customEvent: "bsft_send_me_push",
         customerId: ""  
     };  
 

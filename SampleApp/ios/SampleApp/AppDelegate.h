@@ -1,10 +1,9 @@
-#import <Foundation/Foundation.h>
-#import <EXUpdates/EXUpdatesAppController.h>
 #import <React/RCTBridgeDelegate.h>
 #import <UIKit/UIKit.h>
+#import <BlueShift-iOS-SDK/BlueShift.h>
 
-#import <UMCore/UMAppDelegateWrapper.h>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, BlueshiftUniversalLinksDelegate, RCTBridgeDelegate>
 
-@interface AppDelegate : UMAppDelegateWrapper <RCTBridgeDelegate, EXUpdatesAppControllerDelegate>
+@property (nonatomic, strong) UIWindow *window;
 
 @end
