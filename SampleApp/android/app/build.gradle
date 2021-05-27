@@ -136,7 +136,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        buildConfigField 'String', 'API_KEY', '"apikey"'
+        buildConfigField 'String', 'API_KEY', '"[YOUR EVENT API KEY]"'
     }
     splits {
         abi {
