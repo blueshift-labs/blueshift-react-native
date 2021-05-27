@@ -10,16 +10,15 @@ export default class App extends Component{
       this.navigate(url);
     });
   } else {
+      // Add lister to listen to deep link and push notification click events
       emitter.addListener("PushNotificationClickedNotification", this.handlePush);
-      Linking.addEventListener('url', this.handleOpenURL);
+      emitter.addListener('DeepLinkNotification', this.handleDeepLink);
     }
   }
+ 
   
-  componentWillUnmount() { // C
-    Linking.removeEventListener('url', this.handleOpenURL);
-  }
-  
-  handleOpenURL = (event) => { // D
+  handleDeepLink = (event) => { // D
+    console.log(event);
     Alert.alert(
       "Deep Link URL",
       event.url,
@@ -32,7 +31,7 @@ export default class App extends Component{
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ]
     );
-  }
+  };
 
   handlePush = (event) => { 
     console.log("PushNotificationClickedNotification event received");

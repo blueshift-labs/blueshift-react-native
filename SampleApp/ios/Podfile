@@ -1,5 +1,6 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+$bsftLocalPath = '/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK'
 
 platform :ios, '10.0'
 
@@ -26,5 +27,14 @@ target 'SampleApp' do
   post_install do |installer|
     react_native_post_install(installer)
   end
-  pod 'BlueShift-iOS-SDK'
+  pod 'BlueShift-iOS-SDK' , :path => $bsftLocalPath
 end
+
+target 'NotificationService' do
+    pod 'BlueShift-iOS-Extension-SDK' , :path => $bsftLocalPath
+end
+
+target 'NotificationContent' do
+    pod 'BlueShift-iOS-Extension-SDK', :path => $bsftLocalPath
+end
+
