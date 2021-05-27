@@ -5,11 +5,7 @@ const emitter = Platform.OS === 'ios' ? new NativeEventEmitter(NativeModules.Blu
 export default class App extends Component{
 
   componentDidMount() { // B
-  if (Platform.OS === 'android') {
-    Linking.getInitialURL().then(url => {
-      this.navigate(url);
-    });
-  } else {
+  if (Platform.OS === 'ios') {
       // Add lister to listen to deep link and push notification click events
       emitter.addListener("PushNotificationClickedEvent", this.handlePush);
       emitter.addListener('DeepLinkEvent', this.handleDeepLink);

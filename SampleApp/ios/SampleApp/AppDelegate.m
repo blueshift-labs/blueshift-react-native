@@ -62,12 +62,18 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 }
 
+#pragma mark - Blueshift integration
 - (void)initialiseBlueshiftWithLaunchOptions:(NSDictionary*)launchOptions {
   BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
   config.apiKey = @"YOUR API KEY";
-  config.debug = YES;
+  // Set debug to true to see the SDK logs. Can be removed for release builds.
+  #ifdef DEBUG
+    config.debug = YES;
+  #endif
+
   if (launchOptions) {
     config.applicationLaunchOptions = launchOptions;
+    // Process launch options to share the push notification payload to React native JS.
     [[BlueshiftPluginManager sharedInstance] handlePushNotificationFromLaunchOpions:launchOptions];
   }
   config.enableInAppNotification = YES;
@@ -98,6 +104,8 @@ static void InitializeFlipper(UIApplication *application) {
     [[BlueShift sharedInstance].userNotificationDelegate handleUserNotificationCenter:center willPresentNotification:notification withCompletionHandler:^(UNNotificationPresentationOptions options) {
       completionHandler(options);
     }];
+  } else {
+    //Handle Notifications other than Blueshift
   }
 }
 
@@ -108,15 +116,17 @@ static void InitializeFlipper(UIApplication *application) {
       completionHandler();
     }];
     [[BlueshiftPluginManager sharedInstance] sendPushNotificationDataToRN:userInfo];
+  } else {
+    //Handle Notifications other than Blueshift
   }
 }
 
-#pragma mark - open url and user activity methods
+#pragma mark - open url method
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
   if ([options[@"source"] isEqualToString:@"Blueshift"]) {
     [[BlueshiftPluginManager sharedInstance] sendDeepLinkURLToRN:url data:options];
   } else {
-    [RCTLinkingManager application:app openURL:url options:options];
+    //Handle links other than Blueshift links
   }
   
   if (url) {
@@ -126,21 +136,18 @@ static void InitializeFlipper(UIApplication *application) {
   }
 }
 
+#pragma mark - Universal links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
   if (userActivity.webpageURL != nil && [[BlueShift sharedInstance] isBlueshiftUniversalLinkURL:userActivity.webpageURL]) {
     [[BlueShift sharedInstance].appDelegate handleBlueshiftUniversalLinksForActivity: userActivity];
   } else {
-    [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+    //Handle links other than Blueshift links
   }
   return YES;
 }
 
 - (void)didCompleteLinkProcessing:(NSURL *)url {
   [[BlueshiftPluginManager sharedInstance] sendDeepLinkURLToRN:url data:nil];
-}
-
-- (void)didStartLinkProcessing {
-//  NSLog(@"didStartLinkProcessing");
 }
 
 - (void)didFailLinkProcessingWithError:(NSError *)error url:(NSURL *)url {
