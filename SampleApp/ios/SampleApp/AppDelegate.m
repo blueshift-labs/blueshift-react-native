@@ -4,7 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
-#import "BlueshiftReactEventsManager.h"
+#import "BlueshiftPluginManager.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -49,7 +49,7 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  [self initialiseBlueshift];
+  [self initialiseBlueshiftWithLaunchOptions:launchOptions];
   return YES;
 }
 
@@ -62,10 +62,14 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 }
 
-- (void)initialiseBlueshift {
+- (void)initialiseBlueshiftWithLaunchOptions:(NSDictionary*)launchOptions {
   BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
-  config.apiKey = @"5dfe3c9aee8b375bcc616079b08156d9";
+  config.apiKey = @"YOUR API KEY";
   config.debug = YES;
+  if (launchOptions) {
+    config.applicationLaunchOptions = launchOptions;
+    [[BlueshiftPluginManager sharedInstance] handlePushNotificationFromLaunchOpions:launchOptions];
+  }
   config.enableInAppNotification = YES;
   config.enableInAppNotification = YES;
   config.userNotificationDelegate = self;
@@ -77,7 +81,6 @@ static void InitializeFlipper(UIApplication *application) {
 #pragma mark - remote notification delegate methods
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
     [[BlueShift sharedInstance].appDelegate registerForRemoteNotification:deviceToken];
-    NSLog(@"device token %@", deviceToken);
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
@@ -104,14 +107,23 @@ static void InitializeFlipper(UIApplication *application) {
     [[BlueShift sharedInstance].userNotificationDelegate handleUserNotification:center didReceiveNotificationResponse:response withCompletionHandler:^{
       completionHandler();
     }];
+    [[BlueshiftPluginManager sharedInstance] sendPushNotificationDataToRN:userInfo];
   }
-  [self fireNotificationClickEventToReactJS:response.notification.request.content.userInfo];
 }
 
 #pragma mark - open url and user activity methods
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  BOOL val = [RCTLinkingManager application:app openURL:url options:options];
-  return val;
+  if ([options[@"source"] isEqualToString:@"Blueshift"]) {
+    [[BlueshiftPluginManager sharedInstance] sendDeepLinkURLToRN:url data:options];
+  } else {
+    [RCTLinkingManager application:app openURL:url options:options];
+  }
+  
+  if (url) {
+    return YES;
+  } else {
+    return NO;
+  }
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
@@ -123,19 +135,26 @@ static void InitializeFlipper(UIApplication *application) {
   return YES;
 }
 
--(void)didCompleteLinkProcessing:(NSURL *)url {
-  [RCTLinkingManager application:UIApplication.sharedApplication openURL:url options:@{}];
+- (void)didCompleteLinkProcessing:(NSURL *)url {
+  [[BlueshiftPluginManager sharedInstance] sendDeepLinkURLToRN:url data:nil];
 }
 
--(void)didStartLinkProcessing {
+- (void)didStartLinkProcessing {
 //  NSLog(@"didStartLinkProcessing");
 }
 
--(void)didFailLinkProcessingWithError:(NSError *)error url:(NSURL *)url {
-  [RCTLinkingManager application:UIApplication.sharedApplication openURL:url options:@{}];
+- (void)didFailLinkProcessingWithError:(NSError *)error url:(NSURL *)url {
+  [[BlueshiftPluginManager sharedInstance] sendDeepLinkURLToRN:url data:nil];
 }
 
-- (void)fireNotificationClickEventToReactJS:(NSDictionary*)userInfo {
-  [[NSNotificationCenter defaultCenter] postNotificationName:PushNotificationClickedNotification object:nil userInfo:userInfo];
+#pragma mark - Lifecycle methods
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+  [[BlueShift sharedInstance].appDelegate appDidEnterBackground:application];
 }
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  [[BlueShift sharedInstance].appDelegate appDidBecomeActive:application];
+}
+
 @end

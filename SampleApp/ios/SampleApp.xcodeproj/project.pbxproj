@@ -25,6 +25,7 @@
 		91AD8D72265E1AAE00B317DF /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91AD8D71265E1AAE00B317DF /* NotificationService.m */; };
 		91AD8D76265E1AAE00B317DF /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 91AD8D6E265E1AAE00B317DF /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		91BED051265E650400EF9877 /* BlueshiftReactEventsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BED050265E650400EF9877 /* BlueshiftReactEventsManager.m */; };
+		91D18550265F626900382DBB /* BlueshiftPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91D1854F265F626900382DBB /* BlueshiftPluginManager.m */; };
 		BB1746B80291BD2E542B2CA0 /* libPods-NotificationContent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED7138082A2F646F3C4F8BD /* libPods-NotificationContent.a */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +104,8 @@
 		91BED046265E4B4300EF9877 /* NotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContent.entitlements; sourceTree = "<group>"; };
 		91BED04F265E650400EF9877 /* BlueshiftReactEventsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueshiftReactEventsManager.h; sourceTree = "<group>"; };
 		91BED050265E650400EF9877 /* BlueshiftReactEventsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueshiftReactEventsManager.m; sourceTree = "<group>"; };
+		91D1854F265F626900382DBB /* BlueshiftPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlueshiftPluginManager.m; sourceTree = "<group>"; };
+		91D18551265F657300382DBB /* BlueshiftPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlueshiftPluginManager.h; sourceTree = "<group>"; };
 		9ED7138082A2F646F3C4F8BD /* libPods-NotificationContent.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotificationContent.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A33C936A49E245B007E27371 /* libPods-NotificationService.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotificationService.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA8CC07557DB26A1D3426A2 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
@@ -250,6 +253,8 @@
 			isa = PBXGroup;
 			children = (
 				91AD8D3E265D2EE000B317DF /* SampleApp-Bridging-Header.h */,
+				91D18551265F657300382DBB /* BlueshiftPluginManager.h */,
+				91D1854F265F626900382DBB /* BlueshiftPluginManager.m */,
 				91BED04F265E650400EF9877 /* BlueshiftReactEventsManager.h */,
 				91BED050265E650400EF9877 /* BlueshiftReactEventsManager.m */,
 				91AD8D3F265D2EE100B317DF /* BlueshiftBridge.swift */,
@@ -688,6 +693,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				91BED051265E650400EF9877 /* BlueshiftReactEventsManager.m in Sources */,
 				91AD8D40265D2EE100B317DF /* BlueshiftBridge.swift in Sources */,
+				91D18550265F626900382DBB /* BlueshiftPluginManager.m in Sources */,
 				91AD8D3C265D2ED900B317DF /* Blueshift.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);

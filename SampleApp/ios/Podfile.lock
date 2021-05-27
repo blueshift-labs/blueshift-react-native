@@ -1,4 +1,5 @@
 PODS:
+  - BlueShift-iOS-Extension-SDK (2.1.17)
   - BlueShift-iOS-SDK (2.1.17):
     - BlueShift-iOS-SDK/Core (= 2.1.17)
   - BlueShift-iOS-SDK/Core (2.1.17)
@@ -324,7 +325,8 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - BlueShift-iOS-SDK
+  - BlueShift-iOS-Extension-SDK (from `/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK`)
+  - BlueShift-iOS-SDK (from `/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -377,7 +379,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - BlueShift-iOS-SDK
     - boost-for-react-native
     - CocoaAsyncSocket
     - Flipper
@@ -392,6 +393,10 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
+  BlueShift-iOS-Extension-SDK:
+    :path: "/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK"
+  BlueShift-iOS-SDK:
+    :path: "/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -450,6 +455,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  BlueShift-iOS-Extension-SDK: 522b1d80e181acafd68f7fff0cf9e61cfdd38c58
   BlueShift-iOS-SDK: c475d5ab556c5dd69f2ba44bfcb9b3bec7118f11
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -492,6 +498,6 @@ SPEC CHECKSUMS:
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 9018bf745846acd3dfa4b500939a3bef88b0f8a8
+PODFILE CHECKSUM: 7444af36e429b49c3c260e617acc173f691a477a
 
 COCOAPODS: 1.10.1
