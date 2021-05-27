@@ -8,8 +8,8 @@
 
 #import <React/RCTEventEmitter.h>
 
-static NSString *const BlueshiftPushNotificationClickedNotification = @"PushNotificationClickedNotification";
-static NSString *const BlueshiftDeepLinkNotification = @"DeepLinkNotification";
+static NSString *const BlueshiftPushNotificationClickedNotification = @"PushNotificationClickedEvent";
+static NSString *const BlueshiftDeepLinkNotification = @"DeepLinkEvent";
 
 @interface BlueshiftReactEventsManager : RCTEventEmitter<RCTBridgeModule>
 

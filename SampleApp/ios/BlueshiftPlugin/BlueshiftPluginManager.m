@@ -27,17 +27,13 @@ static BlueshiftPluginManager *_sharedInstance = nil;
 }
 
 - (void)setAppStartedObserving:(BOOL)isStartedObserving {
-  NSLog(@"[Blueshift]-Set started observing");
-
   self.isAppStartedObserving = isStartedObserving;
   if(self.isAppStartedObserving == YES) {
     if(pushNotificationData) {
-      NSLog(@"[Blueshift]-process cached notification");
       [self sendPushNotificationDataToRN:[pushNotificationData copy]];
       pushNotificationData = nil;
     }
     if (deepLinkURL) {
-      NSLog(@"[Blueshift]-process cached deep link");
       [self sendDeepLinkURLToRN:deepLinkURL  data:[deepLinkData copy]];
       deepLinkData = nil;
       deepLinkURL = nil;
@@ -47,10 +43,8 @@ static BlueshiftPluginManager *_sharedInstance = nil;
 
 - (void)handlePushNotificationFromLaunchOpions:(NSDictionary*)launchOptions {
   NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-  NSLog(@"[Blueshift]-Received push launch notification");
 
   if (userInfo) {
-    NSLog(@"[Blueshift]-sending it to push click notification");
       [self sendPushNotificationDataToRN:userInfo];
   }
 }
@@ -59,10 +53,8 @@ static BlueshiftPluginManager *_sharedInstance = nil;
   if (userInfo) {
     if (isAppStartedObserving) {
       [[NSNotificationCenter defaultCenter] postNotificationName:BlueshiftPushNotificationClickedNotification object:nil userInfo:userInfo];
-      NSLog(@"[Blueshift]-sent push click notification");
     } else {
       pushNotificationData = userInfo;
-      NSLog(@"[Blueshift]-cached push click notification");
     }
   }
 }
@@ -75,10 +67,8 @@ static BlueshiftPluginManager *_sharedInstance = nil;
         options = [NSMutableDictionary new];
       }
       [options setValue:deepLinkURL.absoluteString forKey:@"url"];
-      NSLog(@"[Blueshift]-sent deep link notification");
       [[NSNotificationCenter defaultCenter] postNotificationName:BlueshiftDeepLinkNotification object:nil userInfo:options];
     } else {
-      NSLog(@"[Blueshift]-cached deep link notification");
       self->deepLinkURL = deepLinkURL;
       self->deepLinkData = data;
     }

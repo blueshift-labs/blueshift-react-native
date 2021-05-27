@@ -64,7 +64,7 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (void)initialiseBlueshiftWithLaunchOptions:(NSDictionary*)launchOptions {
   BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
-  config.apiKey = @"5dfe3c9aee8b375bcc616079b08156d9";
+  config.apiKey = @"YOUR API KEY";
   config.debug = YES;
   if (launchOptions) {
     config.applicationLaunchOptions = launchOptions;
@@ -81,7 +81,6 @@ static void InitializeFlipper(UIApplication *application) {
 #pragma mark - remote notification delegate methods
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
     [[BlueShift sharedInstance].appDelegate registerForRemoteNotification:deviceToken];
-    NSLog(@"device token %@", deviceToken);
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {

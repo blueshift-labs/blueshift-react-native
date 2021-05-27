@@ -29,9 +29,7 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)fireEvent:(NSNotification*)notification {
-  NSLog(@"[Blueshift]-receved request to fire event");
   if (notification && notification.name) {
-    NSLog(@"[Blueshift]-Fired event");
     [self sendEventWithName:notification.name body:notification.userInfo];
   }
 }

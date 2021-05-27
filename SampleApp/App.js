@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button, Alert, Platform, Linking, NativeEventEmitter} from 'react-native';
+import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button, Alert, Platform, Linking, NativeEventEmitter, DeviceEventEmitter} from 'react-native';
 const emitter = Platform.OS === 'ios' ? new NativeEventEmitter(NativeModules.BlueshiftReactEventsManager) : DeviceEventEmitter
 
 export default class App extends Component{
@@ -11,8 +11,8 @@ export default class App extends Component{
     });
   } else {
       // Add lister to listen to deep link and push notification click events
-      emitter.addListener("PushNotificationClickedNotification", this.handlePush);
-      emitter.addListener('DeepLinkNotification', this.handleDeepLink);
+      emitter.addListener("PushNotificationClickedEvent", this.handlePush);
+      emitter.addListener('DeepLinkEvent', this.handleDeepLink);
     }
   }
  
