@@ -177,6 +177,7 @@
 				91AD8D39265D2EC600B317DF /* BlueshiftPlugin */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				91AD8D3E265D2EE000B317DF /* SampleApp-Bridging-Header.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -252,7 +253,6 @@
 		91AD8D39265D2EC600B317DF /* BlueshiftPlugin */ = {
 			isa = PBXGroup;
 			children = (
-				91AD8D3E265D2EE000B317DF /* SampleApp-Bridging-Header.h */,
 				91D18551265F657300382DBB /* BlueshiftPluginManager.h */,
 				91D1854F265F626900382DBB /* BlueshiftPluginManager.m */,
 				91BED04F265E650400EF9877 /* BlueshiftReactEventsManager.h */,
@@ -823,7 +823,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blueshift.reads;
 				PRODUCT_NAME = SampleApp;
-				SWIFT_OBJC_BRIDGING_HEADER = "BlueshiftPlugin/SampleApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "SampleApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -852,7 +852,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blueshift.reads;
 				PRODUCT_NAME = SampleApp;
-				SWIFT_OBJC_BRIDGING_HEADER = "BlueshiftPlugin/SampleApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "SampleApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
