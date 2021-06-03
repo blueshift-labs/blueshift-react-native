@@ -6,18 +6,31 @@ import com.blueshift.Blueshift;
 import com.blueshift.BlueshiftAppPreferences;
 import com.blueshift.BlueshiftLogger;
 import com.blueshift.model.UserInfo;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.google.gson.Gson;
+
+import java.util.Map;
 
 public class BlueshiftModule extends ReactContextBaseJavaModule {
     private static final String TAG = "BlueshiftBridge";
-    private ReactApplicationContext applicationContext;
+
+    private static Map<String, Object> pushDeliveredAttr = null;
+    private static Map<String, Object> pushClickedAttr = null;
 
     BlueshiftModule(ReactApplicationContext applicationContext) {
         super(applicationContext);
-        this.applicationContext = applicationContext;
+    }
+
+    public static void setPushDeliveredAttr(Map<String, Object> pushDeliveredAttr) {
+        BlueshiftModule.pushDeliveredAttr = pushDeliveredAttr;
+    }
+
+    public static void setPushClickedAttr(Map<String, Object> pushClickedAttr) {
+        BlueshiftModule.pushClickedAttr = pushClickedAttr;
     }
 
     @NonNull
@@ -27,31 +40,53 @@ public class BlueshiftModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    void getPushDeliveredAttributes(Callback callback) {
+        String json = null;
+
+        if (pushDeliveredAttr != null) {
+            json = new Gson().toJson(pushDeliveredAttr);
+        }
+
+        callback.invoke(json);
+    }
+
+    @ReactMethod
+    void getPushClickAttributes(Callback callback) {
+        String json = null;
+
+        if (pushClickedAttr != null) {
+            json = new Gson().toJson(pushClickedAttr);
+        }
+
+        callback.invoke(json);
+    }
+
+    @ReactMethod
     void setUserInfoEmailId(String email) {
-        UserInfo.getInstance(applicationContext).setEmail(email);
-        UserInfo.getInstance(applicationContext).save(applicationContext);
+        UserInfo.getInstance(getReactApplicationContext()).setEmail(email);
+        UserInfo.getInstance(getReactApplicationContext()).save(getReactApplicationContext());
     }
 
     @ReactMethod
     void setUserInfoCustomerId(String customerId) {
-        UserInfo.getInstance(applicationContext).setRetailerCustomerId(customerId);
-        UserInfo.getInstance(applicationContext).save(applicationContext);
+        UserInfo.getInstance(getReactApplicationContext()).setRetailerCustomerId(customerId);
+        UserInfo.getInstance(getReactApplicationContext()).save(getReactApplicationContext());
     }
 
     @ReactMethod
     void identifyWithDetails(ReadableMap map) {
-        String email = UserInfo.getInstance(applicationContext).getEmail();
-        Blueshift.getInstance(applicationContext).identifyUserByEmail(email, map.toHashMap(), false);
+        String email = UserInfo.getInstance(getReactApplicationContext()).getEmail();
+        Blueshift.getInstance(getReactApplicationContext()).identifyUserByEmail(email, map.toHashMap(), false);
     }
 
     @ReactMethod
     void trackCustomEvent(String eventName, ReadableMap map, boolean canBatch) {
-        Blueshift.getInstance(applicationContext).trackEvent(eventName, map.toHashMap(), canBatch);
+        Blueshift.getInstance(getReactApplicationContext()).trackEvent(eventName, map.toHashMap(), canBatch);
     }
 
     @ReactMethod
     void trackScreenView(String screenName, ReadableMap map, boolean canBatch) {
-        Blueshift.getInstance(applicationContext).trackScreenView(screenName, canBatch);
+        Blueshift.getInstance(getReactApplicationContext()).trackScreenView(screenName, canBatch);
     }
 
     @ReactMethod
@@ -66,8 +101,8 @@ public class BlueshiftModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     void setEnablePush(boolean enablePush) {
-        BlueshiftAppPreferences.getInstance(applicationContext).setEnablePush(enablePush);
-        BlueshiftAppPreferences.getInstance(applicationContext).save(applicationContext);
+        BlueshiftAppPreferences.getInstance(getReactApplicationContext()).setEnablePush(enablePush);
+        BlueshiftAppPreferences.getInstance(getReactApplicationContext()).save(getReactApplicationContext());
     }
 
     @ReactMethod
@@ -77,11 +112,11 @@ public class BlueshiftModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     void fetchInAppNotification() {
-        Blueshift.getInstance(applicationContext).fetchInAppMessages(null);
+        Blueshift.getInstance(getReactApplicationContext()).fetchInAppMessages(null);
     }
 
     @ReactMethod
     void displayInAppNotification() {
-        Blueshift.getInstance(applicationContext).displayInAppMessages();
+        Blueshift.getInstance(getReactApplicationContext()).displayInAppMessages();
     }
 }

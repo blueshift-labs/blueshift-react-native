@@ -73,12 +73,14 @@ public class MainApplication extends Application implements ReactApplication {
         Blueshift.setBlueshiftPushListener(new BlueshiftPushListener() {
             @Override
             public void onPushDelivered(Map<String, Object> attributes) {
-                // push received, emit event to JS layer
+                // cache the attributes so that we can access them when RN app is ready
+                BlueshiftModule.setPushDeliveredAttr(attributes);
             }
 
             @Override
             public void onPushClicked(Map<String, Object> attributes) {
-                // push click received, emit events to JS layer
+                // cache the attributes so that we can access them when RN app is ready
+                BlueshiftModule.setPushClickedAttr(attributes);
 
                 // accessing the extra data we send along with push payload
                 if (attributes != null && attributes.containsKey("data")) {

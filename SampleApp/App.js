@@ -5,13 +5,27 @@ const emitter = Platform.OS === 'ios' ? new NativeEventEmitter(NativeModules.Blu
 export default class App extends Component{
 
   componentDidMount() { // B
-  if (Platform.OS === 'ios') {
-      // Add lister to listen to deep link and push notification click events
-      emitter.addListener("PushNotificationClickedEvent", this.handlePush);
-      emitter.addListener('DeepLinkEvent', this.handleDeepLink);
+  if (Platform.OS === 'android') {
+      NativeModules.BlueshiftBridge.getPushDeliveredAttributes((result) => {
+        console.log("push delivered attributes: " + result)
+      });
+
+      NativeModules.BlueshiftBridge.getPushClickAttributes((result) => {
+        console.log("push click attributes: " + result)
+      });
+
+      Linking.getInitialURL().then(url => {
+        this.navigate(url);
+      });
+    }
+
+    if (Platform.OS === 'ios') {
+        // Add lister to listen to deep link and push notification click events
+        emitter.addListener("PushNotificationClickedEvent", this.handlePush);
+        emitter.addListener('DeepLinkEvent', this.handleDeepLink);
     }
   }
- 
+
   
   handleDeepLink = (event) => { // D
     console.log(event);
