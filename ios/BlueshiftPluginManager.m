@@ -92,6 +92,10 @@ static BlueshiftPluginManager *_sharedInstance = nil;
     }
 }
 
+- (void)sendPushNotificationDataToRN:(NSDictionary*)userInfo {
+    [self fireEventWithEventName:BlueshiftPushNotificationClickedEvent data:userInfo];
+}
+
 -(void)fireEventWithEventName:(NSString*)eventName data:(NSDictionary*)data {
     if (self.blueshiftEventsManagerDelegate) {
         if ([self isDuplicatePushNotificationEvent:eventName data:data] == NO) {
@@ -106,7 +110,7 @@ static BlueshiftPluginManager *_sharedInstance = nil;
 }
 
 -(BOOL)isDuplicatePushNotificationEvent:(NSString*)eventName data:(NSDictionary*)data {
-    if ([eventName isEqualToString:BlueshiftPushNotificationClickedEvent]) {
+    if (data && [eventName isEqualToString:BlueshiftPushNotificationClickedEvent]) {
         NSString* messageUUID = [data valueForKey:kBlueshiftMessageUUID];
         if (messageUUID && [messageUUID isEqualToString:lastPushNotificationUUID]) {
             return YES;

@@ -32,6 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param deepLinkData additional data as NSDictionary
 - (void)sendDeepLinkURLToRN:(NSURL* _Nonnull)deepLinkURL data:(NSDictionary*_Nullable)deepLinkData;
 
+/// Use this method to send push notification payload using event `PushNotificationClickedEvent` manually from the AppDelegate.
+/// @param userInfo Push notification payload as NSDictionary
+- (void)sendPushNotificationDataToRN:(NSDictionary*)userInfo;
+
 - (void)fireCachedEventWithEventName:(NSString*)eventName;
 
 /// Check if URL received inside the AppDelegate's OpenURL method is from Blueshift or not.
