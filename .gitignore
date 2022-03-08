@@ -9,6 +9,10 @@ android/.gradle/
 android/.idea/
 android/build/
 android/local.properties
+example/android/.gradle/
+example/android/.idea/
+example/android/build/
+example/android/local.properties
 
 # Xcode
 */Pods/Pods.xcodeproj/xcuserdata/

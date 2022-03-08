@@ -1,4 +1,4 @@
-package com.blueshiftreactnative;
+package com.blueshift.reactnative;
 
 import androidx.annotation.NonNull;
 
@@ -16,7 +16,7 @@ public class BlueshiftReactNativePackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new BlueshiftReactNativeModule(reactContext));
+        modules.add(BlueshiftReactNativeModule.getInstance(reactContext));
         return modules;
     }
 
