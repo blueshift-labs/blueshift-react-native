@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-
-		5E555C0D2413F4C50049A1A2 /* BlueshiftReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* BlueshiftReactNative.m */; };
-
+		91DBC0E027D764670072028E /* BlueshiftBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DBC0DB27D764670072028E /* BlueshiftBridge.m */; };
+		91DBC0E127D764670072028E /* BlueshiftPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DBC0DC27D764670072028E /* BlueshiftPluginManager.m */; };
+		91DBC0E227D764670072028E /* BlueshiftReactAutoIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DBC0DD27D764670072028E /* BlueshiftReactAutoIntegration.m */; };
+		91DBC0E327D764670072028E /* BlueshiftReactEventsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DBC0DF27D764670072028E /* BlueshiftReactEventsManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,10 +27,14 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libBlueshiftReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBlueshiftReactNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
-
-		B3E7B5881CC2AC0600A0062D /* BlueshiftReactNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueshiftReactNative.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* BlueshiftReactNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueshiftReactNative.m; sourceTree = "<group>"; };
-
+		91DBC0D827D764670072028E /* BlueshiftReactEventsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueshiftReactEventsManager.h; sourceTree = "<group>"; };
+		91DBC0D927D764670072028E /* BlueshiftReactAutoIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueshiftReactAutoIntegration.h; sourceTree = "<group>"; };
+		91DBC0DA27D764670072028E /* BlueshiftPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueshiftPluginManager.h; sourceTree = "<group>"; };
+		91DBC0DB27D764670072028E /* BlueshiftBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueshiftBridge.m; sourceTree = "<group>"; };
+		91DBC0DC27D764670072028E /* BlueshiftPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueshiftPluginManager.m; sourceTree = "<group>"; };
+		91DBC0DD27D764670072028E /* BlueshiftReactAutoIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueshiftReactAutoIntegration.m; sourceTree = "<group>"; };
+		91DBC0DE27D764670072028E /* BlueshiftBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueshiftBridge.h; sourceTree = "<group>"; };
+		91DBC0DF27D764670072028E /* BlueshiftReactEventsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueshiftReactEventsManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,10 +59,14 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-
-				B3E7B5881CC2AC0600A0062D /* BlueshiftReactNative.h */,
-				B3E7B5891CC2AC0600A0062D /* BlueshiftReactNative.m */,
-
+				91DBC0DE27D764670072028E /* BlueshiftBridge.h */,
+				91DBC0DB27D764670072028E /* BlueshiftBridge.m */,
+				91DBC0DA27D764670072028E /* BlueshiftPluginManager.h */,
+				91DBC0DC27D764670072028E /* BlueshiftPluginManager.m */,
+				91DBC0D927D764670072028E /* BlueshiftReactAutoIntegration.h */,
+				91DBC0DD27D764670072028E /* BlueshiftReactAutoIntegration.m */,
+				91DBC0D827D764670072028E /* BlueshiftReactEventsManager.h */,
+				91DBC0DF27D764670072028E /* BlueshiftReactEventsManager.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -119,9 +128,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-
-				B3E7B58A1CC2AC0600A0062D /* BlueshiftReactNative.m in Sources */,
-
+				91DBC0E027D764670072028E /* BlueshiftBridge.m in Sources */,
+				91DBC0E327D764670072028E /* BlueshiftReactEventsManager.m in Sources */,
+				91DBC0E227D764670072028E /* BlueshiftReactAutoIntegration.m in Sources */,
+				91DBC0E127D764670072028E /* BlueshiftPluginManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +244,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = BlueshiftReactNative;
 				SKIP_INSTALL = YES;
-
 			};
 			name = Debug;
 		};
@@ -251,7 +260,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = BlueshiftReactNative;
 				SKIP_INSTALL = YES;
-
 			};
 			name = Release;
 		};
