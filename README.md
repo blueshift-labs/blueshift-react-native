@@ -6,21 +6,26 @@ React native plugin for Blueshift iOS and Android SDK.
 
 ```sh
 npm install blueshift-react-native
+
+// using Github url
+npm install https://github.com/blueshift-labs/blueshift-react-native --save
 ```
 
 ## Usage
+Import Blueshift plugin in your JS as mentioned below.
 
 ```js
-import { multiply } from "blueshift-react-native";
+import Blueshift from 'blueshift-react-native';
 
-// ...
-
-const result = await multiply(3, 7);
+// Make a call to Blueshift functions
+Blueshift.setUserInfoEmailId("test@blueshift.com");
+Blueshift.identifyWithDetails({"user_type":"premium"});
 ```
 
+Refer to [these Blueshift JS methods](https://github.com/blueshift-labs/blueshift-react-native/blob/main/src/index.js) to know about features supported by Plugin and how to use them. 
 
-## Deep links 
-Blueshift Plugin will deliver Push, in-app and universal links deep links to react native using `url` event. You can add event listener as below in you react project to get the deep link.
+## Get Deep links on React native
+Blueshift Plugin will deliver Push, in-app and universal links deep links to react native using `url` event. You can add event listener using default `Linking` method as below in you react project to get the deep link.
 
 ```javascript
 // Add event listener to get the deep link url
@@ -31,8 +36,21 @@ handleDeepLink(event) {
   console.log("deep link url = "+ event.url);
 }
 ```
+## Get Push notification payload on React native
+Blueshift Plugin will deliver Push notification payload using event `PushNotificationClickedEvent`. Add event listener using the `Blueshift` method in your react project. 
+
+```javascript
+  // Add custom event listner using Blueshift method
+  Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
+
+handlePushClick(event) {
+  alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
+}
+```
 
 # iOS integration
+
+After adding Blueshift plugin to your project, run `pod install` inside `iOS` directory. The pod will install the Blueshift plugin along with the Blueshift iOS SDK in your iOS Project.
 
 ### Prerequisites
 
