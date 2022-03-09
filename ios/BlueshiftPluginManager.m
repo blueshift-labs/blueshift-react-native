@@ -30,7 +30,7 @@ static BlueshiftPluginManager *_sharedInstance = nil;
     return _sharedInstance;
 }
 
-- (void)intialisePluginWithConfig:(BlueShiftConfig*)config autoIntegrate:(BOOL)autoIntegrate {
+- (void)initialisePluginWithConfig:(BlueShiftConfig*)config autoIntegrate:(BOOL)autoIntegrate {
     if (autoIntegrate == YES) {
         Class appDelegateClass = [[UIApplication sharedApplication].delegate class];
         [appDelegateClass swizzleMainAppDelegate];

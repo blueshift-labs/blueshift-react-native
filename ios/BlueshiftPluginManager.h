@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Pass `autoIntegrate` attribute as false to integrate the SDK manually.
 /// @param config config object for SDK intialisation.
 /// @param autoIntegrate defines the autoIntegration or manualIntegration
-- (void)intialisePluginWithConfig:(BlueShiftConfig*)config autoIntegrate:(BOOL)autoIntegrate;
+- (void)initialisePluginWithConfig:(BlueShiftConfig*)config autoIntegrate:(BOOL)autoIntegrate;
 
 /// Use this method to send the event `DeepLinkEvent` manually from the AppDelegate. This method is to support the legacy bridge events.
 /// @param deepLinkURL url object

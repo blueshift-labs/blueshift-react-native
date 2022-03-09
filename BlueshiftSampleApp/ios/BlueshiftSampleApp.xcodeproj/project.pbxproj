@@ -40,6 +40,7 @@
 		62438C2371B5FED658BD3DB7 /* Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.release.xcconfig"; path = "Target Support Files/Pods-BlueshiftSampleApp-BlueshiftSampleAppTests/Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		788437951574911AB168E2B7 /* Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.debug.xcconfig"; path = "Target Support Files/Pods-BlueshiftSampleApp-BlueshiftSampleAppTests/Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BlueshiftSampleApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		91DBC0E427D8CB120072028E /* BlueshiftSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BlueshiftSampleApp.entitlements; path = BlueshiftSampleApp/BlueshiftSampleApp.entitlements; sourceTree = "<group>"; };
 		A1EB1F6A5DADA41DD35B2ED0 /* libPods-BlueshiftSampleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlueshiftSampleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C24732141E2565586E2AB9A5 /* Pods-BlueshiftSampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlueshiftSampleApp.release.xcconfig"; path = "Target Support Files/Pods-BlueshiftSampleApp/Pods-BlueshiftSampleApp.release.xcconfig"; sourceTree = "<group>"; };
 		D92E98AD8738E3DC4E609416 /* Pods-BlueshiftSampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlueshiftSampleApp.debug.xcconfig"; path = "Target Support Files/Pods-BlueshiftSampleApp/Pods-BlueshiftSampleApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -86,6 +87,7 @@
 		13B07FAE1A68108700A75B9A /* BlueshiftSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				91DBC0E427D8CB120072028E /* BlueshiftSampleApp.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -114,7 +116,6 @@
 				788437951574911AB168E2B7 /* Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.debug.xcconfig */,
 				62438C2371B5FED658BD3DB7 /* Pods-BlueshiftSampleApp-BlueshiftSampleAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -484,7 +485,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BlueshiftSampleApp/BlueshiftSampleApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9YR8UTRCDU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = BlueshiftSampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -496,7 +499,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blueshift.reads;
 				PRODUCT_NAME = BlueshiftSampleApp;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -510,7 +513,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BlueshiftSampleApp/BlueshiftSampleApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9YR8UTRCDU;
 				INFOPLIST_FILE = BlueshiftSampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -521,7 +526,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blueshift.reads;
 				PRODUCT_NAME = BlueshiftSampleApp;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
