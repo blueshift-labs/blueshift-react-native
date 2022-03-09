@@ -85,7 +85,7 @@ To know more about the other optional configurations, please check [this documen
   BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
   
   // Set Blueshift API key to SDK
-  config.apiKey = @"5dfe3c9aee8b375bcc616079b08156d9";
+  config.apiKey = @"API KEY";
  
   // Set launch options to track the push click from killed app state
   config.applicationLaunchOptions = launchOptions;
@@ -199,8 +199,9 @@ The Blueshift iOS SDK supports deep links on push notifications and in-app messa
   if ([[BlueshiftPluginManager sharedInstance] isBlueshiftOpenURLLink:url options:options] == YES) {
     return [[BlueshiftPluginManager sharedInstance] application:application openURL:url options:options];
   } else {// If the link is not from Blueshift, write custom logic to handled it in your own way.
-    return [RCTLinkingManager application:application openURL:url options:options];
+    // Write code to handle the other urls
   }
+  return YES;
 }
 ```
 In case of Automatic integration, the deep links for push and in-app are handled by the plugin automatically. You can always override this functionality by manually implementing the method as mentioned above.
@@ -287,8 +288,9 @@ Pass the URL/activity from the `continueUserActivity` method to the Plugin, so t
   if ([[BlueshiftPluginManager sharedInstance] isBlueshiftUniversalLink:userActivity] == YES) {
     return  [[BlueshiftPluginManager sharedInstance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
   } else { // If the link is not from Blueshift, write custom logic to handled it in your own way.
-    return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+    // Write code to handle the other urls
   }
+  return YES;
 }
 ```
 In case of Automatic integration, the email deep links are handled by the plugin automatically. You can always override this functionality by manually implementing the method as mentioned above.

@@ -18,8 +18,15 @@ example/android/build/
 example/android/local.properties
 example/android/app/build/
 
+BlueshiftSampleApp/android/.gradle/
+BlueshiftSampleApp/android/.idea/
+BlueshiftSampleApp/android/build/
+BlueshiftSampleApp/android/local.properties
+BlueshiftSampleApp/android/app/build/
+
 # example
 example/node_modules/
+BlueshiftSampleApp/node_modules/
 
 # Xcode
 */Pods/Pods.xcodeproj/xcuserdata/
