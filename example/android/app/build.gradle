@@ -204,7 +204,7 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation project(':blueshiftreactnative')
+    // implementation project(':blueshiftreactnative')
 }
 
 // Run this once to be able to run the application with BUCK
