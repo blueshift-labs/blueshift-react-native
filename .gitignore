@@ -9,10 +9,14 @@ android/.gradle/
 android/.idea/
 android/build/
 android/local.properties
+android/gradle/
+android/gradlew
+android/gradlew.bat
 example/android/.gradle/
 example/android/.idea/
 example/android/build/
 example/android/local.properties
+example/android/app/build/
 
 # example
 example/node_modules/
