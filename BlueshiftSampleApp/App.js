@@ -3,43 +3,34 @@ import {StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, Nati
 
 import Blueshift from 'blueshift-react-native';
 
-
 export default class App extends Component {
-  componentDidMount() { // B
 
-      Blueshift.addEventListener('DeepLinkEvent', this._handleOpenURL1);
-      // Blueshift.addEventListener('BlueshiftDeepLinkEvent', this.handleDeepLink);
-      // Blueshift.addEventListener('OnBlueshiftDeepLinkReplayStart', this.deepLinkProcessingStart);
-      Blueshift.addEventListener('PushNotificationClickedEvent',this._handleOpenURL );
-       const urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
-      console.log("componentDidMount");
+  componentDidMount() { 
+
+     // Add event 
+      Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
+
+      global.urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
+
       this.setValues();
+      console.log("componentDidMount");
   }
  
  componentWillUnmount() {
-      Blueshift.removeEventListener('DeepLinkEvent');
-      // Blueshift.removeEventListener('OnBlueshiftDeepLinkReplayStart');
       Blueshift.removeEventListener('PushNotificationClickedEvent');
-      // urlEventListner.remove();
-      console.log("componentWillUnmount"); 
+
+      global.urlEventListner.remove();
+
+      console.log("componentDidUnMount");
   }
 
-_handleOpenURL(event) {
-  alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
-}
-
-_handleOpenURL1(event) {
-  alert("openURL payload "+JSON.stringify(event.channel));
-}
+  handlePushClick(event) {
+    alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
+  }
   
-  handleDeepLink = (event) => { // D
-    console.log("Deep Link URL "+ JSON.stringify(event));
-    if((event.url.includes("/z/") || event.url.includes("/track")) && (event.url.includes("mid") || event.url.includes("uid") || event.url.includes("mid"))) {
-            console.log("process universal link",url);
-            NativeModules.BlueshiftBridge.processBlueshiftUniversalLink(url);
-            return;
-    }
-    Alert.alert(
+  handleDeepLink = (event) => { 
+  console.log("Deep Link URL "+ JSON.stringify(event));
+       Alert.alert(
       "Deep Link URL",
       event.url,
       [
@@ -51,16 +42,6 @@ _handleOpenURL1(event) {
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ]
     );
-  };
-
-  deepLinkProcessingStart = (event) => { 
-    console.log("Deep link processing started");
-    console.log(event);
-  };
-
-  deepLinkProcessingFail = (event) => { 
-    console.log("Deep link processing Failed");
-    console.log(event);
   };
 
   setEmailId = () => {
@@ -178,7 +159,7 @@ _handleOpenURL1(event) {
             this.setState({customerId:res});
         });
         Blueshift.getUserInfoEmailId((res) => {
-                            console.log("email",res);
+          console.log("email",res);
           this.setState({emailId:res});
         });
         Blueshift.getEnableTrackingStatus((res) => {
@@ -429,3 +410,4 @@ backgroundColor: '#F5FCFF',
     marginBottom: 10
   },
 });
+  
