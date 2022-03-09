@@ -70,6 +70,8 @@ static void InitializeFlipper(UIApplication *application) {
  
   // Set launch options to track the push click from killed app state
   config.applicationLaunchOptions = launchOptions;
+  
+  config.appGroupID = @"group.blueshift.reads";
     
   // Delay push permission by setting NO, by default push permission is displayed on app launch.
   config.enablePushNotification = YES;

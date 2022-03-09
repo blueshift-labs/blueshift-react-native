@@ -1,4 +1,5 @@
 PODS:
+  - BlueShift-iOS-Extension-SDK (2.2.4)
   - BlueShift-iOS-SDK (2.2.4)
   - blueshift-react-native (0.1.0):
     - BlueShift-iOS-SDK
@@ -346,6 +347,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
+  - BlueShift-iOS-Extension-SDK
   - blueshift-react-native (from `../node_modules/blueshift-react-native`)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -404,6 +406,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BlueShift-iOS-Extension-SDK
     - BlueShift-iOS-SDK
     - CocoaAsyncSocket
     - Flipper
@@ -485,6 +488,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  BlueShift-iOS-Extension-SDK: 94190bdb48b39590af160451d08c96815cd323f1
   BlueShift-iOS-SDK: 36b96e3277866d8fe780c9c95edb9167df021cba
   blueshift-react-native: c7f8ac78b9f076b6a516556fce5ea18af64a2603
   boost: a7c83b31436843459a1961bfd74b96033dc77234
@@ -532,6 +536,6 @@ SPEC CHECKSUMS:
   Yoga: 90dcd029e45d8a7c1ff059e8b3c6612ff409061a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: f1bfe3aa89a9129e5706050ae9b20538489aaa9d
+PODFILE CHECKSUM: 752d39048eb5158ad12f0b3c61388492be9af0f6
 
 COCOAPODS: 1.11.0

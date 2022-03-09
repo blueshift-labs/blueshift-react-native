@@ -28,3 +28,11 @@ target 'BlueshiftSampleApp' do
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
+
+target 'NotificationContent' do
+  pod 'BlueShift-iOS-Extension-SDK'
+end
+
+target 'NotificationService' do
+  pod 'BlueShift-iOS-Extension-SDK'
+end
