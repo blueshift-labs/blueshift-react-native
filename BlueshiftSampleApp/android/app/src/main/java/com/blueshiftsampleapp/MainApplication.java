@@ -10,6 +10,9 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.blueshift.model.Configuration;
+import com.blueshift.Blueshift;
+import com.blueshift.BlueshiftLogger;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -45,8 +48,21 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+    initBlueshift();
   }
 
+  private void initBlueshift() {
+    BlueshiftLogger.setLogLevel(BlueshiftLogger.VERBOSE);
+
+    Configuration configuration = new Configuration();
+
+    // == Mandatory Settings ==
+    configuration.setAppIcon(R.mipmap.ic_launcher);
+    configuration.setApiKey("BSFT_EVENT_API_KEY");
+
+    Blueshift.getInstance(this).initialize(configuration);
+  }
   /**
    * Loads Flipper in React Native templates. Call this in the onCreate method with something like
    * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
