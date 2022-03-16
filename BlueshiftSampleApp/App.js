@@ -436,7 +436,6 @@ const styles = StyleSheet.create({
   },
   txtH1Style: {
     flex:1,
-    height: 48,
     marginLeft: 16,
     marginRight: 16,
     marginTop: 4,
