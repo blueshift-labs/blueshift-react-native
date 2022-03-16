@@ -59,7 +59,9 @@ public class MainApplication extends Application implements ReactApplication {
 
     // == Mandatory Settings ==
     configuration.setAppIcon(R.mipmap.ic_launcher);
-    configuration.setApiKey("BSFT_EVENT_API_KEY");
+    configuration.setApiKey("API_KEY");
+    configuration.setInAppEnabled(true);
+    configuration.setJavaScriptForInAppWebViewEnabled(true);
 
     Blueshift.getInstance(this).initialize(configuration);
   }
