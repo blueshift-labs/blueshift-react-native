@@ -27,7 +27,7 @@ componentWillUnmount() {
 
   console.log("componentDidUnMount");
 
-  this.unregisterForInAppMessage();
+  this.unRegisterForInApp();
 }
 
 handlePushClick(event) {
