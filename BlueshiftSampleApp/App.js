@@ -6,22 +6,28 @@ import Blueshift from 'blueshift-react-native';
 export default class App extends Component {
 
 componentDidMount() { 
+  // Add event 
 // Add event 
-Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
+  // Add event 
+  Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
 
-global.urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
+  global.urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
 
-this.setValues();
+  this.setValues();
 
-console.log("componentDidMount");
+  console.log("componentDidMount");
+
+  this.registerForInApp();
 }
 
 componentWillUnmount() {
-Blueshift.removeEventListener('PushNotificationClickedEvent');
+  Blueshift.removeEventListener('PushNotificationClickedEvent');
 
-global.urlEventListner.remove();
+  global.urlEventListner.remove();
 
-console.log("componentDidUnMount");
+  console.log("componentDidUnMount");
+
+  this.unregisterForInAppMessage();
 }
 
 handlePushClick(event) {
