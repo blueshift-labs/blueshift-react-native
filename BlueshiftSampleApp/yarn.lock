@@ -2151,7 +2151,7 @@
   "version" "1.6.51"
 
 "blueshift-react-native@github:blueshift-labs/blueshift-react-native":
-  "resolved" "git+ssh://git@github.com/blueshift-labs/blueshift-react-native.git#c9da70f72f632bf110f4486d723330b05065547a"
+  "resolved" "git+ssh://git@github.com/blueshift-labs/blueshift-react-native.git#a66c3c2a89a1fbf054bca143505c9b031de731d6"
   "version" "0.1.0"
 
 "bplist-creator@0.1.0":
