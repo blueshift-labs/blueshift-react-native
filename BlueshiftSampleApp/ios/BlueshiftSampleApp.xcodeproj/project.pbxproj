@@ -21,7 +21,6 @@
 		91DBC0F827D8E5740072028E /* NotificationContent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 91DBC0E927D8E5740072028E /* NotificationContent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		91DBC10527D8E58B0072028E /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DBC10427D8E58B0072028E /* NotificationService.m */; };
 		91DBC10927D8E58B0072028E /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 91DBC10127D8E58B0072028E /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		91DBC14827E1F2790072028E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 91DBC14727E1F2790072028E /* GoogleService-Info.plist */; };
 		F20B4984B894B16B806B1E07 /* libPods-BlueshiftSampleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EB1F6A5DADA41DD35B2ED0 /* libPods-BlueshiftSampleApp.a */; };
 		F562BF6F9AEDA58DD9CC7EFA /* libPods-NotificationContent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF1C4BA37BB7F2576DC35FD /* libPods-NotificationContent.a */; };
 /* End PBXBuildFile section */
@@ -95,7 +94,6 @@
 		91DBC10327D8E58B0072028E /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		91DBC10427D8E58B0072028E /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		91DBC10627D8E58B0072028E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		91DBC14727E1F2790072028E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Blueshift-iOS-SampleApp/Swift/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		99FB4076F405F60F29D00916 /* Pods-NotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationContent.debug.xcconfig"; path = "Target Support Files/Pods-NotificationContent/Pods-NotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
 		A1EB1F6A5DADA41DD35B2ED0 /* libPods-BlueshiftSampleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlueshiftSampleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C24732141E2565586E2AB9A5 /* Pods-BlueshiftSampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlueshiftSampleApp.release.xcconfig"; path = "Target Support Files/Pods-BlueshiftSampleApp/Pods-BlueshiftSampleApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -165,7 +163,6 @@
 				91DBC0E427D8CB120072028E /* BlueshiftSampleApp.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				91DBC14727E1F2790072028E /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -402,7 +399,6 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				91DBC14827E1F2790072028E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
