@@ -76,15 +76,24 @@ static void InitializeFlipper(UIApplication *application) {
   // Delay push permission by setting NO, by default push permission is displayed on app launch.
   config.enablePushNotification = YES;
   
+  //Optional: set debug flag to true to see SDK logs
   config.debug = YES;
   
   // Set userNotificationDelegate to self to get the push notification callbacks.
   config.userNotificationDelegate = self;
   
+  //Optional: Set blueshiftUniversalLinksDelegate to self to enable Univseral links
+  config.blueshiftUniversalLinksDelegate = self;
+  
+  //Optional: Set enableInAppNotification to YES to start receving in-app notifications
+  config.enableInAppNotification = YES;
+  
   // Initialise the Plugin and SDK using the Automatic integration.
   [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
+  
+  // Initialise the Plugin and SDK using the Manual integration.
+//  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:NO];
 }
-
 
 #pragma mark - Implement below methods for manual integration
 /*
