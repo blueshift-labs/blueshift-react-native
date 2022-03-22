@@ -39,4 +39,13 @@ RCT_EXPORT_MODULE();
 
 @implementation BlueshiftRNDeepLinkData
 
+- (instancetype)initWithEventName:(NSString* _Nullable)eventName data:( NSDictionary* _Nullable )data deepLink:(NSURL* _Nullable)url {
+    if (self = [super init]) {
+        self.data = data;
+        self.eventName = eventName;
+        self.deepLinkURL = url;
+    }
+    return self;
+}
+
 @end

@@ -6,8 +6,10 @@
 //  Copyright © 2021 Facebook. All rights reserved.
 //
 
-#import "BlueshiftBridge.h"
 #import <React/RCTLog.h>
+#import <CoreLocation/CoreLocation.h>
+
+#import "BlueshiftBridge.h"
 #import "BlueshiftPluginManager.h"
 #import "BlueShift.h"
 
@@ -45,7 +47,7 @@ RCT_EXPORT_METHOD(trackCustomEvent:(NSString *)eventName details:(NSDictionary *
 RCT_EXPORT_METHOD(trackScreenView:(NSString *)screenName details:(NSDictionary *)details canBatchThisEvent:(BOOL)canBatchThisEvent) {
     if ([screenName isKindOfClass:[NSString class]]) {
         NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-        if (details) {
+        if ([details isKindOfClass:[NSDictionary class]]) {
             [params addEntriesFromDictionary:details];
         }
         params[kScreenViewed] = screenName;
@@ -97,7 +99,7 @@ RCT_EXPORT_METHOD(setUserInfoCustomerId:(NSString *)customerId) {
 }
 
 RCT_EXPORT_METHOD(setUserInfoExtras:(NSDictionary*)extras) {
-    if (extras != nil && [extras isKindOfClass:[NSDictionary class]]) {
+    if ([extras isKindOfClass:[NSDictionary class]]) {
         [[BlueShiftUserInfo sharedInstance] setExtras:[extras mutableCopy]];
         [[BlueShiftUserInfo sharedInstance] save];
     }
