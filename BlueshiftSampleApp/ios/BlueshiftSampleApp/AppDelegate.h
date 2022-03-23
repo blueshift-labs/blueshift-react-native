@@ -3,7 +3,7 @@
 
 #import "BlueshiftPluginManager.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, UNUserNotificationCenterDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, UNUserNotificationCenterDelegate, BlueshiftUniversalLinksDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 

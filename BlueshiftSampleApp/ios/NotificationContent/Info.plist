@@ -6,15 +6,15 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
-      <key>UNNotificationExtensionCategory</key>
-      <array>
-        <string>carousel_animation</string>
-        <string>carousel</string>
-      </array>
-      <key>UNNotificationExtensionDefaultContentHidden</key>
-      <false/>
-      <key>UNNotificationExtensionInitialContentSizeRatio</key>
-      <real>1</real>
+			<key>UNNotificationExtensionCategory</key>
+			<array>
+				<string>carousel_animation</string>
+				<string>carousel</string>
+			</array>
+			<key>UNNotificationExtensionDefaultContentHidden</key>
+			<false/>
+			<key>UNNotificationExtensionInitialContentSizeRatio</key>
+			<real>1</real>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
