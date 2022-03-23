@@ -30,12 +30,18 @@ static BlueshiftPluginManager *_sharedInstance = nil;
     return _sharedInstance;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        cachedDeepLinks = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 - (void)initialisePluginWithConfig:(BlueShiftConfig*)config autoIntegrate:(BOOL)autoIntegrate {
     if (autoIntegrate == YES) {
         Class appDelegateClass = [[UIApplication sharedApplication].delegate class];
         [appDelegateClass swizzleMainAppDelegate];
     }
-    cachedDeepLinks = [[NSMutableArray alloc] init];
     // Fire event for sending push notification click
     if (config.applicationLaunchOptions) {
         NSDictionary *userInfo = [config.applicationLaunchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -83,7 +89,7 @@ static BlueshiftPluginManager *_sharedInstance = nil;
             [options setValue:deepLinkURL.absoluteString forKey:BlueshiftURLEvent];
             [self.blueshiftEventsManagerDelegate fireEventWithEventName:BlueshiftDeepLinkEvent data:options];
         } else {
-            BlueshiftRNDeepLinkData *deepLinkEvent = [[BlueshiftRNDeepLinkData alloc] initWithEventName:BlueshiftURLEvent data:data deepLink:deepLinkURL];
+            BlueshiftRNDeepLinkData *deepLinkEvent = [[BlueshiftRNDeepLinkData alloc] initWithEventName:BlueshiftDeepLinkEvent data:data deepLink:deepLinkURL];
             [cachedDeepLinks addObject:deepLinkEvent];
         }
     }
@@ -99,7 +105,7 @@ static BlueshiftPluginManager *_sharedInstance = nil;
             [self.blueshiftEventsManagerDelegate fireEventWithEventName:eventName data:data];
         }
     } else {
-        BlueshiftRNDeepLinkData *deepLinkEvent = [[BlueshiftRNDeepLinkData alloc] initWithEventName:BlueshiftURLEvent data:data deepLink:nil];
+        BlueshiftRNDeepLinkData *deepLinkEvent = [[BlueshiftRNDeepLinkData alloc] initWithEventName:eventName data:data deepLink:nil];
         [cachedDeepLinks addObject:deepLinkEvent];
     }
 }
