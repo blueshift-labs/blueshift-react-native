@@ -70,9 +70,7 @@ static void InitializeFlipper(UIApplication *application) {
  
   // Set launch options to track the push click from killed app state
   config.applicationLaunchOptions = launchOptions;
-  
-  config.appGroupID = @"group.blueshift.reads";
-    
+      
   // Delay push permission by setting NO, by default push permission is displayed on app launch.
   config.enablePushNotification = YES;
   
@@ -88,6 +86,9 @@ static void InitializeFlipper(UIApplication *application) {
   //Optional: Set enableInAppNotification to YES to start receving in-app notifications
   config.enableInAppNotification = YES;
   
+  // Optional - Set appgroupid if you are using carousel push notifications
+  config.appGroupID = @"group.blueshift.reads";
+
   // Initialise the Plugin and SDK using the Automatic integration.
   [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
   

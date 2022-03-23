@@ -67,6 +67,11 @@ RCT_EXPORT_METHOD(registerForInAppMessage:(NSString *)screenName) {
     }
 }
 
+// Legacy bridge method for backward compatability
+RCT_EXPORT_METHOD(registerForInAppNotification:(NSString *)screenName) {
+    [self registerForInAppMessage:screenName];
+}
+
 RCT_EXPORT_METHOD(unregisterForInAppMessage) {
     [[BlueShift sharedInstance] unregisterForInAppMessage];
 }
