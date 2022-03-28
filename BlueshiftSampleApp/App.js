@@ -6,12 +6,32 @@ import Blueshift from 'blueshift-react-native';
 export default class App extends Component {
 
 componentDidMount() { 
-  // Add event 
-// Add event 
-  // Add event 
-  Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
+  // Read deeplinks when brought from killed state
+  global.killedStateUrlListener = Linking.getInitialURL().then(url => { 
+    if(url) {
+      // Check if the URL is a rewritten/shortened URL from Blueshift
+      if (Blueshift.isBlueshiftUrl(url)) {
+        Blueshift.processBlueshiftUrl(url);
+      } else {
+        this.handleDeeplinkUrl(url);
+      }
+    }
+  });
 
-  global.urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
+  // Read deeplinks when app is alive
+  global.urlListener = Linking.addEventListener('url', (event) => { 
+    var url = event.url;
+    if(url) {
+      // Check if the URL is a rewritten/shortened URL from Blueshift
+      if (Blueshift.isBlueshiftUrl(url)) {
+        Blueshift.processBlueshiftUrl(url);
+      } else {
+        this.handleDeeplinkUrl(url);
+      }
+    }
+  }); 
+
+  Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
 
   this.setValues();
 
@@ -21,32 +41,34 @@ componentDidMount() {
 }
 
 componentWillUnmount() {
-  Blueshift.removeEventListener('PushNotificationClickedEvent');
+  global.killedStateUrlListener.remove();
+  global.urlListener.remove();
 
-  global.urlEventListner.remove();
+  Blueshift.removeEventListener('PushNotificationClickedEvent');
 
   console.log("componentDidUnMount");
 
   this.unRegisterForInApp();
 }
 
-handlePushClick(event) {
+handlePushClick = (event) => {
   alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
-}
+};
 
-handleDeepLink = (event) => { 
-console.log("Deep Link URL "+ JSON.stringify(event));
-Alert.alert(
-  "Deep Link URL",
-  event.url,
-  [
-    {
-      text: "Cancel",
-      onPress: () => console.log("Cancel Pressed"),
-      style: "cancel"
-    },
-    { text: "OK", onPress: () => console.log("OK Pressed") }
-  ]
+handleDeeplinkUrl(url) { 
+  console.log("deeplink: " + url);
+
+  Alert.alert(
+    "Deep Link URL",
+    url,
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      { text: "OK", onPress: () => console.log("OK Pressed") }
+    ]
   );
 };
 

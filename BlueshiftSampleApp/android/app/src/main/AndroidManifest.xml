@@ -20,6 +20,25 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
+        <intent-filter android:label="ReactNativeApp">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:host="universallinks.blueshiftreads.com"
+                android:pathPrefix="/z"
+                android:scheme="https" />
+            <data android:host="universallinks.blueshiftreads.com"
+                android:pathPrefix="/track"
+                android:scheme="https" />
+            <data android:host="www.blueshiftreads.com"
+                android:pathPrefix="/products"
+                android:scheme="https" />
+            <data android:host="www.blueshiftreads.com"
+                android:pathPrefix="/products"
+                android:scheme="http" />
+        </intent-filter>
+        
       </activity>
       <service android:name="com.blueshift.fcm.BlueshiftMessagingService">
         <intent-filter>
