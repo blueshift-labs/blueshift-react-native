@@ -7,20 +7,31 @@ export default class App extends Component {
 
 componentDidMount() { 
   // Read deeplinks when brought from killed state
-  Linking.getInitialURL().then(url => { 
+  global.killedStateUrlListener = Linking.getInitialURL().then(url => { 
     if(url) {
-      this.handleDeeplinkUrl(url);
+      // Check if the URL is a rewritten/shortened URL from Blueshift
+      if (Blueshift.isBlueshiftUrl(url)) {
+        Blueshift.processBlueshiftUrl(url);
+      } else {
+        this.handleDeeplinkUrl(url);
+      }
     }
   });
 
   // Read deeplinks when app is alive
-  Linking.addEventListener('url', (event) => { 
-    this.handleDeeplinkUrl(event.url);
+  global.urlListener = Linking.addEventListener('url', (event) => { 
+    var url = event.url;
+    if(url) {
+      // Check if the URL is a rewritten/shortened URL from Blueshift
+      if (Blueshift.isBlueshiftUrl(url)) {
+        Blueshift.processBlueshiftUrl(url);
+      } else {
+        this.handleDeeplinkUrl(url);
+      }
+    }
   }); 
 
   Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
-
-  // global.urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
 
   this.setValues();
 
@@ -30,9 +41,10 @@ componentDidMount() {
 }
 
 componentWillUnmount() {
-  Blueshift.removeEventListener('PushNotificationClickedEvent');
+  global.killedStateUrlListener.remove();
+  global.urlListener.remove();
 
-  // global.urlEventListner.remove();
+  Blueshift.removeEventListener('PushNotificationClickedEvent');
 
   console.log("componentDidUnMount");
 
@@ -46,22 +58,18 @@ handlePushClick = (event) => {
 handleDeeplinkUrl(url) { 
   console.log("deeplink: " + url);
 
-  if (Blueshift.isBlueshiftUrl(url)) {
-    Blueshift.processBlueshiftUrl(url);
-  } else {
-    Alert.alert(
-      "Deep Link URL",
-      url,
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ]
-    );
-  }
+  Alert.alert(
+    "Deep Link URL",
+    url,
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      { text: "OK", onPress: () => console.log("OK Pressed") }
+    ]
+  );
 };
 
 setEmailId = () => {
