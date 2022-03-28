@@ -28,6 +28,9 @@
             <data android:host="universallinks.blueshiftreads.com"
                 android:pathPrefix="/z"
                 android:scheme="https" />
+            <data android:host="universallinks.blueshiftreads.com"
+                android:pathPrefix="/track"
+                android:scheme="https" />
             <data android:host="www.blueshiftreads.com"
                 android:pathPrefix="/products"
                 android:scheme="https" />
