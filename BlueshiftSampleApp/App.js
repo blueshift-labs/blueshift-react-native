@@ -9,13 +9,13 @@ componentDidMount() {
   // Read deeplinks when brought from killed state
   Linking.getInitialURL().then(url => { 
     if(url) {
-      this.handleDeeplinks(url);
+      this.handleDeeplinkUrl(url);
     }
   });
 
   // Read deeplinks when app is alive
   Linking.addEventListener('url', (event) => { 
-    this.handleDeeplinks(event.url);
+    this.handleDeeplinkUrl(event.url);
   }); 
 
   Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
@@ -43,8 +43,8 @@ handlePushClick = (event) => {
   alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
 };
 
-handleDeeplinks(url) { 
-  console.log(url);
+handleDeeplinkUrl(url) { 
+  console.log("deeplink: " + url);
 
   if (Blueshift.isBlueshiftUrl(url)) {
     Blueshift.processBlueshiftUrl(url);
