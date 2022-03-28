@@ -6,12 +6,21 @@ import Blueshift from 'blueshift-react-native';
 export default class App extends Component {
 
 componentDidMount() { 
-  // Add event 
-// Add event 
-  // Add event 
-  Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
+  // Read deeplinks when brought from killed state
+  Linking.getInitialURL().then(url => { 
+    if(url) {
+      this.handleDeeplinks(url);
+    }
+  });
 
-  global.urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
+  // Read deeplinks when app is alive
+  Linking.addEventListener('url', (event) => { 
+    this.handleDeeplinks(event.url);
+  }); 
+
+  Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
+
+  // global.urlEventListner = Linking.addEventListener('url', this.handleDeepLink);
 
   this.setValues();
 
@@ -23,31 +32,36 @@ componentDidMount() {
 componentWillUnmount() {
   Blueshift.removeEventListener('PushNotificationClickedEvent');
 
-  global.urlEventListner.remove();
+  // global.urlEventListner.remove();
 
   console.log("componentDidUnMount");
 
   this.unRegisterForInApp();
 }
 
-handlePushClick(event) {
+handlePushClick = (event) => {
   alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
-}
+};
 
-handleDeepLink = (event) => { 
-console.log("Deep Link URL "+ JSON.stringify(event));
-Alert.alert(
-  "Deep Link URL",
-  event.url,
-  [
-    {
-      text: "Cancel",
-      onPress: () => console.log("Cancel Pressed"),
-      style: "cancel"
-    },
-    { text: "OK", onPress: () => console.log("OK Pressed") }
-  ]
-  );
+handleDeeplinks(url) { 
+  console.log(url);
+
+  if (Blueshift.isBlueshiftUrl(url)) {
+    Blueshift.processBlueshiftUrl(url);
+  } else {
+    Alert.alert(
+      "Deep Link URL",
+      url,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+  }
 };
 
 setEmailId = () => {
