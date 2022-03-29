@@ -6,9 +6,6 @@ React native plugin for Blueshift iOS and Android SDK.
 
 ```sh
 npm install blueshift-react-native
-
-// using Github url
-npm install https://github.com/blueshift-labs/blueshift-react-native --save
 ```
 
 ## Usage
@@ -28,20 +25,51 @@ Refer to [these Blueshift JS methods](https://github.com/blueshift-labs/blueshif
 Blueshift Plugin will deliver Push, in-app and universal links deep links to react native using `url` event. You can add event listener using default `Linking` method as below in you react project to get the deep link.
 
 ```javascript
-// Add event listener to get the deep link url
-Linking.addEventListener('url', this.handleDeepLink);
+componentDidMount() { 
+  // Read deeplinks when brought from killed state
+  global.killedStateUrlListener = Linking.getInitialURL().then(url => { 
+    if(url) {
+      // Check if the URL is a rewritten/shortened URL from Blueshift
+      if (Blueshift.isBlueshiftUrl(url)) {
+        Blueshift.processBlueshiftUrl(url);
+      } else {
+        this.handleDeeplinkUrl(url);
+      }
+    }
+  });
 
-handleDeepLink(event) {
-  // handle the deep link
-  console.log("deep link url = "+ event.url);
+  // Read deeplinks when app is alive
+  global.urlListener = Linking.addEventListener('url', (event) => { 
+    var url = event.url;
+    if(url) {
+      // Check if the URL is a rewritten/shortened URL from Blueshift
+      if (Blueshift.isBlueshiftUrl(url)) {
+        Blueshift.processBlueshiftUrl(url);
+      } else {
+        this.handleDeeplinkUrl(url);
+      }
+    }
+  });
+
+  Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
+}
+
+handleDeeplinkUrl(url) {
+  // Existing app code for deeplink handling.
+}
+
+componentWillUnmount() {
+  // You must unregister these callbacks
+  global.killedStateUrlListener.remove();
+  global.urlListener.remove();
 }
 ```
 ## Get Push notification payload on React native
 Blueshift Plugin will deliver Push notification payload using event `PushNotificationClickedEvent`. Add event listener using the `Blueshift` method in your react project. 
 
 ```javascript
-  // Add custom event listner using Blueshift method
-  Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
+// Add custom event listner using Blueshift method
+Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick );
 
 handlePushClick(event) {
   alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
