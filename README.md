@@ -50,8 +50,6 @@ componentDidMount() {
       }
     }
   });
-
-  Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
 }
 
 handleDeeplinkUrl(url) {
@@ -74,6 +72,11 @@ Blueshift.addEventListener('PushNotificationClickedEvent',this.handlePushClick )
 handlePushClick(event) {
   alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
 }
+```
+Remove the custom event listner by calling the `removeEventListener` method. 
+```javascript
+// Remove custom event listner using Blueshift method
+Blueshift.removeEventListener('PushNotificationClickedEvent');
 ```
 
 # iOS integration
@@ -119,7 +122,7 @@ Include the Plugin’s header `BlueshiftPluginManager.h` in `AppDelegate.h` and 
 
 #### Setup AppDelegate.m 
 
-Now open `AppDelegate.m` file and add the following function in the `AppDelegate` class. Initialise the Blueshift react native plugin using `BlueshiftPluginManager` class method `intialisePluginWithConfig: autoIntegrate:`. Pass `autoIntegrate` as `YES` to opt in for automatic integration.
+Now open `AppDelegate.m` file and add the following function in the `AppDelegate` class. Initialise the Blueshift react native plugin using `BlueshiftPluginManager` class method `initialisePluginWithConfig: autoIntegrate:`. Pass `autoIntegrate` as `YES` to opt in for automatic integration.
 
 To know more about the other optional configurations, please check [this document](https://developer.blueshift.com/docs/include-configure-initialize-the-ios-sdk-in-the-app#initialize-the-sdk).
 
@@ -143,7 +146,7 @@ To know more about the other optional configurations, please check [this documen
   config.userNotificationDelegate = self;
   
   // Initialise the Plugin and SDK using the Automatic integration.
-  [[BlueshiftPluginManager sharedInstance] intialisePluginWithConfig:config autoIntegrate:YES];
+  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
 }
 
 ```
@@ -174,7 +177,7 @@ Refer section to enable Rich push notifications, section to enable in-app notifi
 You will need to follow above mentioned steps to create the Blueshift Config and then initialise the Plugin by passing `autoIntegrate` as `NO`. 
 
 ```objective-c
-  [[BlueshiftPluginManager sharedInstance] intialisePluginWithConfig:config autoIntegrate:NO];
+  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:NO];
 ```
 
 Now, as you are doing manual integration, follow below steps to integrate the Blueshift SDK manually to handle push notification and deep link callbacks. 
@@ -275,9 +278,9 @@ We highly recommend enabling Background fetch and Remote notifications backgroun
 Once you enable the In-app messages, you will need to register the react native screens for receiving the in-app messages. You can register the screens in two ways.
 
 1. Register all screens to receive in-app messages
-You need to add `registerForInAppMessage` line in the `AppDelegate.m` file immediately after the SDK initialisation line. Refer below code snippet for reference. 
+You need to add `registerForInAppMessage` line in the `AppDelegate.m` file immediately after the SDK initialisation line irrespective of automatic or manual integration. Refer below code snippet for reference. 
 ```objective-c
-  [[BlueshiftPluginManager sharedInstance] intialisePluginWithConfig:config autoIntegrate:NO];
+  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
   [[BlueShift sharedInstance] registerForInAppMessage:@"ReactNative"];
 ```
 2. Register and unregister each screen of your react native app for in-app messages. If you don’t register a screen for in-app messages, the in-app messages will stop showing up for screens that are not registered. You will need to add in-app registration and unregistration code on the `componentDidMount` and `componentWillUnmount` respectively inside your react native screens. Refer below code snipper for reference. 
