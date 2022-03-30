@@ -19,7 +19,7 @@ Blueshift.setUserInfoEmailId("test@blueshift.com");
 Blueshift.identifyWithDetails({"user_type":"premium"});
 ```
 
-Refer to [these Blueshift JS methods](https://github.com/blueshift-labs/blueshift-react-native/blob/main/src/index.js) to know about features supported by Plugin and how to use them. 
+Refer to [these Blueshift JS methods](https://github.com/blueshift-labs/blueshift-react-native/blob/main/index.js) to know about features supported by Plugin and how to use them. 
 
 ## Get Deep links on React native
 Blueshift Plugin will deliver Push, in-app and universal links deep links to react native using `url` event. You can add event listener using default `Linking` method as below in you react project to get the deep link.
