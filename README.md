@@ -53,7 +53,7 @@ componentDidMount() {
 }
 
 handleDeeplinkUrl(url) {
-  // Existing app code for deeplink handling.
+  // Your exisiting deep-link handling code.
 }
 
 componentWillUnmount() {
@@ -443,13 +443,26 @@ track the user location. -->
 Open the `MainApplication` class and add the following lines to its `onCreate()` method.
 
 ```java
-Configuration configuration = new Configuration();
+// required import statements
+import com.blueshift.Blueshift;
+import com.blueshift.model.Configuration;
 
-// == Mandatory Settings ==
-configuration.setAppIcon(R.mipmap.ic_launcher);
-configuration.setApiKey("BLUESHIFT_EVENT_API_KEY");
+@Override
+public void onCreate() {
+  super.onCreate();
+  // ...
+  initializeBlueshift(this);
+}
 
-Blueshift.getInstance(this).initialize(configuration);
+private void initializeBlueshift(Context context) {
+  Configuration configuration = new Configuration();
+
+  configuration.setApiKey("BLUESHIFT_EVENT_API_KEY");
+  configuration.setInAppEnabled(true);
+  configuration.setJavaScriptForInAppWebViewEnabled(true);
+
+  Blueshift.getInstance(context).initialize(configuration);
+}
 ```
 
 To know more about the other optional configurations, please check [this document](https://developer.blueshift.com/docs/get-started-with-the-android-sdk#optional-configurations).
@@ -457,6 +470,11 @@ To know more about the other optional configurations, please check [this documen
 Also, add update the `onCreate()` and `onNewIntent()` methods of your `MainActivity` class as given below to handle push deep links.
 
 ```java
+// required import statements
+import android.os.Bundle;
+import android.content.Intent
+import com.blueshift.reactnative.BlueshiftReactNativeModule;
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
  super.onCreate(savedInstanceState);
