@@ -1,6 +1,6 @@
 import { DeviceEventEmitter, Linking, NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
-const BlueshiftEventEmitter = NativeModules.BlueshiftReactEventsManager ? new NativeEventEmitter(NativeModules.BlueshiftReactEventsManager) : DeviceEventEmitter;
+const BlueshiftEventEmitter = new NativeEventEmitter(NativeModules.BlueshiftReactEventsManager);
 
 var Blueshift = {
 
@@ -91,7 +91,7 @@ var Blueshift = {
     /**
      * Sends an identify event with the details available.
      * 
-     * @param {Object} extras   Additional params (if any)
+     * @param {Object} details   Additional params (if any)
      *
      * Usage - 
      * Blueshift.Blueshift.identifyWithDetails({})
@@ -106,8 +106,8 @@ var Blueshift = {
      * Send any custom event to Blueshift.
      * 
      * @param {String} eventName    Name of the custom event.
-     * @param {Object} extras       Additional params (if any).
-     * @param {Boolean} canBatch    Tells if this event can be batched or not.
+     * @param {Object} details       Additional params (if any).
+     * @param {Boolean} isBatch    Tells if this event can be batched or not.
      *
      * Usage - 
      * Blueshift.trackCustomEvent("CustomEvent",{},false);
@@ -122,8 +122,8 @@ var Blueshift = {
      * Track screen view using Blueshift.
      * 
      * @param {String} screenName   Name of the screen to track.
-     * @param {Object} extras       Additional params (if any).
-     * @param {Boolean} canBatch    Tells if this event can be batched or not.
+     * @param {Object} details       Additional params (if any).
+     * @param {Boolean} isBatch    Tells if this event can be batched or not.
      *
      * Usage - 
      * Blueshift.trackScreenView("IndexScreen",{},false);
@@ -137,7 +137,7 @@ var Blueshift = {
     /**
      * Save email in the SDK.
      * 
-     * @param {String} email email of the customer.
+     * @param {String} emailId email of the customer.
      *
      * Usage - 
      * Blueshift.setUserInfoEmailId("test@test.com");
@@ -228,7 +228,7 @@ var Blueshift = {
     /**
      * Opt-in or opt-out of push notifications sent from Blueshift.
      * 
-     * @param {Boolean} enabled When true, opt-in else opt-out.
+     * @param {Boolean} isEnabled When true, opt-in else opt-out.
      *
      * Usage - 
      * Blueshift.setEnablePush(true);
@@ -241,7 +241,7 @@ var Blueshift = {
     /**
      * Opt-in or opt-out of in-app notifications sent from Blueshift.
      * 
-     * @param {Boolean} enabled When true, opt-in else opt-out.
+     * @param {Boolean} isEnabled When true, opt-in else opt-out.
      *
      * Usage - 
      * Blueshift.setEnableInApp(true);
@@ -287,8 +287,8 @@ var Blueshift = {
      * Set current location of the device in the Blueshift SDK.
      * Note - This is only applicable for the iOS devices.
      *
-     * @param {double} latitude location latitude value.
-     * @param {double} longitude location longitude value.
+     * @param {Number} latitude location latitude value.
+     * @param {Number} longitude location longitude value.
      *
      * Usage - 
      * Blueshift.setCurrentLocation(18.5245649,73.7228812);
@@ -363,7 +363,7 @@ var Blueshift = {
     /**
      * Get opt-in or opt-out status of in-app notifications set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getEnableInAppStatus((value) => {
@@ -377,7 +377,7 @@ var Blueshift = {
     /**
      * Get opt-in or opt-out status of push notifications set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getEnablePushStatus((value) => {
@@ -391,7 +391,7 @@ var Blueshift = {
     /**
      * Get status of event tracking set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getEnableTrackingStatus((value) => {
@@ -405,7 +405,7 @@ var Blueshift = {
     /**
      * Get email id string set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getUserInfoEmailId((value) => {
@@ -419,7 +419,7 @@ var Blueshift = {
     /**
      * Get customer id string set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getUserInfoCustomerId((value) => {
@@ -433,7 +433,7 @@ var Blueshift = {
     /**
      * Get first name string set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getUserInfoFirstName((value) => {
@@ -447,7 +447,7 @@ var Blueshift = {
     /**
      * Get last name string set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getUserInfoLastName((value) => {
@@ -461,7 +461,7 @@ var Blueshift = {
     /**
      * Get extras JSON data set in the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getUserInfoExtras((value) => {
@@ -475,7 +475,7 @@ var Blueshift = {
     /**
      * Get current device id string used by the SDK.
      *
-     * @param {function} success success callback.
+     * @param {function} callback success callback.
      *
      * Usage - 
      *  Blueshift.getCurrentDeviceId((value) => {
