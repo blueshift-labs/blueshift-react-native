@@ -1,5 +1,4 @@
-declare namespace Blueshift{
-		
+declare module 'blueshift-react-native' {
 	/**
 	 * Add event listener for a event name to listen to events fired by Blueshift SDK
 	 * 
