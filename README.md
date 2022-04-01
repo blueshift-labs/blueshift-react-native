@@ -70,7 +70,7 @@ Blueshift.setUserInfoCustomerId("cust123456");
 Blueshift.setUserInfoExtras({"profession":"software engineer", "isLoggedIn":true});
 
 // Identify event with custom data
-Blueshift.Blueshift.identifyWithDetails({"user_type":"premium"});
+Blueshift.identifyWithDetails({"user_type":"premium"});
 
 ```
 
@@ -92,7 +92,7 @@ Use Blueshift app preferences to opt-out of push notifications that we send from
 Blueshift.setEnablePush(false);
 
 // fire identify event
-Blueshift.Blueshift.identifyWithDetails({});
+Blueshift.identifyWithDetails({});
 
 ```
 - **In-app notifications opt-out**
@@ -104,7 +104,7 @@ Use Blueshift app preferences to opt-out of In-app notifications that we send fr
 Blueshift.setEnableInApp(false);
 
 // fire identify event
-Blueshift.Blueshift.identifyWithDetails({});
+Blueshift.identifyWithDetails({});
 
 ```
 
