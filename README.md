@@ -108,7 +108,7 @@ Blueshift.Blueshift.identifyWithDetails({});
 
 ```
 
-###Delay Push permission dialog(iOS only)
+### Delay Push permission dialog(iOS only)
 Blueshift SDK registers for iOS push notifications automatically after the app launch. If you don't want the push notification permission to be displayed immediately on the app launch, you can customize it to display it later after sign up/sign in. To do that you need to set the `config.enablePushNotification` as `false` in your **Xcode project** while initializing the Blueshift Plugin.
 
 ```Objective-c

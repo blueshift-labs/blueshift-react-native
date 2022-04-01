@@ -86,7 +86,7 @@ Now call above function inside the `application:(UIApplication *)application did
 
 ```
 
-####SDK Config values
+#### SDK Config values
 The other optional SDK config values which can be used to configure the SDK are:
 
 ```Objective-c
@@ -227,7 +227,7 @@ During the SDK initialisation in `AppDelegate.m` file, we have set the values to
 
 ```
 
-####Configure time intervals between two in-apps
+#### Configure time intervals between two in-apps
 By default, the time interval between two in-app messages (the interval when a message is dismissed and the next message appears) is one minute. You can use the following method to change this interval during the SDK initialization in the `AppDelegate.m` file:
 
 ```objective-c
