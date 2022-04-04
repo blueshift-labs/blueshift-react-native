@@ -117,13 +117,10 @@ The other optional SDK config values which can be used to configure the SDK are:
  	[config setDebug:YES];
  #endif
 
- // Optional: Set the applications launch Options for SDK to track.
- [config setApplicationLaunchOptions:launchOptions];
-
 ```
 
 The SDK setup with automatic integration is complete over here. Using this setup you will be able to send events to Blueshift, send basic push notifications (title+content) to the iOS device. And also you will get the deep links in your react app using event `url`.
-Refer section to enable Rich push notifications, section to enable in-app notifications and section to enable Blueshift email deep links. 
+Refer [section](#2-enable-rich-push-notifications) to enable Rich push notifications, [section](#3-enable-in-app-messages) to enable in-app notifications and [section](#4-enable-blueshift-email-deep-links) to enable Blueshift email deep links. 
 
 
 ### Manual Integration
@@ -264,7 +261,7 @@ You need to add `registerForInAppMessage` line in the `AppDelegate.m` file immed
     Blueshift.unregisterForInAppMessage();
  }
 ```
-## 3. Enable Blueshift email deep links
+## 4. Enable Blueshift email deep links
 Blueshift’s deep links are usual https URLs that take users to a page in the app or launch them in a browser. If an email or text message that we send as a part of your campaign contains a Blueshift deep link and a user clicks on it, iOS will launch the installed app and Blueshift SDK will deliver the deep link to the app so that app can navigate the user to the respective screen.
 
 - Complete the CNAME and AASA configuration as mentioned in the `Prerequisites` section of [this document](https://developer.blueshift.com/docs/integrate-blueshifts-universal-links-ios#prerequisites).
