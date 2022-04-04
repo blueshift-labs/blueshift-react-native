@@ -2,17 +2,19 @@ package com.blueshiftsampleapp;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.blueshift.Blueshift;
+import com.blueshift.BlueshiftLogger;
+import com.blueshift.model.Configuration;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import com.blueshift.model.Configuration;
-import com.blueshift.Blueshift;
-import com.blueshift.BlueshiftLogger;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -49,19 +51,24 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
 
+    // Enable logging to view SDK logs in logcat window.
+    if (BuildConfig.DEBUG) {
+      // You must disable logging in production.
+      BlueshiftLogger.setLogLevel(BlueshiftLogger.VERBOSE);
+    }
+
     initBlueshift();
   }
 
   private void initBlueshift() {
-    BlueshiftLogger.setLogLevel(BlueshiftLogger.VERBOSE);
-
     Configuration configuration = new Configuration();
-
-    // == Mandatory Settings ==
-    configuration.setAppIcon(R.mipmap.ic_launcher);
-    configuration.setApiKey("API_KEY");
+    // Set Blueshift event API key
+    configuration.setApiKey(BuildConfig.API_KEY);
+    // Enable in-app messages
     configuration.setInAppEnabled(true);
     configuration.setJavaScriptForInAppWebViewEnabled(true);
+    // Set device-id source to Instance Id and package name combo (highly recommended)
+    configuration.setDeviceIdSource(Blueshift.DeviceIdSource.INSTANCE_ID_PKG_NAME);
 
     Blueshift.getInstance(this).initialize(configuration);
   }

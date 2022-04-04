@@ -127,6 +127,12 @@ def enableHermes = project.ext.react.get("enableHermes", false);
  */
 def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
+String blueshiftEventApiKey() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty('bsft.apikey')
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -138,6 +144,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        buildConfigField 'String', 'API_KEY', blueshiftEventApiKey()
     }
     splits {
         abi {

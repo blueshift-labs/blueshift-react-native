@@ -7,7 +7,7 @@ export default class App extends Component {
 
 componentDidMount() { 
   // Read deeplinks when brought from killed state
-  global.killedStateUrlListener = Linking.getInitialURL().then(url => { 
+  global.initUrlListener = Linking.getInitialURL().then(url => { 
     if(url) {
       // Check if the URL is a rewritten/shortened URL from Blueshift
       if (Blueshift.isBlueshiftUrl(url)) {
@@ -41,8 +41,13 @@ componentDidMount() {
 }
 
 componentWillUnmount() {
-  global.killedStateUrlListener.remove();
-  global.urlListener.remove();
+  if (global) {
+    global.initUrlListener.remove();
+  }
+
+  if (global) {
+    global.urlListener.remove();
+  }
 
   Blueshift.removeEventListener('PushNotificationClickedEvent');
 
