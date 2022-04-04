@@ -72,32 +72,72 @@ track the user location. -->
 
 ## Initialize the Native SDK
 
-Open the `MainApplication` class and add the following lines to its `onCreate()` method.
+Open the `MainApplication.java` file and import the following classes.
+
+```java
+import com.blueshift.model.Configuration;
+import com.blueshift.Blueshift;
+```
+
+Now add the following lines inside the onCreated method of MainApplication class to initialize the Blueshift SDK.
 
 ```java
 Configuration configuration = new Configuration();
-
-// == Mandatory Settings ==
-configuration.setAppIcon(R.mipmap.ic_launcher);
-configuration.setApiKey("BLUESHIFT_EVENT_API_KEY");
+// Set Blueshift event API key
+configuration.setApiKey(YOUR_EVENT_API_KEY);
+// Enable in-app messages
+configuration.setInAppEnabled(true);
+configuration.setJavaScriptForInAppWebViewEnabled(true);
+// Set device-id source to Instance Id and package name combo (highly recommended)
+configuration.setDeviceIdSource(Blueshift.DeviceIdSource.INSTANCE_ID_PKG_NAME);
 
 Blueshift.getInstance(this).initialize(configuration);
 ```
 
 To know more about the other optional configurations, please check [this document](https://developer.blueshift.com/docs/get-started-with-the-android-sdk#optional-configurations).
 
-Also, add update the `onCreate()` and `onNewIntent()` methods of your `MainActivity` class as given below to handle push deep links.
+## Handle Push Notification deeplinks
+
+Open the `MainActivity.java` file and import the following classes.
+
+```java
+import android.content.Intent;
+import android.os.Bundle;
+import com.blueshift.reactnative.BlueshiftReactNativeModule;
+```
+
+Now add the following code inside the `MainActivity` class to handle push notification deeplinks.
 
 ```java
 @Override
 protected void onCreate(Bundle savedInstanceState) {
- super.onCreate(savedInstanceState);
- BlueshiftReactNativeModule.processBlueshiftPushUrl(getIntent());
+  super.onCreate(savedInstanceState);
+  BlueshiftReactNativeModule.processBlueshiftPushUrl(getIntent());
 }
 
 @Override
 public void onNewIntent(Intent intent) {
- super.onNewIntent(intent);
- BlueshiftReactNativeModule.processBlueshiftPushUrl(getIntent());
+  super.onNewIntent(intent);
+  BlueshiftReactNativeModule.processBlueshiftPushUrl(getIntent());
+}
+```
+
+## Logging
+
+To verify the SDK integration, enable the logging and see the events are being sent to the Blueshift APIs.
+
+Open the `MainActivity.java` file and import the following class.
+
+```java
+import com.blueshift.BlueshiftLogger;
+```
+
+Now add the below lines before the SDK initialization code for enabling SDK logs.
+
+```java
+// Enable logging to view SDK logs in logcat window.
+if (BuildConfig.DEBUG) {
+  // You must disable logging in production.
+  BlueshiftLogger.setLogLevel(BlueshiftLogger.VERBOSE);
 }
 ```
