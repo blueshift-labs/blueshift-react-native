@@ -2,7 +2,7 @@
 
 ## 1. SDK Integration
 
-### Depend on Blueshift Android SDK
+### Install Blueshift Android SDK
 
 To install the Blueshift Android SDK, add the following line to the app level `build.gradle` file. To know the latest version, check the [releases](https://github.com/blueshift-labs/Blueshift-Android-SDK/releases) page on **GitHub**. 
 
@@ -10,7 +10,7 @@ To install the Blueshift Android SDK, add the following line to the app level `b
 implementation "com.blueshift:android-sdk-x:$sdkVersion"
 ```
 
-### Depend on Firebase Cloud Messaging
+### Install Firebase Cloud Messaging
 
 Blueshift uses Firebase Messaging for sending push messages. If not already done, please integrate Firebase Messaging into the project.
 
