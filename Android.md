@@ -8,7 +8,7 @@ To install the Blueshift Android SDK, add the following line to the app level `b
 implementation "com.blueshift:android-sdk-x:$sdkVersion"
 ```
 
-## Depend on Firebase Messaging
+## Depend on Firebase Cloud Messaging
 
 Blueshift uses Firebase Messaging for sending push messages. If not already done, please integrate Firebase Messaging into the project.
 
@@ -85,9 +85,6 @@ Now add the following lines inside the onCreated method of MainApplication class
 Configuration configuration = new Configuration();
 // Set Blueshift event API key
 configuration.setApiKey(YOUR_EVENT_API_KEY);
-// Enable in-app messages
-configuration.setInAppEnabled(true);
-configuration.setJavaScriptForInAppWebViewEnabled(true);
 // Set device-id source to Instance Id and package name combo (highly recommended)
 configuration.setDeviceIdSource(Blueshift.DeviceIdSource.INSTANCE_ID_PKG_NAME);
 
@@ -120,6 +117,88 @@ public void onNewIntent(Intent intent) {
   super.onNewIntent(intent);
   BlueshiftReactNativeModule.processBlueshiftPushUrl(getIntent());
 }
+```
+
+## In-app messaging
+
+By default, In-app messages are disabled in the SDK. You will need to enable it explicitly using the Blueshift config during SDK initialization.
+
+Add the following lines before calling the initialize method mentioned in the "Initialize the Native SDK" section above.
+
+```java
+// Enable in-app messages
+configuration.setInAppEnabled(true);
+configuration.setJavaScriptForInAppWebViewEnabled(true);
+```
+
+By default, the time interval between two in-app messages is one minute. You can use the following method to change this interval during the SDK initialization.
+
+```java
+configuration.setInAppInterval(1000 * 60 * 2); // This will set the interval to two minutes.
+```
+
+### In-app display options.
+
+The app must register/whitelist its pages/screens to show in-app messages.
+
+#### 1. Show on all pages
+
+To whitelist all pages/screens make use of `ActivityLifecycleCallback` as mentioned below.
+
+```java
+public class YourApplication extends Application implements Application.ActivityLifecycleCallbacks {
+  
+    @Override
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+      
+    }
+  
+    @Override
+    public void onActivityStarted(@NonNull Activity activity) {
+        Blueshift.getInstance(activity).registerForInAppMessages(activity);
+    }
+  
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+      
+    }
+  
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+      
+    }
+  
+    @Override
+    public void onActivityStopped(@NonNull Activity activity) {
+        Blueshift.getInstance(activity).unregisterForInAppMessages(activity);
+    }
+  
+    @Override
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+      
+    }
+  
+    @Override
+    public void onActivityDestroyed(@NonNull Activity activity) {
+      
+    }
+}
+```
+
+#### 2. Show on selected pages
+
+To register selected screens of the react native application, make use of the following methods in the respective callacks.
+
+```js
+ componentDidMount() { 
+    // Register for in-app notification
+    Blueshift.registerForInAppMessage("ScreenName");
+  }
+  
+ componentWillUnmount() {
+    // Unregister for in-app notification
+    Blueshift.unregisterForInAppMessage();
+ }
 ```
 
 ## Logging
