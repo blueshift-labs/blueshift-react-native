@@ -12,6 +12,8 @@
 #import "BlueshiftBridge.h"
 #import "BlueshiftPluginManager.h"
 #import "BlueShift.h"
+#import "BlueshiftVersion.h"
+#import "BlueshiftNotificationConstants.h"
 
 @implementation BlueshiftBridge
 
@@ -27,20 +29,12 @@ RCT_EXPORT_MODULE();
 
 #pragma mark Events
 RCT_EXPORT_METHOD(identifyWithDetails:(NSDictionary *)details) {
-    if ([details isKindOfClass:[NSDictionary class]]) {
-        [[BlueShift sharedInstance] identifyUserWithDetails:details canBatchThisEvent:NO];
-    } else {
-        [[BlueShift sharedInstance] identifyUserWithDetails:nil canBatchThisEvent:NO];
-    }
+    [[BlueShift sharedInstance] identifyUserWithDetails:[self addRNSDKVersionString:details] canBatchThisEvent:NO];
 }
 
 RCT_EXPORT_METHOD(trackCustomEvent:(NSString *)eventName details:(NSDictionary *) details canBatchThisEvent:(BOOL)canBatchThisEvent) {
     if ([eventName isKindOfClass:[NSString class]]) {
-        if ([details isKindOfClass:[NSDictionary class]]) {
-            [[BlueShift sharedInstance] trackEventForEventName:eventName andParameters:details canBatchThisEvent:canBatchThisEvent];
-        } else {
-            [[BlueShift sharedInstance] trackEventForEventName:eventName andParameters:nil canBatchThisEvent:canBatchThisEvent];
-        }
+        [[BlueShift sharedInstance] trackEventForEventName:eventName andParameters:[self addRNSDKVersionString:details] canBatchThisEvent:canBatchThisEvent];
     }
 }
 
@@ -51,7 +45,7 @@ RCT_EXPORT_METHOD(trackScreenView:(NSString *)screenName details:(NSDictionary *
             [params addEntriesFromDictionary:details];
         }
         params[kScreenViewed] = screenName;
-        [[BlueShift sharedInstance] trackEventForEventName:kEventPageLoad andParameters:params canBatchThisEvent:canBatchThisEvent];
+        [[BlueShift sharedInstance] trackEventForEventName:kEventPageLoad andParameters:[self addRNSDKVersionString:params] canBatchThisEvent:canBatchThisEvent];
     }
 }
 
@@ -268,4 +262,16 @@ RCT_EXPORT_METHOD(processBlueshiftUrl:(NSString*)url) {
     // Android Placeholder method
 }
 
+- (NSDictionary *)addRNSDKVersionString: (NSDictionary*) details {
+    NSString *sdkVersion = [NSString stringWithFormat:@"%@-RN-%@",kBlueshiftSDKVersion,kBlueshiftReactSDKVersion];
+    if ([details isKindOfClass:[NSDictionary class]]) {
+        NSMutableDictionary *dict = [details mutableCopy];
+        dict[kInAppNotificationModalSDKVersionKey] = sdkVersion;
+        return dict;
+    } else {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        dict[kInAppNotificationModalSDKVersionKey] = sdkVersion;
+        return dict;
+    }
+}
 @end

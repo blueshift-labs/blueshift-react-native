@@ -1,6 +1,6 @@
 {
   "name": "blueshift-react-native",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "React native plugin for Blueshift iOS and Android SDK.",
   "main": "index.js",
   "types": "index.d.ts",
