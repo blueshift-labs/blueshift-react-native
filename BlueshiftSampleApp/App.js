@@ -6,10 +6,10 @@ import Blueshift from 'blueshift-react-native';
 export default class App extends Component {
 
 componentDidMount() { 
-  // Read deeplinks when brought from killed state
-  global.initUrlListener = Linking.getInitialURL().then(url => { 
+  // Get the email deep link when app launched from killed state
+  Linking.getInitialURL().then(url => { 
     if(url) {
-      // Check if the URL is a rewritten/shortened URL from Blueshift
+      // Check if the email deep link is from Blueshift
       if (Blueshift.isBlueshiftUrl(url)) {
         Blueshift.processBlueshiftUrl(url);
       } else {
@@ -18,7 +18,7 @@ componentDidMount() {
     }
   });
 
-  // Read deeplinks when app is alive
+  // Add event listner for `url` event
   global.urlListener = Linking.addEventListener('url', (event) => { 
     var url = event.url;
     if(url) {
@@ -31,28 +31,25 @@ componentDidMount() {
     }
   }); 
 
+  // Add custom event listener using Blueshift method
   Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
 
   this.setValues();
 
-  console.log("componentDidMount");
-
+  // Register screen for receiving in-app notifications
   this.registerForInApp();
 }
 
 componentWillUnmount() {
-  if (global) {
-    global.initUrlListener.remove();
-  }
-
+    // You must unregister these callbacks
   if (global) {
     global.urlListener.remove();
   }
 
+  // Remove custom event listner using Blueshift method
   Blueshift.removeEventListener('PushNotificationClickedEvent');
 
-  console.log("componentDidUnMount");
-
+  // Unregister screen 
   this.unRegisterForInApp();
 }
 
