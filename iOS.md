@@ -55,8 +55,8 @@ Now open `AppDelegate.m` file and add the following function in the `AppDelegate
   // Set launch options to track the push click from killed app state
   config.applicationLaunchOptions = launchOptions;
     
-  // Delay push permission by setting NO, by default push permission is displayed on app launch.
-  config.enablePushNotification = NO;
+  // Delay push permission dialog by setting NO, by default push permission dialog is displayed on app launch.
+  config.enablePushNotification = YES;
   
   // Set userNotificationDelegate to self to get the push notification callbacks.
   config.userNotificationDelegate = self;
@@ -119,7 +119,7 @@ The other optional SDK config values which can be used to configure the SDK are:
 
 ```
 
-The SDK setup with automatic integration is complete over here. Using this setup you will be able to send events to Blueshift, send basic push notifications (title+content) to the iOS device. And also you will get the deep links in your react app using event `url`.
+The SDK setup with automatic integration is complete over here. Using this setup you will be able to send events to Blueshift, send basic push notifications (title+content) to the iOS device. And also you will get the push notification deep links in your react app using event `url`.
 Refer [section](#2-enable-rich-push-notifications) to enable Rich push notifications, [section](#3-enable-in-app-messages) to enable in-app notifications and [section](#4-enable-blueshift-email-deep-links) to enable Blueshift email deep links. 
 
 

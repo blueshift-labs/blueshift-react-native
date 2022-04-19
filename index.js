@@ -7,11 +7,11 @@ var Blueshift = {
     /**
      * Add event listener for a event name to listen to events fired by Blueshift SDK
      *
-     * @param {string} eventName    Name of event to listen to.
-     * @param {function} callback    callback function to handle the event
-     *
      * Usage - 
      * Blueshift.addEventListener("PushNotificationClickedEvent", this.handlePush);
+     * 
+     * @param {string} eventName    Name of event to listen to.
+     * @param {function} callback    callback function to handle the event
      * 
      */
     addEventListener: function(eventName, callback) {
@@ -27,10 +27,10 @@ var Blueshift = {
     /**
      * Remove the event listener.
      *
-     * @param {string} eventName    Name of event remove the listener.
-     *
      * Usage - 
      * Blueshift.removeEventListener("PushNotificationClickedEvent");
+     * 
+     * @param {string} eventName    Name of event remove the listener.
      * 
      */
     removeEventListener: function(eventName) {
@@ -42,10 +42,10 @@ var Blueshift = {
     /**
      * Registers a page for showing in-app message.
      *
-     * @param {String} screenName    Name of the screen.
-     *
      * Usage - 
      * Blueshift.registerForInAppMessage("IndexScreen");
+     * 
+     * @param {string} screenName    Name of the screen.
      * 
      */
     registerForInAppMessage: function(screenName) {
@@ -91,10 +91,10 @@ var Blueshift = {
     /**
      * Sends an identify event with the details available.
      * 
-     * @param {Object} details   Additional params (if any)
-     *
      * Usage - 
      * Blueshift.Blueshift.identifyWithDetails({})
+     * 
+     * @param {object} details   Additional params (if any)
      * 
      */
 
@@ -105,12 +105,12 @@ var Blueshift = {
     /**
      * Send any custom event to Blueshift.
      * 
-     * @param {String} eventName    Name of the custom event.
-     * @param {Object} details       Additional params (if any).
-     * @param {Boolean} isBatch    Tells if this event can be batched or not.
-     *
      * Usage - 
      * Blueshift.trackCustomEvent("CustomEvent",{},false);
+     * 
+     * @param {string} eventName    Name of the custom event.
+     * @param {object} details      Additional params (if any).
+     * @param {boolean} isBatch     Tells if this event can be batched or not.
      * 
      */
 
@@ -121,12 +121,12 @@ var Blueshift = {
     /**
      * Track screen view using Blueshift.
      * 
-     * @param {String} screenName   Name of the screen to track.
-     * @param {Object} details       Additional params (if any).
-     * @param {Boolean} isBatch    Tells if this event can be batched or not.
-     *
      * Usage - 
      * Blueshift.trackScreenView("IndexScreen",{},false);
+     * 
+     * @param {string} screenName   Name of the screen to track.
+     * @param {object} details      Additional params (if any).
+     * @param {boolean} isBatch     Tells if this event can be batched or not.
      * 
      */
     trackScreenView: function(screenName, details, isBatch) {
@@ -137,10 +137,10 @@ var Blueshift = {
     /**
      * Save email in the SDK.
      * 
-     * @param {String} emailId email of the customer.
-     *
      * Usage - 
      * Blueshift.setUserInfoEmailId("test@test.com");
+     * 
+     * @param {string} emailId email of the customer.
      * 
      */
 
@@ -150,12 +150,12 @@ var Blueshift = {
 
     /**
      * Save customerId in the SDK.
-     * 
-     * @param {String} customerId customerId of the customer.
      *
      * Usage - 
      * Blueshift.setUserInfoCustomerId("cust123456");
-     * 
+     *  
+     * @param {string} customerId customerId of the customer.
+     *
      */
 
     setUserInfoCustomerId: function(customerId) {
@@ -164,11 +164,11 @@ var Blueshift = {
 
     /**
      * Save firstname in the SDK.
-     * 
-     * @param {String} firstname firstname of the customer.
      *
      * Usage - 
      * Blueshift.setUserInfoFirstName("John");
+     *  
+     * @param {string} firstname firstname of the customer.
      * 
      */
     setUserInfoFirstName: function(firstname) {
@@ -178,10 +178,10 @@ var Blueshift = {
     /**
      * Save lastname in the SDK.
      * 
-     * @param {String} lastname lastname of the customer.
-     *
      * Usage - 
      * Blueshift.setUserInfoLastName("Cartor");
+     *
+     * @param {string} lastname lastname of the customer.
      * 
      */
     setUserInfoLastName: function(lastname) {
@@ -190,11 +190,11 @@ var Blueshift = {
 
     /**
      * Save additional user info in the SDK.
-     * 
-     * @param {Object} extras additional user info.
      *
      * Usage - 
      * Blueshift.setUserInfoExtras({"profession":"software engineer", "usertype":"premium"});
+     *  
+     * @param {object} extras additional user info.
      * 
      */
     setUserInfoExtras: function(extras) {
@@ -214,25 +214,25 @@ var Blueshift = {
 
     /**
      * Enable/disable SDK's event tracking.
-     * 
-     * @param {Boolean} enabled When true, tracking is enabled. When false, disabled.
      *
      * Usage - 
      * Blueshift.setEnableTracking(true);
+     *  
+     * @param {boolean} enabled When true, tracking is enabled. When false, disabled.
      * 
      */
-     setEnableTracking: function(enabled) {
+    setEnableTracking: function(enabled) {
         NativeModules.BlueshiftBridge.setEnableTracking(enabled);
     },
 
     /**
      * Opt-in or opt-out of push notifications sent from Blueshift.
-     * 
-     * @param {Boolean} isEnabled When true, opt-in else opt-out.
      *
      * Usage - 
      * Blueshift.setEnablePush(true);
-     * 
+     *  
+     * @param {boolean} isEnabled When true, opt-in else opt-out.
+     *
      */
     setEnablePush: function(isEnabled) {
         NativeModules.BlueshiftBridge.setEnablePush(isEnabled);
@@ -241,13 +241,12 @@ var Blueshift = {
     /**
      * Opt-in or opt-out of in-app notifications sent from Blueshift.
      * 
-     * @param {Boolean} isEnabled When true, opt-in else opt-out.
-     *
      * Usage - 
      * Blueshift.setEnableInApp(true);
      * 
+     * @param {boolean} isEnabled When true, opt-in else opt-out.
+     * 
      */
-
     setEnableInApp: function(isEnabled) {
         NativeModules.BlueshiftBridge.setEnableInApp(isEnabled);
     },
@@ -256,10 +255,10 @@ var Blueshift = {
      * Set IDFA of the device in the Blueshift SDK.
      * Note - This is only applicable for the iOS devices.
      *
-     * @param {String} IDFAString IDFA value.
-     *
      * Usage - 
      * Blueshift.setIDFA("EA7583CD-A667-48BC-B806-42ECB2B48606");
+     * 
+     * @param {string} IDFAString IDFA value.
      * 
      */
     setIDFA: function(IDFAString) {
@@ -276,7 +275,6 @@ var Blueshift = {
      * Blueshift.registerForRemoteNotification();
      * 
      */
-
     registerForRemoteNotification: function() {
         if (Platform.OS === 'ios') {
             NativeModules.BlueshiftBridge.registerForRemoteNotification();
@@ -287,12 +285,12 @@ var Blueshift = {
      * Set current location of the device in the Blueshift SDK.
      * Note - This is only applicable for the iOS devices.
      *
-     * @param {Number} latitude location latitude value.
-     * @param {Number} longitude location longitude value.
-     *
      * Usage - 
      * Blueshift.setCurrentLocation(18.5245649,73.7228812);
      * 
+     * @param {Number} latitude location latitude value.
+     * @param {Number} longitude location longitude value.
+     *
      */
     setCurrentLocation: function(latitude, longitude) {
         if (Platform.OS === 'ios') {
@@ -302,10 +300,6 @@ var Blueshift = {
 
     /**
      * Calls Blueshift's live content API with email and given slot name and live content context.
-     * 
-     * @param {String} slot slot name of the live content.
-     * @param {Object} lcContext live content context.
-     * @param {function} callback callback function.
      *
      * Usage - 
      *    Blueshift.getLiveContentByEmail("testSlot",{},(err,result) => {
@@ -315,6 +309,11 @@ var Blueshift = {
      *           console.log(err);
      *         }
      *    });
+     *  
+     * @param {string} slot slot name of the live content.
+     * @param {object} lcContext live content context.
+     * @param {function} callback callback function.
+     *
      */  
     getLiveContentByEmail: function(slot, lcContext, callback) {
         NativeModules.BlueshiftBridge.getLiveContentByEmail(slot,lcContext,callback);
@@ -322,10 +321,6 @@ var Blueshift = {
 
     /**
      * Calls Blueshift's live content API with customer id and given slot name and live content context.
-     * 
-     * @param {String} slot slot name of the live content.
-     * @param {Object} lcContext live content context.
-     * @param {function} callback callback function.
      *
      * Usage - 
      *    Blueshift.getLiveContentByCustomerId("testSlot",{},(err,result) => {
@@ -335,6 +330,11 @@ var Blueshift = {
      *           console.log(err);
      *         }
      *    });
+     *  
+     * @param {string} slot slot name of the live content.
+     * @param {object} lcContext live content context.
+     * @param {function} callback callback function.
+     *
      */  
     getLiveContentByCustomerId: function(slot, lcContext, callback) {
         NativeModules.BlueshiftBridge.getLiveContentByCustomerId(slot,lcContext,callback);
@@ -342,10 +342,6 @@ var Blueshift = {
 
     /**
      * Calls Blueshift's live content API with device id and given slot name and live content context.
-     * 
-     * @param {String} slot slot name of the live content.
-     * @param {Object} lcContext live content context.
-     * @param {function} callback callback function.
      *
      * Usage - 
      *    Blueshift.getLiveContentByDeviceId("testSlot",{},(err,result) => {
@@ -355,20 +351,26 @@ var Blueshift = {
      *           console.log(err);
      *         }
      *    });
+     *  
+     * @param {string} slot slot name of the live content.
+     * @param {object} lcContext live content context.
+     * @param {function} callback callback function.
+     * 
      */    
-     getLiveContentByDeviceId: function(slot, lcContext, callback) {
+    getLiveContentByDeviceId: function(slot, lcContext, callback) {
         NativeModules.BlueshiftBridge.getLiveContentByDeviceId(slot,lcContext,callback);
     },
 
     /**
      * Get opt-in or opt-out status of in-app notifications set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getEnableInAppStatus((value) => {
      *       console.log("status"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getEnableInAppStatus: function(callback) {
         NativeModules.BlueshiftBridge.getEnableInAppStatus(callback);
@@ -377,12 +379,13 @@ var Blueshift = {
     /**
      * Get opt-in or opt-out status of push notifications set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getEnablePushStatus((value) => {
      *       console.log("status"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getEnablePushStatus: function(callback) {
         NativeModules.BlueshiftBridge.getEnablePushStatus(callback);
@@ -391,12 +394,13 @@ var Blueshift = {
     /**
      * Get status of event tracking set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getEnableTrackingStatus((value) => {
      *       console.log("status"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getEnableTrackingStatus: function(callback) {
         NativeModules.BlueshiftBridge.getEnableTrackingStatus(callback);
@@ -405,12 +409,13 @@ var Blueshift = {
     /**
      * Get email id string set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getUserInfoEmailId((value) => {
      *       console.log("Email id"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getUserInfoEmailId: function(callback) {
         NativeModules.BlueshiftBridge.getUserInfoEmailId(callback);
@@ -419,12 +424,13 @@ var Blueshift = {
     /**
      * Get customer id string set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getUserInfoCustomerId((value) => {
      *       console.log("Customer id"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getUserInfoCustomerId: function(callback) {
         NativeModules.BlueshiftBridge.getUserInfoCustomerId(callback);
@@ -433,12 +439,13 @@ var Blueshift = {
     /**
      * Get first name string set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getUserInfoFirstName((value) => {
      *       console.log("First name"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getUserInfoFirstName: function(callback) {
         NativeModules.BlueshiftBridge.getUserInfoFirstName(callback);
@@ -447,12 +454,13 @@ var Blueshift = {
     /**
      * Get last name string set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getUserInfoLastName((value) => {
      *       console.log("Last name"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getUserInfoLastName: function(callback) {
         NativeModules.BlueshiftBridge.getUserInfoLastName(callback);
@@ -461,12 +469,13 @@ var Blueshift = {
     /**
      * Get extras JSON data set in the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getUserInfoExtras((value) => {
      *       console.log("Extras"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getUserInfoExtras: function(callback) {
         NativeModules.BlueshiftBridge.getUserInfoExtras(callback);
@@ -475,21 +484,23 @@ var Blueshift = {
     /**
      * Get current device id string used by the SDK.
      *
-     * @param {function} callback success callback.
-     *
      * Usage - 
      *  Blueshift.getCurrentDeviceId((value) => {
      *       console.log("Device id"+value);
      *   });
+     * 
+     * @param {function} callback success callback.
+     *
      */
     getCurrentDeviceId: function(callback) {
         NativeModules.BlueshiftBridge.getCurrentDeviceId(callback);
     },
 
-     /**
+    /**
      * Process the Blueshift url and provide the final url to Linking's "url" callback
      * 
-     * @param {String} url 
+     * @param {string} url 
+     * 
      */
     processBlueshiftUrl: function(url) {
         if (Platform.OS === 'android') {
@@ -500,7 +511,7 @@ var Blueshift = {
     /**
      * Checks if the given Url is of Blueshift's format.
      * 
-     * @param {String} url 
+     * @param {string} url 
      */
     isBlueshiftUrl: function(url) {
         if (url) {

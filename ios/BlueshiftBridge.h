@@ -12,6 +12,8 @@
 NS_ASSUME_NONNULL_BEGIN
 #define kScreenViewed @"screen_viewed"
 
+#define kBlueshiftReactSDKVersion @"1.0.0"
+
 @interface BlueshiftBridge : NSObject <RCTBridgeModule>
 
 @end
