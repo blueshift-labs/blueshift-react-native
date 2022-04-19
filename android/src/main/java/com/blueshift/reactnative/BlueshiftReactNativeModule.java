@@ -464,6 +464,8 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
                     } else if (val instanceof Double) {
                         map.putDouble(key, (Double) val);
                     }
+                } else {
+                    map.putNull(key);
                 }
             }
         }
@@ -493,6 +495,8 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
                     } else if (val instanceof Double) {
                         array.pushDouble((Double) val);
                     }
+                } else {
+                    array.pushNull();
                 }
             }
         }
