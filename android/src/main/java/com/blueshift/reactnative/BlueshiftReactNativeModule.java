@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.blueshift.Blueshift;
 import com.blueshift.BlueshiftAppPreferences;
+import com.blueshift.BlueshiftConstants;
 import com.blueshift.BlueshiftLinksHandler;
 import com.blueshift.BlueshiftLogger;
 import com.blueshift.model.UserInfo;
@@ -30,6 +31,7 @@ import java.util.Map;
 public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     public static final String TAG = "BlueshiftReactNative";
     public static final String NAME = "BlueshiftBridge";
+    private static final String VERSION = BuildConfig.SDK_VERSION + "-RN-" + BuildConfig.PLUGIN_VERSION;
     private static final String DEEP_LINK_URL = "deep_link_url";
 
     private static BlueshiftReactNativeModule sInstance = null;
@@ -203,22 +205,37 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     // EVENTS
 
+    HashMap<String, Object> mapWithVersion() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(BlueshiftConstants.KEY_SDK_VERSION, VERSION);
+        return map;
+    }
+
     @ReactMethod
     void identifyWithDetails(ReadableMap map) {
-        Blueshift.getInstance(getReactApplicationContext())
-                .identifyUser(toHashMap(map), false);
+        HashMap<String, Object> params = toHashMap(map);
+        if (params == null) {
+            params = mapWithVersion();
+        } else {
+            params.putAll(mapWithVersion());
+        }
+        Blueshift.getInstance(getReactApplicationContext()).identifyUser(params, false);
     }
 
     @ReactMethod
     void trackCustomEvent(String eventName, ReadableMap map, boolean canBatch) {
-        Blueshift.getInstance(getReactApplicationContext())
-                .trackEvent(eventName, toHashMap(map), canBatch);
+        HashMap<String, Object> params = toHashMap(map);
+        if (params == null) {
+            params = mapWithVersion();
+        } else {
+            params.putAll(mapWithVersion());
+        }
+        Blueshift.getInstance(getReactApplicationContext()).trackEvent(eventName, params, canBatch);
     }
 
     @ReactMethod
     void trackScreenView(String screenName, boolean canBatch) {
-        Blueshift.getInstance(getReactApplicationContext())
-                .trackScreenView(screenName, canBatch);
+        Blueshift.getInstance(getReactApplicationContext()).trackScreenView(screenName, canBatch);
     }
 
     // iOS ONLY METHODS
