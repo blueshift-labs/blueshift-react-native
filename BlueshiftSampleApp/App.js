@@ -9,7 +9,7 @@ componentDidMount() {
   // Get the email deep link when app launched from killed state
   Linking.getInitialURL().then(url => { 
     if(url) {
-      // Check if the email deep link from Blueshift
+      // Check if the email deep link is from Blueshift
       if (Blueshift.isBlueshiftUrl(url)) {
         Blueshift.processBlueshiftUrl(url);
       } else {
