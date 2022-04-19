@@ -20,10 +20,18 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 @SuppressWarnings("unused")
@@ -119,7 +127,16 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     void getUserInfoExtras(Callback callback) {
         if (callback != null) {
             HashMap<String, Object> value = UserInfo.getInstance(getReactApplicationContext()).getDetails();
-            callback.invoke(value != null ? value : "{}");
+            if (value != null) {
+                WritableNativeMap map = hashMapToWritableMap(value);
+                if (map != null) {
+                    callback.invoke(map);
+                } else {
+                    callback.invoke(new WritableNativeMap());
+                }
+            } else {
+                callback.invoke(new WritableNativeMap());
+            }
         }
     }
 
@@ -234,7 +251,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    void trackScreenView(String screenName, boolean canBatch) {
+    void trackScreenView(String screenName, ReadableMap map, boolean canBatch) {
         Blueshift.getInstance(getReactApplicationContext()).trackScreenView(screenName, canBatch);
     }
 
@@ -408,5 +425,82 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
         }
 
         return arrayList;
+    }
+
+    WritableNativeMap hashMapToWritableMap(HashMap<String, Object> value) {
+        if (value != null) {
+            try {
+                String json = new Gson().toJson(value);
+                JSONObject inputMap = new JSONObject(json);
+                return jsonObjectToWritableMap(inputMap);
+            } catch (Exception e) {
+                BlueshiftLogger.e(TAG, e);
+            }
+        }
+
+        return null;
+    }
+
+    WritableNativeMap jsonObjectToWritableMap(JSONObject jsonObject) {
+        WritableNativeMap map = null;
+        if (jsonObject != null) {
+            map = new WritableNativeMap();
+            Iterator<String> keys = jsonObject.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Object val = jsonObject.opt(key);
+
+                if (val != null) {
+                    if (val instanceof JSONObject) {
+                        map.putMap(key, jsonObjectToWritableMap((JSONObject) val));
+                    } else if (val instanceof JSONArray) {
+                        map.putArray(key, jsonObjectToWritableArray((JSONArray) val));
+                    } else if (val instanceof Boolean) {
+                        map.putBoolean(key, (Boolean) val);
+                    } else if (val instanceof String) {
+                        map.putString(key, (String) val);
+                    } else if (val instanceof Integer) {
+                        map.putInt(key, (Integer) val);
+                    } else if (val instanceof Double) {
+                        map.putDouble(key, (Double) val);
+                    }
+                } else {
+                    map.putNull(key);
+                }
+            }
+        }
+
+        return map;
+    }
+
+    WritableArray jsonObjectToWritableArray(JSONArray jsonArray) {
+        WritableNativeArray array = null;
+        if (jsonArray != null) {
+            array = new WritableNativeArray();
+            int length = jsonArray.length();
+            for (int index = 0; index < length; index++) {
+                Object val = jsonArray.opt(index);
+
+                if (val != null) {
+                    if (val instanceof JSONObject) {
+                        array.pushMap(jsonObjectToWritableMap((JSONObject) val));
+                    } else if (val instanceof JSONArray) {
+                        array.pushArray(jsonObjectToWritableArray((JSONArray) val));
+                    } else if (val instanceof Boolean) {
+                        array.pushBoolean((Boolean) val);
+                    } else if (val instanceof String) {
+                        array.pushString((String) val);
+                    } else if (val instanceof Integer) {
+                        array.pushInt((Integer) val);
+                    } else if (val instanceof Double) {
+                        array.pushDouble((Double) val);
+                    }
+                } else {
+                    array.pushNull();
+                }
+            }
+        }
+
+        return array;
     }
 }
