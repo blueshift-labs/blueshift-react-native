@@ -69,6 +69,7 @@ public class MainApplication extends Application implements ReactApplication {
     configuration.setJavaScriptForInAppWebViewEnabled(true);
     // Set device-id source to Instance Id and package name combo (highly recommended)
     configuration.setDeviceIdSource(Blueshift.DeviceIdSource.INSTANCE_ID_PKG_NAME);
+    configuration.setPushAppLinksEnabled(true);
 
     Blueshift.getInstance(this).initialize(configuration);
   }
