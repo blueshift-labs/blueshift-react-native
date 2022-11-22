@@ -227,23 +227,15 @@
 
 #pragma mark - Application lifecycle methods
 - (void)blueshift_swizzled_applicationWillEnterForeground:(UIApplication *)application {
-    [self blueshift_swizzled_applicationWillEnterForeground:application];
-    
-    [[BlueShift sharedInstance].appDelegate appDidBecomeActive:application];
 }
 
 - (void)blueshift_swizzled_no_applicationWillEnterForeground:(UIApplication *)application {
-    [[BlueShift sharedInstance].appDelegate appDidBecomeActive:application];
 }
 
 - (void)blueshift_swizzled_applicationDidEnterBackground:(UIApplication *)application {
-    [self blueshift_swizzled_applicationDidEnterBackground:application];
-    
-    [[BlueShift sharedInstance].appDelegate appDidEnterBackground:application];
 }
 
 - (void)blueshift_swizzled_no_applicationDidEnterBackground:(UIApplication *)application {
-    [[BlueShift sharedInstance].appDelegate appDidEnterBackground:application];
 }
 
 #pragma mark - Universal links method
