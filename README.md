@@ -32,6 +32,10 @@ Blueshift.identifyWithDetails({"user_type":"premium"});
 
 Refer to [these Blueshift JS methods](https://github.com/blueshift-labs/blueshift-react-native/blob/main/index.js) to know about features and methods supported by Plugin and how to use them. 
 
+##Support
+The primary and correct way to report an issue is via the customer support channel. Send us an email at support@blueshift.com from your work email with all the necessary details that contain step-by-step instructions on how to reproduce the issue.
+
+
 ## License
 
 MIT
