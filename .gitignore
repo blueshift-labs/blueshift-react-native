@@ -34,3 +34,5 @@ BlueshiftSampleApp/node_modules/
 **xcuserdata**
 */coverage
 */Pods
+*/.bundle
+*/vendor

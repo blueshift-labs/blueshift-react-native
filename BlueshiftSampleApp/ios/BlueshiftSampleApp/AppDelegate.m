@@ -55,7 +55,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
@@ -90,92 +90,92 @@ static void InitializeFlipper(UIApplication *application) {
   config.appGroupID = @"group.blueshift.reads";
 
   // Initialise the Plugin and SDK using the Automatic integration.
-  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
+//  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
   
   // Initialise the Plugin and SDK using the Manual integration.
-//  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:NO];
+  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
 }
 
 #pragma mark - Implement below methods for manual integration
-/*
-#pragma mark - remote notification delegate methods
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
-    [[BlueShift sharedInstance].appDelegate registerForRemoteNotification:deviceToken];
-}
 
-- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
-    [[BlueShift sharedInstance].appDelegate failedToRegisterForRemoteNotificationWithError:error];
-}
+//#pragma mark - remote notification delegate methods
+//- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
+//    [[BlueShift sharedInstance].appDelegate registerForRemoteNotification:deviceToken];
+//}
+//
+//- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
+//    [[BlueShift sharedInstance].appDelegate failedToRegisterForRemoteNotificationWithError:error];
+//}
+//
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler {
+//  if([[BlueShift sharedInstance]isBlueshiftPushNotification:userInfo] == YES) {
+//    [[BlueShift sharedInstance].appDelegate handleRemoteNotification:userInfo forApplication:application fetchCompletionHandler:handler];
+//  } else {
+//    //Handle Notifications other than Blueshift
+//      handler(UIBackgroundFetchResultNoData);
+//  }
+//}
+//
+//#pragma mark - UserNotificationCenter delegate methods
+//-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
+//  NSDictionary* userInfo = notification.request.content.userInfo;
+//  if([[BlueShift sharedInstance]isBlueshiftPushNotification:userInfo]) {
+//    [[BlueShift sharedInstance].userNotificationDelegate handleUserNotificationCenter:center willPresentNotification:notification withCompletionHandler:completionHandler];
+//  } else {
+//    //Handle Notifications other than Blueshift
+//    if (@available(iOS 14.0, *)) {
+//        completionHandler(UNNotificationPresentationOptionBanner | UNNotificationPresentationOptionList | UNAuthorizationOptionSound | UNNotificationPresentationOptionBadge);
+//    } else {
+//        completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge);
+//    }
+//  }
+//}
+//
+//- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+//  NSDictionary* userInfo = response.notification.request.content.userInfo;
+//
+// // Optional : Call Plugin method to send the push notification payload to react native under event `PushNotificationClickedEvent`.
+// [[BlueshiftPluginManager sharedInstance] sendPushNotificationDataToRN:userInfo];
+//
+//  if([[BlueShift sharedInstance]isBlueshiftPushNotification:userInfo]) {
+//    [[BlueShift sharedInstance].userNotificationDelegate handleUserNotification:center didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
+//  } else {
+//    //Handle Notifications other than Blueshift
+//  }
+//}
+//
+//#pragma mark - Manual Blueshift integration
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+//  if ([[BlueshiftPluginManager sharedInstance] isBlueshiftOpenURLLink:url options:options] == YES) {
+//    return [[BlueshiftPluginManager sharedInstance] application:application openURL:url options:options];
+//  } else {
+//    // Write code to handle the other urls
+//  }
+//  return YES;
+//}
+//
+//- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
+// restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+//  if ([[BlueshiftPluginManager sharedInstance] isBlueshiftUniversalLink:userActivity] == YES) {
+//    return  [[BlueshiftPluginManager sharedInstance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+//  } else {
+//    // Write code to handle the other urls
+//  }
+//  return YES;
+//}
+//
+//#pragma mark - Blueshift Universal links delgate methods
+//- (void)didCompleteLinkProcessing:(NSURL *)url {
+//  if (url) {
+//    [[BlueshiftPluginManager sharedInstance] application:UIApplication.sharedApplication openURL:url options:@{}];
+//  }
+//}
+//
+//- (void)didFailLinkProcessingWithError:(NSError *)error url:(NSURL *)url {
+//  if (url) {
+//    [[BlueshiftPluginManager sharedInstance] application:UIApplication.sharedApplication openURL:url options:@{}];
+//  }
+//}
+//
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler {
-    [[BlueShift sharedInstance].appDelegate handleRemoteNotification:userInfo forApplication:application fetchCompletionHandler:handler];
-}
-
-#pragma mark - UserNotificationCenter delegate methods
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
-  NSDictionary* userInfo = notification.request.content.userInfo;
-  if([[BlueShift sharedInstance]isBlueshiftPushNotification:userInfo]) {
-    [[BlueShift sharedInstance].userNotificationDelegate handleUserNotificationCenter:center willPresentNotification:notification withCompletionHandler:completionHandler];
-  } else {
-    //Handle Notifications other than Blueshift
-  }
-}
-
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
-  NSDictionary* userInfo = response.notification.request.content.userInfo;
-
- // Optional : Call Plugin method to send the push notification payload to react native under event `PushNotificationClickedEvent`.
- [[BlueshiftPluginManager sharedInstance] sendPushNotificationDataToRN:userInfo];
-  
-  if([[BlueShift sharedInstance]isBlueshiftPushNotification:userInfo]) {
-    [[BlueShift sharedInstance].userNotificationDelegate handleUserNotification:center didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
-  } else {
-    //Handle Notifications other than Blueshift
-  }
-}
-
-#pragma mark - Manual Blueshift integration
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  if ([[BlueshiftPluginManager sharedInstance] isBlueshiftOpenURLLink:url options:options] == YES) {
-    return [[BlueshiftPluginManager sharedInstance] application:application openURL:url options:options];
-  } else {
-    // Write code to handle the other urls
-  }
-  return YES;
-}
-
-- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
- restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
-  if ([[BlueshiftPluginManager sharedInstance] isBlueshiftUniversalLink:userActivity] == YES) {
-    return  [[BlueshiftPluginManager sharedInstance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
-  } else {
-    // Write code to handle the other urls
-  }
-  return YES;
-}
-
-#pragma mark - Blueshift Universal links delgate methods
-- (void)didCompleteLinkProcessing:(NSURL *)url {
-  if (url) {
-    [[BlueshiftPluginManager sharedInstance] application:UIApplication.sharedApplication openURL:url options:@{}];
-  }
-}
-
-- (void)didFailLinkProcessingWithError:(NSError *)error url:(NSURL *)url {
-  if (url) {
-    [[BlueshiftPluginManager sharedInstance] application:UIApplication.sharedApplication openURL:url options:@{}];
-  }
-}
-
-#pragma mark - Lifecycle methods
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-  [[BlueShift sharedInstance].appDelegate appDidEnterBackground:application];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-  [[BlueShift sharedInstance].appDelegate appDidBecomeActive:application];
-  
-}
-*/
 @end
