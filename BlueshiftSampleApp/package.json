@@ -10,9 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "blueshift-react-native": "^1.0.0-beta.1",
-    "react": "17.0.2",
-    "react-native": "0.67.3"
+    "blueshift-react-native": "file:..",
+    "react": "^18.2.0",
+    "react-native": "0.70.5"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
