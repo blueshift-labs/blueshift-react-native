@@ -90,10 +90,10 @@ static void InitializeFlipper(UIApplication *application) {
   config.appGroupID = @"group.blueshift.reads";
 
   // Initialise the Plugin and SDK using the Automatic integration.
-//  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
+  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
   
   // Initialise the Plugin and SDK using the Manual integration.
-  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:YES];
+//  [[BlueshiftPluginManager sharedInstance] initialisePluginWithConfig:config autoIntegrate:NO];
 }
 
 #pragma mark - Implement below methods for manual integration
