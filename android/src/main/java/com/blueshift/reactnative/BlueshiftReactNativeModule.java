@@ -336,8 +336,11 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     public static void processBlueshiftPushUrl(Intent intent) {
+        BlueshiftLogger.d(TAG, "processBlueshiftPushUrl");
         if (intent != null && intent.hasExtra(DEEP_LINK_URL)) {
             String url = intent.getStringExtra(DEEP_LINK_URL);
+            BlueshiftLogger.d(TAG, "processBlueshiftPushUrl: " + url);
+
             Map<String, Object> params = new HashMap<>();
             params.put("url", url);
             BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params);
