@@ -2,6 +2,7 @@ package com.blueshift.reactnative;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -348,6 +349,10 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
             Map<String, Object> params = new HashMap<>();
             params.put("url", url);
             BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params);
+
+            // cleanup the intent's data and deep link string
+            intent.removeExtra(DEEP_LINK_URL);
+            intent.setData(Uri.EMPTY);
         }
     }
 
