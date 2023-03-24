@@ -32,19 +32,21 @@ public class BlueshiftReactNativeEventHandler {
         }
     }
 
-    public void enqueueEvent(String eventName, Map<String, Object> params) {
+    public void enqueueEvent(String eventName, Map<String, Object> params, ReactContext context) {
         synchronized (mEventQueue) {
             mEventQueue.put(eventName, params);
         }
 
-        fireEvent(eventName);
+        fireEvent(eventName, context);
     }
 
-    public void fireEvent(String eventName) {
+    public void fireEvent(String eventName, ReactContext context) {
+        initEventEmitter(context);
+
         if (mEventEmitter == null) {
             int SYNC_DELAY = 500;
             BlueshiftLogger.d(TAG, "mEventEmitter not ready. Retrying in " + SYNC_DELAY + " ms.");
-            new Handler().postDelayed(() -> fireEvent(eventName), SYNC_DELAY);
+            new Handler().postDelayed(() -> fireEvent(eventName, context), SYNC_DELAY);
         } else if (eventName != null) {
             synchronized (mEventQueue) {
                 if (mEventQueue.containsKey(eventName)) {

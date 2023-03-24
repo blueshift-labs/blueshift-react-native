@@ -52,7 +52,6 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     public BlueshiftReactNativeModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        BlueshiftReactNativeEventHandler.getInstance().initEventEmitter(reactContext);
     }
 
     @Override
@@ -315,13 +314,13 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     void onAddEventListener(String eventName) {
-        BlueshiftReactNativeEventHandler.getInstance().fireEvent(eventName);
+        BlueshiftReactNativeEventHandler.getInstance().fireEvent(eventName, getReactApplicationContext());
 
         // This is to fire any pending "url" event in the queue so that RN can receive it.
         // For this to work, we should make sure that the Linking.addEventListener code is
         // written before calling the Blueshift.addEventListener method.
         if (!"url".equals(eventName)) {
-            BlueshiftReactNativeEventHandler.getInstance().fireEvent("url");
+            BlueshiftReactNativeEventHandler.getInstance().fireEvent("url", getReactApplicationContext());
         }
     }
 
@@ -342,9 +341,10 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
             if (url == null || url.isEmpty()) {
                 BlueshiftLogger.w(TAG, "Null/Empty value found for deep_link_url.");
             } else {
+                ReactApplicationContext context = BlueshiftReactNativeModule.sInstance.getReactApplicationContext();
                 Map<String, Object> params = new HashMap<>();
                 params.put("url", url);
-                BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params);
+                BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params, context);
             }
 
             // remove the push deep link from intent to avoid
