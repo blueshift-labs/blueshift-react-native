@@ -52,6 +52,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     public BlueshiftReactNativeModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        BlueshiftReactNativeEventHandler.getInstance().initEventEmitter(reactContext);
     }
 
     @Override
@@ -314,7 +315,6 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     void onAddEventListener(String eventName) {
-        BlueshiftReactNativeEventHandler.getInstance().initEventEmitter(getReactApplicationContext());
         BlueshiftReactNativeEventHandler.getInstance().fireEvent(eventName);
 
         // This is to fire any pending "url" event in the queue so that RN can receive it.
@@ -337,22 +337,19 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     public static void processBlueshiftPushUrl(Intent intent) {
-        BlueshiftLogger.d(TAG, "processBlueshiftPushUrl");
         if (intent != null && intent.hasExtra(DEEP_LINK_URL)) {
             String url = intent.getStringExtra(DEEP_LINK_URL);
-            BlueshiftLogger.d(TAG, "processBlueshiftPushUrl: url - " + url);
-            Uri data = intent.getData();
-            if (data != null) {
-                BlueshiftLogger.d(TAG, "processBlueshiftPushUrl: data - " + data.toString());
+            if (url == null || url.isEmpty()) {
+                BlueshiftLogger.w(TAG, "Null/Empty value found for deep_link_url.");
+            } else {
+                Map<String, Object> params = new HashMap<>();
+                params.put("url", url);
+                BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params);
             }
 
-            Map<String, Object> params = new HashMap<>();
-            params.put("url", url);
-            BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params);
-
-            // cleanup the intent's data and deep link string
+            // remove the push deep link from intent to avoid
+            // duplicate deep linking when onNewIntent is called
             intent.removeExtra(DEEP_LINK_URL);
-            intent.setData(Uri.EMPTY);
         }
     }
 
