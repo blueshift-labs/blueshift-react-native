@@ -1,6 +1,14 @@
 declare module 'blueshift-react-native' {
 
 	/**
+	 * Initialise the plugin components when React Native is ready and loaded.
+	 * 
+	 * Usage -
+	 * Blueshift.init();
+	 */
+	function init(): void;
+
+	/**
 	 * Add event listener for a event name to listen to events fired by Blueshift SDK
 	 * 
 	 * Usage -
