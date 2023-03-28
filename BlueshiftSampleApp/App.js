@@ -6,6 +6,8 @@ import Blueshift from 'blueshift-react-native';
 export default class App extends Component {
 
 componentDidMount() { 
+  Blueshift.init();
+  
   // Get the email deep link when app launched from killed state
   Linking.getInitialURL().then(url => { 
     if(url) {
@@ -491,3 +493,48 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   }
 });
+
+
+// import React, { useEffect } from 'react';
+
+// const Root = () => {
+  
+//   Blueshift.identifyWithDetails({});
+
+//   useEffect(() => {
+
+//     console.log('useEffect: START');
+  
+
+//       // Add event listner for `url` event
+//   global.urlListener = Linking.addEventListener('url', (event) => { 
+//     var url = event.url;
+//     if(url) {
+//       // Check if the URL is a rewritten/shortened URL from Blueshift
+//       if (Blueshift.isBlueshiftUrl(url)) {
+//         Blueshift.processBlueshiftUrl(url);
+//       } else {
+//         console.log('handleDeeplink: ' + url);
+//         // this.handleDeeplinkUrl(url);
+//       }
+//     }
+//   });
+  
+//   Blueshift.addEventListener('PushNotificationClickedEvent', () =>{});
+  
+
+//     return () => {
+//       console.log('useEffect: return');
+//       global.urlListener.remove();  
+//     }
+//   }, [])
+  
+  
+//   return (
+//     <View style={{ flex: 1 }}>
+//       <Text>Hello</Text>
+//     </View>
+//   );
+// }
+
+// export default Root;
