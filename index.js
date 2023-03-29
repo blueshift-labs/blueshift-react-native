@@ -5,6 +5,21 @@ const BlueshiftEventEmitter = new NativeEventEmitter(NativeModules.BlueshiftReac
 var Blueshift = {
 
     /**
+     * Initialize the components of the Blueshift SDK. This mainly initializes the
+     * event emitter instance to start firing the events when the app is ready to
+     * receive them.
+     * 
+     * Usage -
+     * Blueshift.init();
+     * 
+     */
+    init: function() {
+        if (Platform.OS === 'android') {
+            NativeModules.BlueshiftBridge.init();      
+        }
+    },
+
+    /**
      * Add event listener for a event name to listen to events fired by Blueshift SDK
      *
      * Usage - 

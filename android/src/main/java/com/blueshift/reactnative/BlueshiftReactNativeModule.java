@@ -2,6 +2,7 @@ package com.blueshift.reactnative;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,14 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     @NonNull
     public String getName() {
         return NAME;
+    }
+
+    // INITIALIZE
+
+    @ReactMethod
+    void init() {
+        BlueshiftReactNativeEventHandler.getInstance().initEventEmitter(getReactApplicationContext());
+        BlueshiftReactNativeEventHandler.getInstance().fireEvent("url");
     }
 
     // USERINFO
@@ -313,15 +322,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     void onAddEventListener(String eventName) {
-        BlueshiftReactNativeEventHandler.getInstance().initEventEmitter(getReactApplicationContext());
         BlueshiftReactNativeEventHandler.getInstance().fireEvent(eventName);
-
-        // This is to fire any pending "url" event in the queue so that RN can receive it.
-        // For this to work, we should make sure that the Linking.addEventListener code is
-        // written before calling the Blueshift.addEventListener method.
-        if (!"url".equals(eventName)) {
-            BlueshiftReactNativeEventHandler.getInstance().fireEvent("url");
-        }
     }
 
     @ReactMethod
@@ -338,9 +339,17 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     public static void processBlueshiftPushUrl(Intent intent) {
         if (intent != null && intent.hasExtra(DEEP_LINK_URL)) {
             String url = intent.getStringExtra(DEEP_LINK_URL);
-            Map<String, Object> params = new HashMap<>();
-            params.put("url", url);
-            BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params);
+            if (url == null || url.isEmpty()) {
+                BlueshiftLogger.w(TAG, "Null/Empty value found for deep_link_url.");
+            } else {
+                Map<String, Object> params = new HashMap<>();
+                params.put("url", url);
+                BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("url", params);
+            }
+
+            // remove the push deep link from intent to avoid
+            // duplicate deep linking when onNewIntent is called
+            intent.removeExtra(DEEP_LINK_URL);
         }
     }
 

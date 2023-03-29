@@ -19,6 +19,7 @@ public class BlueshiftReactNativeEventHandler {
     private static BlueshiftReactNativeEventHandler sInstance = null;
     private final LinkedHashMap<String, Object> mEventQueue = new LinkedHashMap<>();
     private DeviceEventManagerModule.RCTDeviceEventEmitter mEventEmitter = null;
+    private int retryAttemptCount = 0;
 
     public static BlueshiftReactNativeEventHandler getInstance() {
         if (sInstance == null) sInstance = new BlueshiftReactNativeEventHandler();
@@ -41,17 +42,33 @@ public class BlueshiftReactNativeEventHandler {
     }
 
     public void fireEvent(String eventName) {
+        int oneSecond = 1000;
+
         if (mEventEmitter == null) {
-            int SYNC_DELAY = 500;
-            BlueshiftLogger.d(TAG, "mEventEmitter not ready. Retrying in " + SYNC_DELAY + " ms.");
-            new Handler().postDelayed(() -> fireEvent(eventName), SYNC_DELAY);
-        } else if (eventName != null) {
-            synchronized (mEventQueue) {
-                if (mEventQueue.containsKey(eventName)) {
-                    Object data = mEventQueue.get(eventName);
-                    if (data instanceof Map) {
-                        mEventEmitter.emit(eventName, mapToWritableMap((Map<String, Object>) data));
-                        mEventQueue.remove(eventName);
+            BlueshiftLogger.w(TAG, "EventEmitter is not ready! Please make sure that you are calling Blueshift.init() when the React Native app is ready.");
+
+            int retryAttemptCap = 5;
+            if (retryAttemptCount < retryAttemptCap) {
+                BlueshiftLogger.d(TAG, "Retrying fireEvent( " + eventName + " ) in " + oneSecond + " ms. Attempt " + ++retryAttemptCount);
+                new Handler().postDelayed(() -> fireEvent(eventName), oneSecond);
+            } else {
+                retryAttemptCount = 0;
+            }
+        } else {
+            retryAttemptCount = 0;
+
+            if (eventName != null) {
+                synchronized (mEventQueue) {
+                    if (mEventQueue.containsKey(eventName)) {
+                        new Handler().postDelayed(() -> {
+                            Object data = mEventQueue.get(eventName);
+                            if (data instanceof Map) {
+                                BlueshiftLogger.d(TAG, "Emitting event : " + eventName);
+
+                                mEventEmitter.emit(eventName, mapToWritableMap((Map<String, Object>) data));
+                                mEventQueue.remove(eventName);
+                            }
+                        }, oneSecond); // Adding one second delay to make sure receivers are ready
                     }
                 }
             }
