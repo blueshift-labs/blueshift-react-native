@@ -5,9 +5,7 @@ import Blueshift from 'blueshift-react-native';
 
 export default class App extends Component {
 
-componentDidMount() { 
-  Blueshift.init();
-  
+componentDidMount() {   
   // Get the email deep link when app launched from killed state
   Linking.getInitialURL().then(url => { 
     if(url) {
@@ -32,6 +30,8 @@ componentDidMount() {
       }
     }
   }); 
+
+  Blueshift.init();
 
   // Add custom event listener using Blueshift method
   Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
