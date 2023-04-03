@@ -1,456 +1,559 @@
-import React, {Component} from 'react';
-import {Dimensions, StyleSheet, Text,Switch, View, TextInput, SafeAreaView, ScrollView, NativeModules, Button, Alert, Platform, Linking} from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  Switch,
+  View,
+  TextInput,
+  SafeAreaView,
+  ScrollView,
+  Button,
+  Alert,
+  Linking,
+} from 'react-native';
 
+import React, {useEffect, useState} from 'react';
 import Blueshift from 'blueshift-react-native';
 
-export default class App extends Component {
+export default function App() {
+  useEffect(() => {
+    // To read the deep link URL when app is launched from killed state.
+    Linking.getInitialURL().then(url => handleUrlEvent(url));
 
-componentDidMount() {   
-  // Get the email deep link when app launched from killed state
-  Linking.getInitialURL().then(url => { 
-    if(url) {
-      // Check if the email deep link is from Blueshift
+    // To listen to the url event fired by OS or push Blueshift push notifications
+    global.urlListener = Linking.addEventListener('url', event =>
+      handleUrlEvent(event.url),
+    );
+
+    // To initialize the SDK components such as Event Emitter
+    Blueshift.init();
+
+    initState();
+
+    return () => {
+      // remove the listener to avoid duplicate url event listeners getting added
+      global.urlListener.remove();
+    };
+  }, []);
+
+  function handleUrlEvent(url) {
+    if (url) {
+      // Check if the URL is from Blueshift's campaign.
       if (Blueshift.isBlueshiftUrl(url)) {
         Blueshift.processBlueshiftUrl(url);
       } else {
-        this.handleDeeplinkUrl(url);
+        // Use this block to do the app's deep linking.
+        alertUrl(url);
       }
     }
-  });
-
-  // Add event listner for `url` event
-  global.urlListener = Linking.addEventListener('url', (event) => { 
-    var url = event.url;
-    if(url) {
-      // Check if the URL is a rewritten/shortened URL from Blueshift
-      if (Blueshift.isBlueshiftUrl(url)) {
-        Blueshift.processBlueshiftUrl(url);
-      } else {
-        this.handleDeeplinkUrl(url);
-      }
-    }
-  }); 
-
-  Blueshift.init();
-
-  // Add custom event listener using Blueshift method
-  Blueshift.addEventListener('PushNotificationClickedEvent', this.handlePushClick);
-
-  this.setValues();
-
-  // Register screen for receiving in-app notifications
-  this.registerForInApp();
-}
-
-componentWillUnmount() {
-    // You must unregister these callbacks
-  if (global) {
-    global.urlListener.remove();
   }
 
-  // Remove custom event listner using Blueshift method
-  Blueshift.removeEventListener('PushNotificationClickedEvent');
-
-  // Unregister screen 
-  this.unRegisterForInApp();
-}
-
-handlePushClick = (event) => {
-  alert("push payload "+JSON.stringify(event.bsft_experiment_uuid));
-};
-
-handleDeeplinkUrl(url) { 
-  console.log("deeplink: " + url);
-
-  Alert.alert(
-    "Deep Link URL",
-    url,
-    [
+  function alertUrl(url) {
+    Alert.alert('URL', url, [
       {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
       },
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]
-  );
-};
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+  }
 
-setEmailId = () => {
-  Blueshift.setUserInfoEmailId(this.state.emailId)
-};
+  const [email, setEmail] = useState('');
+  const [customerId, setCustomerId] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [customEventA, setCustomEventA] = useState('bsft_send_me_inapp');
+  const [customEventB, setCustomEventB] = useState('bsft_send_me_push');
+  const [enablePush, setEnablePush] = useState(true);
+  const [enableInApp, setEnableInApp] = useState(true);
+  const [enableSdk, setEnableSdk] = useState(true);
+  const [deviceId, setDeviceId] = useState('');
 
-setCustomerId = () => {
-  Blueshift.setUserInfoCustomerId(this.state.customerId)
-};
+  function initState() {
+    Blueshift.getEnablePushStatus(res => {
+      if (res) {
+        console.log('enable_push: ' + res);
+        setEnablePush(res);
+      }
+    });
 
-setFirstName = () => {
-  Blueshift.setUserInfoFirstName(this.state.firstName)
-};
+    Blueshift.getEnableInAppStatus(res => {
+      if (res) {
+        console.log('enable_inapp: ' + res);
+        setEnableInApp(res);
+      }
+    });
 
-setLastName = () => {
-  Blueshift.setUserInfoLastName(this.state.lastName)
-};
+    Blueshift.getEnableTrackingStatus(res => {
+      if (res) {
+        console.log('enable_tracking: ' + res);
+        setEnableSdk(res);
+      }
+    });
 
-setExtras = () => {
-  Blueshift.setUserInfoExtras({"profession": "software engineer", "usertype":"premium"})
-};
+    Blueshift.getUserInfoEmailId(res => {
+      if (res) {
+        console.log('email: ' + res);
+        setEmail(res);
+      }
+    });
 
-setIDFA = () => {
-  Blueshift.setIDFA("EA7583CD-A667-48BC-B806-42ECB2B48606")
-};
+    Blueshift.getUserInfoCustomerId(res => {
+      if (res) {
+        console.log('customer id: ' + res);
+        setCustomerId(res);
+      }
+    });
 
-setLocation = () => {
-  Blueshift.setCurrentLocation(18.5245649,73.7228812)
-};
+    Blueshift.getUserInfoFirstName(res => {
+      if (res) {
+        console.log('firstname: ' + res);
+        setFirstName(res);
+      }
+    });
 
-identify = () => {
-  Blueshift.identifyWithDetails({})
-};
+    Blueshift.getUserInfoLastName(res => {
+      if (res) {
+        console.log('lastname: ' + res);
+        setLastName(res);
+      }
+    });
 
-sendCustomEvent = () => {
-  Blueshift.trackCustomEvent(this.state.customEvent,{},false)
-};
+    Blueshift.getCurrentDeviceId(res => {
+      if (res) {
+        console.log('deviceid: ' + res);
+        setDeviceId(res);
+      }
+    });
+  }
 
-sendCustomEvent1 = () => {
-  Blueshift.trackCustomEvent(this.state.customEvent1,{},false)
-};
+  function saveEmail() {
+    Blueshift.setUserInfoEmailId(email);
+  }
 
-trackScreenView = () => {
-  Blueshift.trackScreenView("ReactNativeTestScreen",{},false)
-};
+  function saveCustomerId() {
+    Blueshift.setUserInfoCustomerId(customerId);
+  }
 
-removeUserInfo = () => {
-  Blueshift.removeUserInfo()
-};
+  function saveFirstname() {
+    Blueshift.setUserInfoFirstName(firstName);
+  }
 
-registerForRemoteNotification = () => {
-  Blueshift.registerForRemoteNotification()
-};
+  function saveLastname() {
+    Blueshift.setUserInfoLastName(firstName);
+  }
 
-setEnablePush = () => {
-  Blueshift.setEnablePush(this.state.enablePushSwitchValue)
-};
+  function saveExtras() {
+    Blueshift.setUserInfoExtras({
+      profession: 'Software Engineer',
+      usertype: 'Premium',
+    });
+  }
 
-setEnableInApp = () => {
-  Blueshift.setEnableInApp(this.state.enableInAppSwitchValue)
-};
+  function saveIDFA() {
+    Blueshift.setIDFA('EA7583CD-A667-48BC-B806-42ECB2B48606');
+  }
 
-setEnableTracking = () => {
-  Blueshift.setEnableTracking(this.state.enableTrackingSwitchValue)
-}
+  function saveLocation() {
+    Blueshift.setCurrentLocation(18.5245649, 73.7228812);
+  }
 
-fetchInAppNotification = () => {
-  Blueshift.fetchInAppNotification()
-};
+  function sendEventIdentify() {
+    Blueshift.identifyWithDetails({});
+  }
 
-displayInAppNotification = () => {
-  Blueshift.displayInAppNotification()
-};
+  function sendEventCustomA() {
+    Blueshift.trackCustomEvent(customEventA, {}, false);
+  }
 
-registerForInApp = () => {
-  Blueshift.registerForInAppMessage("index")
-};
+  function sendEventCustomB() {
+    Blueshift.trackCustomEvent(customEventB, {}, false);
+  }
 
-unRegisterForInApp = () => {
-  Blueshift.unregisterForInAppMessage()
-};
+  function sendEventScreenView() {
+    Blueshift.trackScreenView('index', {}, false);
+  }
 
-getLiveContentByEmail = () => {
-  Blueshift.getLiveContentByEmail("careinappmessagingslot",{},(err,result) => {
-    if (result != null) {
-      console.log(result);
-    } else {
-      console.log(err);
-    }
-  });
-};
+  function registerForRemoteNotification() {
+    Blueshift.registerForRemoteNotification();
+  }
 
-getLiveContentByDeviceID = () => {
-  Blueshift.getLiveContentByDeviceId("careinappmessagingslot",{},(err,result) => {
-    if (result != null) {
-      console.log(result);
-    } else {
-      console.log(err);
-    }
-  });
-};
+  function saveEnablePush() {
+    Blueshift.setEnablePush(enablePush);
+  }
 
-getLiveContentByCustomerID = () => {
-  Blueshift.getLiveContentByCustomerId("careinappmessagingslot",{},(err,result) => {
-    if (result != null) {
-      console.log(result);
-    } else {
-      console.log(err);
-    }
-  });
-};
+  function saveEnableInApp() {
+    Blueshift.setEnableInApp(enableInApp);
+  }
 
-state = {  
-  enablePushSwitchValue: true,
-  enableInAppSwitchValue: true,
-  enableTrackingSwitchValue: true,
-  emailId: "",
-  customEvent: "bsft_send_me_image_push",
-  customEvent1: "bsft_send_me_in_app_modal",
-  customerId: "",
-  firstName: "",
-  lastName: "",
-  deviceId: ""
-};  
+  function saveEnableSdk() {
+    Blueshift.setEnableTracking(enableSdk);
+  }
 
-setValues = () => {
-  console.log("setValues");
-  Blueshift.getEnablePushStatus((res) => {
-    this.setState({enablePushSwitchValue:res});
-  });
-  Blueshift.getEnableInAppStatus((res) => {
-    this.setState({enableInAppSwitchValue:res});
-  });
-  Blueshift.getUserInfoCustomerId((res) => {
-    this.setState({customerId:res});
-  });
-  Blueshift.getUserInfoEmailId((res) => {
-    console.log("email",res);
-    this.setState({emailId:res});
-  });
-  Blueshift.getEnableTrackingStatus((res) => {
-    this.setState({enableTrackingSwitchValue:res});
-  });
-  Blueshift.getUserInfoFirstName((res) => {
-    this.setState({firstName:res});
-  });
-  Blueshift.getUserInfoLastName((res) => {
-    this.setState({lastName:res});
-  });
-  Blueshift.getCurrentDeviceId((res) => {
-    console.log("deviceid",res);
-    this.setState({deviceId:res});
-  });
-};  
+  function fetchInappMessages() {
+    Blueshift.fetchInAppNotification();
+  }
 
-render() {
+  function showInappMessages() {
+    Blueshift.displayInAppNotification();
+  }
+
+  function removeUserInfo() {
+    Blueshift.removeUserInfo();
+  }
+
+  function registerForInappMessages() {
+    Blueshift.registerForInAppMessage('index');
+  }
+  function unregisterForInappMessages() {
+    Blueshift.unregisterForInAppMessage();
+  }
+
+  function getLiveContentByEmail() {
+    Blueshift.getLiveContentByEmail(
+      'careinappmessagingslot',
+      {},
+      (err, result) => {
+        if (result != null) {
+          console.log(result);
+        } else {
+          console.log(err);
+        }
+      },
+    );
+  }
+
+  function getLiveContentByDeviceID() {
+    Blueshift.getLiveContentByDeviceId(
+      'careinappmessagingslot',
+      {},
+      (err, result) => {
+        if (result != null) {
+          console.log(result);
+        } else {
+          console.log(err);
+        }
+      },
+    );
+  }
+
+  function getLiveContentByCustomerID() {
+    Blueshift.getLiveContentByCustomerId(
+      'careinappmessagingslot',
+      {},
+      (err, result) => {
+        if (result != null) {
+          console.log(result);
+        } else {
+          console.log(err);
+        }
+      },
+    );
+  }
+
   let w = Dimensions.get('window').width;
-  let btnClr = "#2160D4"
+  let btnClr = '#2160D4';
 
   return (
     <SafeAreaView style={styles.container}>
-    <ScrollView style={{ width:w }} >
-    
-    <TextInput
-      style={styles.txtStyle}
-      onChangeText={(emailId)=>this.setState({emailId})}
-      value={this.state.emailId} placeholder="Enter email id" />
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.setEmailId}
-        title="Set email Id"
-        color={btnClr} />
-    </View>
-    
-    <TextInput
-      style={styles.txtStyle}
-      onChangeText={(customerId)=>this.setState({customerId})}
-      value={this.state.customerId} placeholder="Enter customer profile Id" />
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.setCustomerId}
-        title="Set customer Id"
-        color={btnClr} />
-    </View>
-    
-    <TextInput
-      style={styles.txtStyle}
-      onChangeText={(firstName)=>this.setState({firstName})}
-      value={this.state.firstName} placeholder="Enter firstName" />
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.setFirstName}
-        title="Set firstName"
-        color={btnClr} />
-    </View>
-    
-    <TextInput
-      style={styles.txtStyle}
-      onChangeText={(lastName)=>this.setState({lastName})}
-      value={this.state.lastName} placeholder="Enter lastName" />
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.setLastName}
-        title="Set lastName"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.setExtras}
-        title="Set extras"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.setIDFA}
-        title="Set IDFA"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.setLocation}
-        title="Set Location"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.identify}
-        title="Identify"
-        color={btnClr} />
-    </View>
-    
-    <TextInput
-      style={styles.txtStyle}
-      onChangeText={(customEvent)=>this.setState({customEvent})}
-      value={this.state.customEvent} placeholder="Enter custom event name" />
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.sendCustomEvent}
-        title="Send custom event"
-        color={btnClr} />
-    </View>
-    
-    <TextInput
-      style={styles.txtStyle}
-      onChangeText={(customEvent1)=>this.setState({customEvent1})}
-      value={this.state.customEvent1} placeholder="Enter custom event name" />
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.sendCustomEvent1}
-        title="Send custom event"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.trackScreenView}
-        title="Track screen view"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.registerForRemoteNotification}
-        title="register for remote notifications"
-        color={btnClr} />
-    </View>
+      <ScrollView style={{width: w}}>
+        <TextInput
+          style={styles.txtStyle}
+          onChangeText={text => setEmail(text)}
+          value={email}
+          placeholder="Enter email id"
+        />
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              saveEmail();
+            }}
+            title="Set email Id"
+            color={btnClr}
+          />
+        </View>
 
-    <View style={{ flexDirection: 'row'}}>
-      <Switch  
-        style={{flex:1}}
-        value={this.state.enablePushSwitchValue}  
-        onValueChange ={(enablePushSwitchValue)=>this.setState({enablePushSwitchValue})}/>  
-      <View style={[styles.btnStyle, {flex: 2}]}>
-        <Button
-          onPress={this.setEnablePush}
-          title="Set enablePush"
-          color={btnClr} />
-      </View>
-    </View>
-      
-    <View style={{ flexDirection: 'row'}}>
-      <Switch  
-        style={{flex:1}}
-        value={this.state.enableInAppSwitchValue}  
-        onValueChange ={(enableInAppSwitchValue)=>this.setState({enableInAppSwitchValue})}/>  
-      <View style={[styles.btnStyle, {flex: 2}]}>
-        <Button
-          onPress={this.setEnableInApp}
-          title="Set enableInApp"
-          color={btnClr} />
-      </View>
-    </View>
-    
-    <View style={{ flexDirection: 'row'}}>
-      <Switch  
-        style={{flex:1}}
-        value={this.state.enableTrackingSwitchValue}  
-        onValueChange ={(enableTrackingSwitchValue)=>this.setState({enableTrackingSwitchValue})}/>  
-      <View style={[styles.btnStyle, {flex: 2}]}>
-        <Button
-          onPress={this.setEnableTracking}
-          title="Set enableTracking"
-          color={btnClr} />
-      </View>
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.fetchInAppNotification}
-        title="fetch InApp Notification notifications"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.displayInAppNotification}
-        title="display In App Notification"
-        color={btnClr} />
-    </View>
-    
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.removeUserInfo}
-        title="Remove user info"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.registerForInApp}
-        title="Register For in-app notifications"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.unRegisterForInApp}
-        title="Un-register for in-app notifications"
-        color={btnClr} />
-    </View>    
+        <TextInput
+          style={styles.txtStyle}
+          onChangeText={text => setCustomerId(text)}
+          value={customerId}
+          placeholder="Enter customer profile Id"
+        />
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              saveCustomerId();
+            }}
+            title="Set customer Id"
+            color={btnClr}
+          />
+        </View>
 
-    <Text style={styles.txtH1Style}>{"Current Device ID"}</Text>
-    <TextInput
-      style={styles.txtStyle}
-      onChangeText={(deviceId)=>this.setState({deviceId})}
-      value={this.state.deviceId} />
+        <TextInput
+          style={styles.txtStyle}
+          onChangeText={text => setFirstName(text)}
+          value={firstName}
+          placeholder="Enter firstName"
+        />
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              saveFirstname();
+            }}
+            title="Set firstName"
+            color={btnClr}
+          />
+        </View>
 
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.getLiveContentByEmail}
-        title="Live content by Email"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.getLiveContentByDeviceID}
-        title="Live content by Device id"
-        color={btnClr} />
-    </View>
-    
-    <View style={styles.btnStyle}>
-      <Button
-        onPress={this.getLiveContentByCustomerID}
-        title="Live content by Customer id"
-        color={btnClr} />
-    </View>
-    
-    </ScrollView>
+        <TextInput
+          style={styles.txtStyle}
+          onChangeText={text => setLastName(text)}
+          value={lastName}
+          placeholder="Enter lastName"
+        />
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              saveLastname();
+            }}
+            title="Set lastName"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              saveExtras();
+            }}
+            title="Set extras"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              saveIDFA();
+            }}
+            title="Set IDFA"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              saveLocation();
+            }}
+            title="Set Location"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              sendEventIdentify();
+            }}
+            title="Identify"
+            color={btnClr}
+          />
+        </View>
+
+        <TextInput
+          style={styles.txtStyle}
+          onChangeText={text => setCustomEventA(text)}
+          value={customEventA}
+          placeholder="Enter custom event name"
+        />
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              sendEventCustomA();
+            }}
+            title="Send custom event"
+            color={btnClr}
+          />
+        </View>
+
+        <TextInput
+          style={styles.txtStyle}
+          onChangeText={text => setCustomEventB(text)}
+          value={customEventB}
+          placeholder="Enter custom event name"
+        />
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              sendEventCustomB();
+            }}
+            title="Send custom event"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              sendEventScreenView();
+            }}
+            title="Track screen view"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              registerForRemoteNotification();
+            }}
+            title="register for remote notifications"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={{flexDirection: 'row'}}>
+          <Switch
+            style={{flex: 1}}
+            value={enablePush}
+            onValueChange={status => setEnablePush(status)}
+          />
+          <View style={[styles.btnStyle, {flex: 2}]}>
+            <Button
+              onPress={() => {
+                saveEnablePush();
+              }}
+              title="Set enablePush"
+              color={btnClr}
+            />
+          </View>
+        </View>
+
+        <View style={{flexDirection: 'row'}}>
+          <Switch
+            style={{flex: 1}}
+            value={enableInApp}
+            onValueChange={status => setEnableInApp(status)}
+          />
+          <View style={[styles.btnStyle, {flex: 2}]}>
+            <Button
+              onPress={() => {
+                saveEnableInApp();
+              }}
+              title="Set enableInApp"
+              color={btnClr}
+            />
+          </View>
+        </View>
+
+        <View style={{flexDirection: 'row'}}>
+          <Switch
+            style={{flex: 1}}
+            value={enableSdk}
+            onValueChange={status => setEnableSdk(status)}
+          />
+          <View style={[styles.btnStyle, {flex: 2}]}>
+            <Button
+              onPress={() => {
+                saveEnableSdk();
+              }}
+              title="Set enableTracking"
+              color={btnClr}
+            />
+          </View>
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              fetchInappMessages();
+            }}
+            title="fetch InApp Notification notifications"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              showInappMessages();
+            }}
+            title="display In App Notification"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              removeUserInfo();
+            }}
+            title="Remove user info"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              registerForInappMessages();
+            }}
+            title="Register For in-app notifications"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              unregisterForInappMessages();
+            }}
+            title="Un-register for in-app notifications"
+            color={btnClr}
+          />
+        </View>
+
+        <Text style={styles.txtH1Style}>{'Current Device ID'}</Text>
+        <TextInput
+          style={styles.txtStyle}
+          onChangeText={text => setDeviceId(text)}
+          value={deviceId}
+        />
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              getLiveContentByEmail();
+            }}
+            title="Live content by Email"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              getLiveContentByDeviceID();
+            }}
+            title="Live content by Device id"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={() => {
+              getLiveContentByCustomerID();
+            }}
+            title="Live content by Customer id"
+            color={btnClr}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
-    );
-  }
+  );
 }
 
 const styles = StyleSheet.create({
@@ -462,12 +565,12 @@ const styles = StyleSheet.create({
   },
   welcome: {
     flex: 1,
-    borderColor: "#cccccc",
+    borderColor: '#cccccc',
     borderBottomWidth: 1,
-    marginBottom: 10
+    marginBottom: 10,
   },
   txtH1Style: {
-    flex:1,
+    flex: 1,
     marginLeft: 16,
     marginRight: 16,
     marginTop: 4,
@@ -475,7 +578,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   txtStyle: {
-    flex:1,
+    flex: 1,
     height: 48,
     borderColor: '#2160D4',
     borderWidth: 1,
@@ -486,55 +589,10 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   btnStyle: {
-    flex:1,
+    flex: 1,
     marginLeft: 16,
     marginRight: 16,
     marginTop: 4,
     marginBottom: 4,
-  }
+  },
 });
-
-
-// import React, { useEffect } from 'react';
-
-// const Root = () => {
-  
-//   Blueshift.identifyWithDetails({});
-
-//   useEffect(() => {
-
-//     console.log('useEffect: START');
-  
-
-//       // Add event listner for `url` event
-//   global.urlListener = Linking.addEventListener('url', (event) => { 
-//     var url = event.url;
-//     if(url) {
-//       // Check if the URL is a rewritten/shortened URL from Blueshift
-//       if (Blueshift.isBlueshiftUrl(url)) {
-//         Blueshift.processBlueshiftUrl(url);
-//       } else {
-//         console.log('handleDeeplink: ' + url);
-//         // this.handleDeeplinkUrl(url);
-//       }
-//     }
-//   });
-  
-//   Blueshift.addEventListener('PushNotificationClickedEvent', () =>{});
-  
-
-//     return () => {
-//       console.log('useEffect: return');
-//       global.urlListener.remove();  
-//     }
-//   }, [])
-  
-  
-//   return (
-//     <View style={{ flex: 1 }}>
-//       <Text>Hello</Text>
-//     </View>
-//   );
-// }
-
-// export default Root;
