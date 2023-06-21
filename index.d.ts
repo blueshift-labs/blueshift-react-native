@@ -406,8 +406,18 @@ declare module 'blueshift-react-native' {
 	 * @param {function} callback success callback.
 	 * 
 	 */
-	function getCurrentDeviceId(callback : function): void;
+	function getCurrentDeviceId(callback : Function): void;
 		
+	function syncInboxMessages(callback:Function): void;
+
+	function getUnreadInboxMessageCount(callback:Function): void;
+
+	function getInboxMessages(callback:Function): void;
+
+	function showInboxMessage(message: BlueshiftInboxMessage):void;
+	
+	function deleteInboxMessage(message: BlueshiftInboxMessage ):void;
+
 	/**
 	 * Process the Blueshift url and provide the final url to Linking's "url" callback
 	 * 
