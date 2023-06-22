@@ -258,6 +258,60 @@ RCT_EXPORT_METHOD(getLiveContentByDeviceId:(NSString*)slot context:(NSDictionary
     }];
 }
 
+#pragma mark Inbox
+RCT_EXPORT_METHOD(syncInboxMessages:(RCTResponseSenderBlock)callback) {
+    [BlueshiftInboxManager syncInboxMessages:^{
+        if (callback) {
+            callback(@[@YES]);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(getInboxMessages:(RCTResponseSenderBlock)callback) {
+    [BlueshiftInboxManager getCachedInboxMessagesWithHandler:^(BOOL status, NSMutableArray<BlueshiftInboxMessage *> * _Nullable messages) {
+        if (status && messages.count > 0) {
+            NSMutableArray* convertedMessages = [[NSMutableArray alloc] init];
+            [messages enumerateObjectsUsingBlock:^(BlueshiftInboxMessage * _Nonnull msg, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (msg) {
+                    [convertedMessages addObject:[BlueShiftInAppNotificationHelper convertMessageToDictionary:msg]];
+                }
+            }];
+            callback(@[@{@"messages": [convertedMessages copy]}]);
+        } else {
+            callback(@[@{@"messages":@[]}]);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(getUnreadInboxMessageCount:(RCTResponseSenderBlock)callback) {
+    if (callback) {
+        [BlueshiftInboxManager getInboxUnreadMessagesCount:^(BOOL status, NSUInteger count) {
+            if (status) {
+                callback(@[[NSNumber numberWithUnsignedInteger:count]]);
+            } else {
+                callback(@[[NSNumber numberWithUnsignedInteger:0]]);
+            }
+        }];
+    } 
+}
+RCT_EXPORT_METHOD(deleteInboxMessage:(NSDictionary*)message callback:(RCTResponseSenderBlock)callback) {
+    if ([message isKindOfClass:[NSDictionary class]]) {
+        [BlueshiftInboxManager deleteInboxMessage:[BlueShiftInAppNotificationHelper convertDictionaryToMessage:message] completionHandler:^(BOOL status, NSString * _Nullable errMsg) {
+            if (status) {
+                callback(@[@YES, @""]);
+            } else {
+                callback(@[@NO, errMsg]);
+            }
+        }];
+    }
+}
+
+RCT_EXPORT_METHOD(showInboxMessage:(NSDictionary*)message callback:(RCTResponseSenderBlock)callback) {
+    if ([message isKindOfClass:[NSDictionary class]]) {
+        [BlueshiftInboxManager showNotificationForInboxMessage:[BlueShiftInAppNotificationHelper convertDictionaryToMessage:message] inboxInAppDelegate:nil];
+    }
+}
+
 RCT_EXPORT_METHOD(processBlueshiftUrl:(NSString*)url) {
     // Android Placeholder method
 }
