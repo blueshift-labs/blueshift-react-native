@@ -14,6 +14,7 @@
 #import "BlueShift.h"
 #import "BlueshiftVersion.h"
 #import "BlueshiftNotificationConstants.h"
+#import "BlueShiftInAppNotificationHelper.h"
 
 @implementation BlueshiftBridge
 
@@ -294,6 +295,7 @@ RCT_EXPORT_METHOD(getUnreadInboxMessageCount:(RCTResponseSenderBlock)callback) {
         }];
     } 
 }
+
 RCT_EXPORT_METHOD(deleteInboxMessage:(NSDictionary*)message callback:(RCTResponseSenderBlock)callback) {
     if ([message isKindOfClass:[NSDictionary class]]) {
         [BlueshiftInboxManager deleteInboxMessage:[BlueShiftInAppNotificationHelper convertDictionaryToMessage:message] completionHandler:^(BOOL status, NSString * _Nullable errMsg) {
