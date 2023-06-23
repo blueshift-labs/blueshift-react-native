@@ -13,7 +13,7 @@
 RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[BlueshiftDeepLinkEvent, BlueshiftPushNotificationClickedEvent];
+    return @[BlueshiftDeepLinkEvent, BlueshiftPushNotificationClickedEvent, InAppLoadEvent, InboxDataChangeEvent];
 }
 
 - (void)startObserving {    

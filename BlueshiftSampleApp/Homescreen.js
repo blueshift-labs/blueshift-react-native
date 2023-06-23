@@ -78,18 +78,6 @@ export default function HomeScreen({navigation}) {
   handleDeeplinkUrl = url => {
     console.log('deeplink: ' + url);
     navigation.navigate('Deeplink', {deeplink: url});
-    // Alert.alert(
-    //   "Deep Link URL",
-    //   url,
-    //   [
-    //     {
-    //       text: "Cancel",
-    //       onPress: () => console.log("Cancel Pressed"),
-    //       style: "cancel"
-    //     },
-    //     { text: "OK", onPress: () => console.log("OK Pressed") }
-    //   ]
-    // );
   };
 
   navigateToInboxScreen = () => {

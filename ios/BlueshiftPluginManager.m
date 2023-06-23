@@ -64,8 +64,21 @@ static BlueshiftPluginManager *_sharedInstance = nil;
             }
         }
     }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:kBSInboxUnreadMessageCountDidChange object:nil queue: [NSOperationQueue currentQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if (self.blueshiftEventsManagerDelegate) {
+            [self.blueshiftEventsManagerDelegate fireEventWithEventName:InboxDataChangeEvent data:@{}];
+        }
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kBSInAppNotificationDidAppear object:nil queue: [NSOperationQueue currentQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if (self.blueshiftEventsManagerDelegate) {
+            [self.blueshiftEventsManagerDelegate fireEventWithEventName:InAppLoadEvent data:@{}];
+        }
+    }];
 }
 
+#pragma mark handle push and deep link event with caching
 - (void)fireCachedEventWithEventName:(NSString*)eventName {
     NSMutableArray *deepLinksCopy = [cachedDeepLinks copy];
     for (BlueshiftRNDeepLinkData *deepLinkData in deepLinksCopy) {

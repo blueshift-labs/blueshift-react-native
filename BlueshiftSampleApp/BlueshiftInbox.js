@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,47 +7,34 @@ import {
   RefreshControl,
   Text,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import Blueshift from 'blueshift-react-native';
 
 const BlueshiftInbox = () => {
-  const itemTitles = [
-    'Go to your settings on your iPhone to find the name of the device',
-    'Go to your settings on your iPhone to find the name of the device.',
-    'Item 3 Go to your settings on your iPhone to find the name of the device.',
-  ];
-  const itemSubtitles = [
-    'Sometimes this will fail and output a message like this:',
-    'Subtitle 2 Sometimes this will fail and output a message like this:',
-    ' Sometimes this will fail and output a message like this: Subtitle 3',
-  ];
-  const itemDates = ['2023-06-01', '2023-06-02', '2023-06-03'];
-  const itemImages = [
-    'https://picsum.photos/300/300',
-    'https://picsum.photos/300/300',
-    'https://picsum.photos/300/300',
-  ];
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [onLoadComplete, setOnLoadComplete] = useState(false);
 
-  // Create an array of objects, each representing an item
-  const data = itemTitles.map((title, index) => {
-    return {
-      title,
-      subtitle: itemSubtitles[index],
-      date: itemDates[index],
-      image: itemImages[index],
-    };
-  });
-
-  const [refreshing, setRefreshing] = useState(false);
-
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+  const handlePullToRefresh = () => {
+    if (isRefreshing == false) {
+      setIsRefreshing(true);
+    }
+    Blueshift.syncInboxMessages(res => {
+      setIsRefreshing(false);
+    });
   };
 
-  const showInboxMessage = item => {};
+  const setupListeners = () => {
+    Blueshift.addEventListener('InboxDataChangeEvent', event => {
+      loadMessages();
+    });
+
+    Blueshift.addEventListener('InAppLoadEvent', evt => {
+      setIsLoading(false);
+    });
+  };
 
   const handleDeleteItem = item => {
     // Handle the delete action for the list item
@@ -56,14 +43,33 @@ const BlueshiftInbox = () => {
     // setListData(updatedData);
   };
 
+  const loadMessages = () => {
+    Blueshift.getInboxMessages(res => {
+      setMessages(res.messages);
+      console.log(res);
+    });
+  };
+
+  const showInboxMessage = item => {
+    setIsLoading(true);
+    Blueshift.showInboxMessage(item);
+  };
+
   useEffect(() => {
-   Blueshift
+    console.log('useEffect');
+    setupListeners();
+    loadMessages();
+    if (onLoadComplete == false) {
+      Blueshift.syncInboxMessages(res => {});
+      setOnLoadComplete(true);
+    }
 
     return () => {
-
+      console.log('unload useEffect');
+      Blueshift.removeEventListener('InboxDataChangeEvent');
+      Blueshift.removeEventListener('InAppLoadEvent');
     };
   }, []);
-
 
   const renderListItem = ({item}) => {
     return (
@@ -71,30 +77,57 @@ const BlueshiftInbox = () => {
         onPress={() => showInboxMessage(item)}
         style={styles.listItemContainer}>
         <View style={styles.listItem}>
-          {item.title && <View style={styles.circle} />}
+          <View
+            style={
+              item.status == 'read' ? styles.empty_circle : styles.filled_circle
+            }
+          />
           <View style={styles.textContainer}>
             {item.title && <Text style={styles.title}>{item.title}</Text>}
-            {item.subtitle && (
-              <Text style={styles.subtitle}>{item.subtitle}</Text>
+            {item.details && (
+              <Text style={styles.subtitle}>{item.details}</Text>
             )}
-            {item.date && <Text style={styles.date}>{item.date}</Text>}
+            {item.createdAt && (
+              <Text style={styles.date}>{Date(item.createdAt * 1000)}</Text>
+            )}
           </View>
-          {item.image && (
-            <Image source={{uri: item.image}} style={styles.image} />
-          )}
+          <Image source={{uri: item.imageUrl}} style={styles.image} />
         </View>
       </TouchableOpacity>
     );
   };
 
+  const renderLoader = () => {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="blue" />
+      </View>
+    );
+  };
+
+  const pulllToRefreshControl = () => {
+    return (
+      <RefreshControl
+        refreshing={isRefreshing}
+        onRefresh={handlePullToRefresh}
+        // style={styles.pullToRefresh}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
+      {isLoading ? renderLoader() : null}
       <FlatList
-        data={data}
+        data={messages}
         renderItem={renderListItem}
         keyExtractor={(item, index) => index.toString()}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handlePullToRefresh}
+            tintColor="red"
+          />
         }
       />
     </View>
@@ -104,6 +137,12 @@ const BlueshiftInbox = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loaderContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   listItem: {
     flexDirection: 'row',
@@ -118,15 +157,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
   subtitle: {
     fontSize: 14,
-    color: '#888888',
+    color: '#808080',
   },
   date: {
     fontSize: 12,
-    color: '#888888',
+    fontWeight: '300',
+    color: '#808080',
   },
   image: {
     width: 60,
@@ -134,11 +174,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     resizeMode: 'cover',
   },
-  circle: {
+  filled_circle: {
     width: 10,
     height: 10,
     borderRadius: 5,
     backgroundColor: 'red',
+    marginRight: 10,
+    marginTop: 5,
+    alignSelf: 'flex-start',
+  },
+  empty_circle: {
+    width: 10,
+    height: 10,
     marginRight: 10,
     marginTop: 5,
     alignSelf: 'flex-start',

@@ -308,7 +308,7 @@ RCT_EXPORT_METHOD(deleteInboxMessage:(NSDictionary*)message callback:(RCTRespons
     }
 }
 
-RCT_EXPORT_METHOD(showInboxMessage:(NSDictionary*)message callback:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(showInboxMessage:(NSDictionary*)message) {
     if ([message isKindOfClass:[NSDictionary class]]) {
         [BlueshiftInboxManager showNotificationForInboxMessage:[BlueShiftInAppNotificationHelper convertDictionaryToMessage:message] inboxInAppDelegate:nil];
     }
