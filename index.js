@@ -566,7 +566,9 @@ var Blueshift = {
    *   });
    */
   getInboxMessages: function (callback) {
-    NativeModules.BlueshiftBridge.getInboxMessages(callback);
+    NativeModules.BlueshiftBridge.getInboxMessages((messages) => {
+      callback(messages);
+    });
   },
 
   /**
