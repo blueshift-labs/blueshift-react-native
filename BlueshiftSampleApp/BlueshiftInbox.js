@@ -11,11 +11,21 @@ import {
 } from 'react-native';
 import Blueshift from 'blueshift-react-native';
 
-const BlueshiftInbox = () => {
+const BlueshiftInbox = (
+  pullToRefreshColor,
+  loaderColor,
+  customStyle,
+  placeholderText,
+  dateFormatter,
+) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [onLoadComplete, setOnLoadComplete] = useState(false);
+
+  const inappLoadEvent = 'InAppLoadEvent';
+  const inboxDataChangeEvent = 'InboxDataChangeEvent';
+  const styles = customStyle ?? defaultStyle;
 
   const handlePullToRefresh = () => {
     if (isRefreshing == false) {
@@ -27,20 +37,17 @@ const BlueshiftInbox = () => {
   };
 
   const setupListeners = () => {
-    Blueshift.addEventListener('InboxDataChangeEvent', event => {
+    Blueshift.addEventListener(inboxDataChangeEvent, event => {
       loadMessages();
     });
 
-    Blueshift.addEventListener('InAppLoadEvent', evt => {
+    Blueshift.addEventListener(inappLoadEvent, event => {
       setIsLoading(false);
     });
   };
 
   const handleDeleteItem = item => {
-    // Handle the delete action for the list item
     console.log('Deleted item:', item);
-    // const updatedData = listData.filter((dataItem) => dataItem.id !== item.id);
-    // setListData(updatedData);
   };
 
   const loadMessages = () => {
@@ -60,18 +67,22 @@ const BlueshiftInbox = () => {
     setupListeners();
     loadMessages();
     if (onLoadComplete == false) {
-      Blueshift.syncInboxMessages(res => {});
+      Blueshift.syncInboxMessages(data => {});
       setOnLoadComplete(true);
     }
 
     return () => {
       console.log('unload useEffect');
-      Blueshift.removeEventListener('InboxDataChangeEvent');
-      Blueshift.removeEventListener('InAppLoadEvent');
+      Blueshift.removeEventListener(inboxDataChangeEvent);
+      Blueshift.removeEventListener(inappLoadEvent);
     };
   }, []);
 
   const renderListItem = ({item}) => {
+    const createdAt = new Date(item.createdAt * 1000);
+    const createdAtString = dateFormatter
+      ? dateFormatter(createdAt)
+      : createdAt.toDateString();
     return (
       <TouchableOpacity
         onPress={() => showInboxMessage(item)}
@@ -88,7 +99,7 @@ const BlueshiftInbox = () => {
               <Text style={styles.subtitle}>{item.details}</Text>
             )}
             {item.createdAt && (
-              <Text style={styles.date}>{Date(item.createdAt * 1000)}</Text>
+              <Text style={styles.date}>{createdAtString}</Text>
             )}
           </View>
           <Image source={{uri: item.imageUrl}} style={styles.image} />
@@ -97,21 +108,17 @@ const BlueshiftInbox = () => {
     );
   };
 
+  const renderPlaceholderText = () => (
+    <View style={styles.placeholderContainer}>
+      <Text style={styles.placeholderText}>{placeholderText}</Text>
+    </View>
+  );
+
   const renderLoader = () => {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="blue" />
+        <ActivityIndicator size="large" color={loaderColor ?? '#00c0c0'} />
       </View>
-    );
-  };
-
-  const pulllToRefreshControl = () => {
-    return (
-      <RefreshControl
-        refreshing={isRefreshing}
-        onRefresh={handlePullToRefresh}
-        // style={styles.pullToRefresh}
-      />
     );
   };
 
@@ -122,11 +129,12 @@ const BlueshiftInbox = () => {
         data={messages}
         renderItem={renderListItem}
         keyExtractor={(item, index) => index.toString()}
+        ListEmptyComponent={renderPlaceholderText}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handlePullToRefresh}
-            tintColor="red"
+            tintColor={pullToRefreshColor ?? '#00c0c0'}
           />
         }
       />
@@ -134,7 +142,7 @@ const BlueshiftInbox = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const defaultStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -189,6 +197,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 5,
     alignSelf: 'flex-start',
+  },
+  placeholderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  placeholderText: {
+    fontSize: 16,
+    color: 'gray',
   },
 });
 
