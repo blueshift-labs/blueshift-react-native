@@ -78,13 +78,13 @@ var Blueshift = {
    * Get registered screen name for in-app messages.
    *
    * Usage -
-   * Blueshift.registerForInAppMessage("IndexScreen");
-   *
-   * @param {string} screenName    Name of the screen.
+   * Blueshift.getRegisteredForInAppScreenName(screenName = {
+   * 	console.log("registered screen name - " + screenName);
+   * });
    *
    */
-  getRegisteredForInAppScreenName: function () {
-    NativeModules.BlueshiftBridge.getRegisteredForInAppScreenName();
+  getRegisteredForInAppScreenName: function (callback) {
+    NativeModules.BlueshiftBridge.getRegisteredForInAppScreenName(callback);
   },
 
   /**

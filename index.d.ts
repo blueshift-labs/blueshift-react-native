@@ -50,10 +50,8 @@ declare module 'blueshift-react-native' {
 	 * 	console.log("registered screen name - " + screenName);
 	 * });
 	 *
-	 * @param {string} screenName    Name of the screen.
-	 *
 	 */
-	function getRegisteredForInAppScreenName(callback : Function): void;
+	function getRegisteredForInAppScreenName(callback : function): void;
 
 	/**
 	 * Unregisters a page from showing in-app message.
