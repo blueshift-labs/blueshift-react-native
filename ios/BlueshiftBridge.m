@@ -62,6 +62,13 @@ RCT_EXPORT_METHOD(registerForInAppMessage:(NSString *)screenName) {
     }
 }
 
+RCT_EXPORT_METHOD(getRegisteredForInAppScreenName:(RCTResponseSenderBlock)callback) {
+    if (callback) {
+        NSString* screenName = [[BlueShift sharedInstance] getRegisteredForInAppScreenName];
+        callback(@[screenName]);
+    }
+}
+
 // Legacy bridge method for backward compatability
 RCT_EXPORT_METHOD(registerForInAppNotification:(NSString *)screenName) {
     [self registerForInAppMessage:screenName];
