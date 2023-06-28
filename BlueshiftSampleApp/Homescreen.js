@@ -7,17 +7,28 @@ import {
   View,
   TextInput,
   SafeAreaView,
+  TouchableOpacity,
   ScrollView,
-  NativeModules,
   Button,
-  Alert,
-  Platform,
   Linking,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Blueshift from 'blueshift-react-native';
+import Blueshift, {showInboxMessage} from 'blueshift-react-native';
 
 export default function HomeScreen({navigation}) {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Blueshift Sample App',
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => navigateToInboxScreen()}
+          style={{marginRight: 25}}>
+          <Text style={{color: 'black'}}>Inbox({unreadCount})</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
   useEffect(() => {
     // Get the email deep link when app launched from killed state
     Linking.getInitialURL().then(url => {
@@ -57,6 +68,16 @@ export default function HomeScreen({navigation}) {
     // Register screen for receiving in-app notifications
     this.registerForInApp();
 
+    Blueshift.getUnreadInboxMessageCount(count => {
+      setUnreadCount(count);
+    });
+
+    Blueshift.addEventListener('InboxDataChangeEvent', event => {
+      Blueshift.getUnreadInboxMessageCount(count => {
+        setUnreadCount(count);
+      });
+    });
+
     return () => {
       // You must unregister these callbacks
       if (global) {
@@ -65,7 +86,7 @@ export default function HomeScreen({navigation}) {
 
       // Remove custom event listner using Blueshift method
       Blueshift.removeEventListener('PushNotificationClickedEvent');
-
+      Blueshift.removeEventListener('InboxDataChangeEvent');
       // Unregister screen
       this.unRegisterForInApp();
     };
@@ -156,6 +177,7 @@ export default function HomeScreen({navigation}) {
   };
 
   displayInAppNotification = () => {
+    navigation.navigate('Second');
     Blueshift.displayInAppNotification();
   };
 
@@ -219,6 +241,7 @@ export default function HomeScreen({navigation}) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [deviceId, setDeviceId] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
 
   setValues = () => {
     console.log('setValues');

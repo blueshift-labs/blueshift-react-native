@@ -5,6 +5,7 @@ import {
   Image,
   FlatList,
   RefreshControl,
+  Platform,
   Text,
   StyleSheet,
   ActivityIndicator,
@@ -26,6 +27,7 @@ const BlueshiftInbox = (
   const inappLoadEvent = 'InAppLoadEvent';
   const inboxDataChangeEvent = 'InboxDataChangeEvent';
   const styles = customStyle ?? defaultStyle;
+  var cachedInAppScreenName = null;
 
   const handlePullToRefresh = () => {
     if (isRefreshing == false) {
@@ -70,13 +72,63 @@ const BlueshiftInbox = (
       Blueshift.syncInboxMessages(data => {});
       setOnLoadComplete(true);
     }
+    handleInitState();
 
     return () => {
       console.log('unload useEffect');
       Blueshift.removeEventListener(inboxDataChangeEvent);
       Blueshift.removeEventListener(inappLoadEvent);
+      handleDispose();
     };
   }, []);
+
+  const handleInitState = () => {
+    Blueshift.getRegisteredForInAppScreenName(screenName => {
+      if (Platform.OS == 'ios') {
+        handleIOSInAppRegistrationInit(screenName);
+      } else if (Platform.OS == 'android') {
+        handleAndroidInAppRegistrationInit(screenName);
+      }
+    });
+  };
+
+  const handleDispose = () => {
+    if (Platform.OS == 'ios') {
+      handleIOSInAppRegistrationCleanup();
+    } else if (Platform.OS == 'android') {
+      handleAndroidInAppRegistrationCleanup();
+    }
+  };
+
+  const handleIOSInAppRegistrationInit = screenName => {
+    if (screenName != null && screenName != '') {
+      cachedInAppScreenName = screenName;
+      Blueshift.unregisterForInAppMessage();
+    }
+  };
+
+  const handleIOSInAppRegistrationCleanup = () => {
+    if (cachedInAppScreenName != null) {
+      Blueshift.registerForInAppMessage(cachedInAppScreenName);
+      cachedInAppScreenName = null;
+    }
+  };
+
+  const handleAndroidInAppRegistrationInit = screenName => {
+    cachedInAppScreenName = screenName;
+    Blueshift.registerForInAppMessage('blueshift_inbox');
+  };
+
+  const handleAndroidInAppRegistrationCleanup = () => {
+    Blueshift.unregisterForInAppMessage();
+
+    /// If cachedInAppScreenName is null, the host app may not have
+    /// registered any screen for in-app display. Having this check
+    /// will prevent doing an unintentional call to registerForInAppMessage().
+    if (cachedInAppScreenName != null) {
+      Blueshift.registerForInAppMessage(cachedInAppScreenName);
+    }
+  };
 
   const renderListItem = ({item}) => {
     const createdAt = new Date(item.createdAt * 1000);
