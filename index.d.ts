@@ -488,4 +488,6 @@ declare module 'blueshift-react-native' {
 	 * @return {boolean}
 	 */
 	function isBlueshiftUrl(url : string): boolean;
+
+	function getInbox():function; 
 }
