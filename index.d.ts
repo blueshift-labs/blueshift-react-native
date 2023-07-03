@@ -417,7 +417,7 @@ declare module 'blueshift-react-native' {
 	 * @param {function} callback success callback.
 	 * 
 	 */
-	function getCurrentDeviceId(callback : Function): void;
+	function getCurrentDeviceId(callback : function): void;
 
 	/**
    * Sync Blueshift Inbox messages on the local cache.
@@ -431,7 +431,7 @@ declare module 'blueshift-react-native' {
    *    }
    *   });
    */
-    function syncInboxMessages(callback: Function): void;
+    function syncInboxMessages(callback: function): void;
 	
 	/**
    * Get unread messages count to show on the notification badge.
@@ -441,7 +441,7 @@ declare module 'blueshift-react-native' {
    *       console.log("unread messages count"+count);
    *   });
    */
-	function getUnreadInboxMessageCount(callback: Function): void;
+	function getUnreadInboxMessageCount(callback: function): void;
 
 	/**
    * Get inbox messages list to show in the list view.
@@ -451,7 +451,7 @@ declare module 'blueshift-react-native' {
    *       console.log("unread messages count"+count);
    *   });
    */
-	function getInboxMessages(callback: Function): void;
+	function getInboxMessages(callback: function): void;
 
 	/**
    * Show in-app notification for the Inbox message.
