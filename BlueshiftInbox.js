@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Blueshift from "./index";
 
-const BlueshiftInbox = (
+export const BlueshiftInbox = (
   pullToRefreshColor,
   loaderColor,
   customStyle,
@@ -261,5 +261,3 @@ const defaultStyle = StyleSheet.create({
     color: "gray",
   },
 });
-
-export default BlueshiftInbox;
