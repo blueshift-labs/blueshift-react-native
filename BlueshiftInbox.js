@@ -10,7 +10,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import Blueshift from "./index";
+import Blueshift from "./Blueshift";
 
 const BlueshiftInbox = (
   pullToRefreshColor,
