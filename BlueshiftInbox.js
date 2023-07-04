@@ -10,9 +10,9 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import Blueshift from "./index";
+const Blueshift = require("./index");
 
-export const BlueshiftInbox = (
+const BlueshiftInbox = (
   pullToRefreshColor,
   loaderColor,
   customStyle,
@@ -261,3 +261,5 @@ const defaultStyle = StyleSheet.create({
     color: "gray",
   },
 });
+
+export default BlueshiftInbox;

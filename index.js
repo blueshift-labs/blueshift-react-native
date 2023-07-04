@@ -5,7 +5,7 @@ import {
   NativeModules,
   Platform,
 } from "react-native";
-import BlueshiftInbox from "./BlueshiftInbox";
+import { BlueshiftInbox } from "./BlueshiftInbox";
 
 const BlueshiftEventEmitter = new NativeEventEmitter(
   NativeModules.BlueshiftReactEventsManager
