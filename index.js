@@ -5,13 +5,12 @@ import {
   NativeModules,
   Platform,
 } from "react-native";
-import { BlueshiftInbox } from "./BlueshiftInbox";
 
 const BlueshiftEventEmitter = new NativeEventEmitter(
   NativeModules.BlueshiftReactEventsManager
 );
 
-export const Blueshift = {
+const Blueshift = {
   /**
    * Initialize the components of the Blueshift SDK. This mainly initializes the
    * event emitter instance to start firing the events when the app is ready to
@@ -641,7 +640,7 @@ export const Blueshift = {
   },
 
   getInbox: function () {
-    return BlueshiftInbox();
+    return {};
   },
 };
 
