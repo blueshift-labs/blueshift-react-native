@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
-import BlueshiftInbox from './BlueshiftInbox';
+import BlueshiftInbox from 'blueshift-react-native/BlueshiftInbox';
 
 export default function InboxScreen() {
-  return BlueshiftInbox(
-    'red',
-    'red',
-    customStyle,
-    'No items to show. Come again later!',
-    date => {
-      return date.toISOString();
-    },
-  );
+  return BlueshiftInbox();
+  // return BlueshiftInbox(
+  //   'red',
+  //   'red',
+  //   customStyle,
+  //   'No items to show. Come again later!',
+  //   date => {
+  //     return date.toISOString();
+  //   },
+  // );
 }
 
 const customStyle = StyleSheet.create({
