@@ -18,13 +18,11 @@ import Blueshift, {showInboxMessage} from 'blueshift-react-native';
 export default function HomeScreen({navigation}) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Blueshift Sample App',
       headerRight: () => (
-        <TouchableOpacity
+        <Button
           onPress={() => navigateToInboxScreen()}
-          style={{marginRight: 25}}>
-          <Text style={{color: 'black'}}>Inbox({unreadCount})</Text>
-        </TouchableOpacity>
+          title={'Inbox(' + unreadCount + ')'}
+        />
       ),
     });
   }, [navigation]);
@@ -68,14 +66,10 @@ export default function HomeScreen({navigation}) {
     // Register screen for receiving in-app notifications
     this.registerForInApp();
 
-    Blueshift.getUnreadInboxMessageCount(count => {
-      setUnreadCount(count);
-    });
+    updateUnreadCount();
 
     Blueshift.addEventListener('InboxDataChangeEvent', event => {
-      Blueshift.getUnreadInboxMessageCount(count => {
-        setUnreadCount(count);
-      });
+      updateUnreadCount();
     });
 
     return () => {
@@ -91,6 +85,13 @@ export default function HomeScreen({navigation}) {
       this.unRegisterForInApp();
     };
   }, []);
+
+  updateUnreadCount = () => {
+    Blueshift.getUnreadInboxMessageCount(count => {
+      console.log('unread messages count ' + count);
+      setUnreadCount(count);
+    });
+  };
 
   handlePushClick = event => {
     alert('push payload ' + JSON.stringify(event.bsft_experiment_uuid));
