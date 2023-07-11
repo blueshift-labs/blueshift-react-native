@@ -2,7 +2,6 @@ package com.blueshift.reactnative;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +11,8 @@ import com.blueshift.BlueshiftAppPreferences;
 import com.blueshift.BlueshiftConstants;
 import com.blueshift.BlueshiftLinksHandler;
 import com.blueshift.BlueshiftLogger;
+import com.blueshift.inbox.BlueshiftInboxManager;
+import com.blueshift.inbox.BlueshiftInboxMessage;
 import com.blueshift.model.UserInfo;
 import com.blueshift.util.DeviceUtils;
 import com.facebook.react.bridge.Callback;
@@ -351,6 +352,73 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
             // duplicate deep linking when onNewIntent is called
             intent.removeExtra(DEEP_LINK_URL);
         }
+    }
+
+    // MOBILE INBOX
+    @ReactMethod
+    private void getInboxMessages(Callback callback) {
+        if (callback != null) {
+            BlueshiftInboxManager.getMessages(getReactApplicationContext(), blueshiftInboxMessages -> {
+                if (blueshiftInboxMessages == null || blueshiftInboxMessages.isEmpty()) {
+                    BlueshiftLogger.d(TAG, "No messages found inside Mobile Inbox.");
+
+                    // return empty list
+                    HashMap<String, Object> messages = new HashMap<>();
+                    messages.put("messages", new ArrayList<>());
+                    callback.invoke(hashMapToWritableMap(messages));
+                } else {
+                    ArrayList<HashMap<String, Object>> messageList = new ArrayList<>();
+
+                    for (BlueshiftInboxMessage message : blueshiftInboxMessages) {
+                        messageList.add(message.toHashMap());
+                    }
+
+                    HashMap<String, Object> messages = new HashMap<>();
+                    messages.put("messages", messageList);
+                    callback.invoke(hashMapToWritableMap(messages));
+                }
+            });
+        }
+
+    }
+
+    @ReactMethod
+    private void showInboxMessage(ReadableMap readableMap) {
+        HashMap<String, Object> map = toHashMap(readableMap.getMap("message"));
+        if (map != null) {
+            BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
+            BlueshiftInboxManager.displayInboxMessage(message);
+        }
+    }
+
+    @ReactMethod
+    private void deleteInboxMessage(ReadableMap readableMap, Callback callback) {
+        HashMap<String, Object> map = toHashMap(readableMap.getMap("message"));
+        if (map != null) {
+            BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
+            BlueshiftInboxManager.deleteMessage(getReactApplicationContext(), message, status -> {
+                if (status) {
+                    callback.invoke(true);
+                } else {
+                    callback.invoke(false);
+                }
+            });
+        }
+    }
+
+    @ReactMethod
+    private void syncInboxMessages(Callback callback) {
+        BlueshiftInboxManager.syncMessages(getReactApplicationContext(), callback::invoke);
+    }
+
+    @ReactMethod
+    private void sendInboxDataChangeEvent() {
+        BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("InboxDataChangeEvent", null);
+    }
+
+    @ReactMethod
+    private void getUnreadInboxMessageCount(Callback callback) {
+        BlueshiftInboxManager.getUnreadMessagesCount(getReactApplicationContext(), callback::invoke);
     }
 
     // HELPER METHODS
