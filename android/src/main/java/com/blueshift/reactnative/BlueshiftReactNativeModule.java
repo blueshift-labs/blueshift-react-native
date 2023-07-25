@@ -11,6 +11,7 @@ import com.blueshift.BlueshiftAppPreferences;
 import com.blueshift.BlueshiftConstants;
 import com.blueshift.BlueshiftLinksHandler;
 import com.blueshift.BlueshiftLogger;
+import com.blueshift.inappmessage.InAppManager;
 import com.blueshift.inbox.BlueshiftInboxManager;
 import com.blueshift.inbox.BlueshiftInboxMessage;
 import com.blueshift.model.UserInfo;
@@ -356,7 +357,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     // MOBILE INBOX
     @ReactMethod
-    private void getInboxMessages(Callback callback) {
+    void getInboxMessages(Callback callback) {
         if (callback != null) {
             BlueshiftInboxManager.getMessages(getReactApplicationContext(), blueshiftInboxMessages -> {
                 if (blueshiftInboxMessages == null || blueshiftInboxMessages.isEmpty()) {
@@ -383,17 +384,19 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    private void showInboxMessage(ReadableMap readableMap) {
-        HashMap<String, Object> map = toHashMap(readableMap.getMap("message"));
+    void showInboxMessage(ReadableMap readableMap) {
+        HashMap<String, Object> map = toHashMap(readableMap);
         if (map != null) {
             BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
             BlueshiftInboxManager.displayInboxMessage(message);
+        } else {
+            Log.d(TAG, "showInboxMessage: No message found to display.");
         }
     }
 
     @ReactMethod
-    private void deleteInboxMessage(ReadableMap readableMap, Callback callback) {
-        HashMap<String, Object> map = toHashMap(readableMap.getMap("message"));
+    void deleteInboxMessage(ReadableMap readableMap, Callback callback) {
+        HashMap<String, Object> map = toHashMap(readableMap);
         if (map != null) {
             BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
             BlueshiftInboxManager.deleteMessage(getReactApplicationContext(), message, status -> {
@@ -403,22 +406,30 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
                     callback.invoke(false);
                 }
             });
+        } else {
+            Log.d(TAG, "deleteInboxMessage: No message found to delete.");
         }
     }
 
     @ReactMethod
-    private void syncInboxMessages(Callback callback) {
+    void syncInboxMessages(Callback callback) {
         BlueshiftInboxManager.syncMessages(getReactApplicationContext(), callback::invoke);
     }
 
     @ReactMethod
-    private void sendInboxDataChangeEvent() {
+    void sendInboxDataChangeEvent() {
         BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("InboxDataChangeEvent", null);
     }
 
     @ReactMethod
-    private void getUnreadInboxMessageCount(Callback callback) {
+    void getUnreadInboxMessageCount(Callback callback) {
         BlueshiftInboxManager.getUnreadMessagesCount(getReactApplicationContext(), callback::invoke);
+    }
+
+    @ReactMethod
+    void getRegisteredForInAppScreenName(Callback callback) {
+        String screenName = InAppManager.getRegisteredScreenName();
+        if (callback != null) callback.invoke(screenName);
     }
 
     // HELPER METHODS
