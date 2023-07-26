@@ -50,7 +50,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     private static final BroadcastReceiver inboxChangeListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, null);
+            BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, new HashMap<>());
         }
     };
     private static BlueshiftReactNativeModule sInstance = null;
@@ -426,7 +426,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     void sendInboxDataChangeEvent() {
-        BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, null);
+        BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, new HashMap<>());
     }
 
     @ReactMethod
