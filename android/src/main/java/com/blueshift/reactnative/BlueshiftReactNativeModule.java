@@ -1,5 +1,7 @@
 package com.blueshift.reactnative;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -44,7 +46,13 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     public static final String NAME = "BlueshiftBridge";
     private static final String VERSION = BuildConfig.SDK_VERSION + "-RN-" + BuildConfig.PLUGIN_VERSION;
     private static final String DEEP_LINK_URL = "deep_link_url";
-
+    private static final String INBOX_DATA_CHANGE_EVENT = "InboxDataChangeEvent";
+    private static final BroadcastReceiver inboxChangeListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, null);
+        }
+    };
     private static BlueshiftReactNativeModule sInstance = null;
 
     public static BlueshiftReactNativeModule getInstance(ReactApplicationContext context) {
@@ -418,7 +426,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     void sendInboxDataChangeEvent() {
-        BlueshiftReactNativeEventHandler.getInstance().enqueueEvent("InboxDataChangeEvent", null);
+        BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, null);
     }
 
     @ReactMethod
@@ -430,6 +438,29 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     void getRegisteredForInAppScreenName(Callback callback) {
         String screenName = InAppManager.getRegisteredScreenName();
         if (callback != null) callback.invoke(screenName);
+    }
+
+
+    /**
+     * Method to register a {@link BroadcastReceiver} for listening inbox's data change events.
+     *
+     * @param context valid context on which broadcast should be registered.
+     */
+    public static void registerForInboxDataChangeEvents(Context context) {
+        if (context != null) {
+            BlueshiftInboxManager.registerForInboxBroadcasts(context, inboxChangeListener);
+        }
+    }
+
+    /**
+     * Method to unregister the {@link BroadcastReceiver} that listen for inbox's data change events.
+     *
+     * @param context valid context from which broadcast should be unregistered.
+     */
+    public static void unregisterForInboxDataChangeEvents(Context context) {
+        if (context != null) {
+            context.unregisterReceiver(inboxChangeListener);
+        }
     }
 
     // HELPER METHODS
