@@ -23,6 +23,18 @@ public class MainActivity extends ReactActivity {
   }
 
   @Override
+  protected void onStart() {
+    super.onStart();
+    BlueshiftReactNativeModule.registerForInboxDataChangeEvents(this);
+  }
+
+  @Override
+  protected void onStop() {
+    BlueshiftReactNativeModule.unregisterForInboxDataChangeEvents(this);
+    super.onStop();
+  }
+
+  @Override
   public void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
     BlueshiftReactNativeModule.processBlueshiftPushUrl(getIntent());
