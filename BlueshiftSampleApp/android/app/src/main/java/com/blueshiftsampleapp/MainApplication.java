@@ -69,9 +69,11 @@ public class MainApplication extends Application implements ReactApplication {
     configuration.setJavaScriptForInAppWebViewEnabled(true);
     // Set device-id source to Instance Id and package name combo (highly recommended)
     configuration.setDeviceIdSource(Blueshift.DeviceIdSource.INSTANCE_ID_PKG_NAME);
-
+    // Enable mobile inbox
+    configuration.setInboxEnabled(true);
     Blueshift.getInstance(this).initialize(configuration);
   }
+
   /**
    * Loads Flipper in React Native templates. Call this in the onCreate method with something like
    * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
