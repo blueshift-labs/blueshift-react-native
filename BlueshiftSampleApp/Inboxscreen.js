@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
-import BlueshiftInbox from 'blueshift-react-native/BlueshiftInbox';
+import BlueshiftInbox from 'blueshift-react-native/components/BlueshiftInbox';
 
 export default function InboxScreen() {
   return BlueshiftInbox();
