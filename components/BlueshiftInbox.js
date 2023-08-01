@@ -9,7 +9,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import Blueshift from "./index";
+import Blueshift from "../index";
 import BlueshiftInboxItemContainer from "./BlueshiftInboxItemContainer";
 
 const BlueshiftInbox = (
@@ -62,6 +62,14 @@ const BlueshiftInbox = (
   const showInboxMessage = (item) => {
     setIsLoading(true);
     Blueshift.showInboxMessage(item);
+
+    console.log("show: " + item.title);
+  };
+
+  const deleteInboxMessage = (item) => {
+    // implement delete.
+
+    console.log("delete: " + item.title);
   };
 
   useEffect(() => {
@@ -138,7 +146,7 @@ const BlueshiftInbox = (
     return (
       <BlueshiftInboxItemContainer
         onClick={showInboxMessage(item)}
-        onDelete={{}}
+        onDelete={deleteInboxMessage(item)}
       >
         <View style={styles.listItemContainer}>
           <View style={styles.listItem}>

@@ -1,6 +1,4 @@
-// BlueshiftInboxItemContainer
-
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -37,14 +35,11 @@ const BlueshiftInboxItemContainer = ({ children, onDelete, onClick }) => {
           useNativeDriver: false,
         }).start(); // Execute callback for swipe left
       } else {
-        // No significant swipe, reset position to center
         if (Math.abs(gesture.dx) < 5 && Math.abs(gesture.dy) < 5) {
-          // this must be a click
-          if (onClick) {
-            onClick();
-          }
+          onClick();
         }
 
+        // No significant swipe, reset position to center
         Animated.spring(position, {
           toValue: { x: 0, y: 0 },
           useNativeDriver: false,
@@ -58,20 +53,14 @@ const BlueshiftInboxItemContainer = ({ children, onDelete, onClick }) => {
     backgroundColor: isTouched ? '#e0e0e0' : '#f0f0f0', // Change background color when touched
   };
 
-  const handleDeleteClick = {
-    if(onDelete) {
-      onDelete();
-    },
-  };
-
   return (
     <View style={styles.stackContainer}>
       <View style={styles.swipableViewBackground}>
-        <TouchableOpacity onPress={handleDeleteClick}>
+        <TouchableOpacity onPress={() => onDelete()}>
           <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
         <View style={{ flex: 1 }} />
-        <TouchableOpacity onPress={handleDeleteClick}>
+        <TouchableOpacity onPress={() => onDelete()}>
           <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -102,7 +91,6 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     justifyContent: "center",
-    alignItems: "center",
     position: "absolute",
     height: "100%",
     width: "100%",
