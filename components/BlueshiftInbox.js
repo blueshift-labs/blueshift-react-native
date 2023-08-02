@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Blueshift from "../index";
-import BlueshiftInboxItemContainer from "./BlueshiftInboxItemContainer";
+import BlueshiftInboxItem from "./BlueshiftInboxItem";
 
 const BlueshiftInbox = (
   pullToRefreshColor,
@@ -60,16 +60,13 @@ const BlueshiftInbox = (
   };
 
   const showInboxMessage = (item) => {
+    console.log("show: " + item.title);
     setIsLoading(true);
     Blueshift.showInboxMessage(item);
-
-    console.log("show: " + item.title);
   };
 
   const deleteInboxMessage = (item) => {
-    // implement delete.
-
-    console.log("delete: " + item.title);
+    console.log("deletexx: " + item.title);
   };
 
   useEffect(() => {
@@ -138,38 +135,43 @@ const BlueshiftInbox = (
     }
   };
 
-  const renderListItem = ({ item }) => {
+  const renderViews = (item) => {
     const createdAt = new Date(item.createdAt * 1000);
     const createdAtString = dateFormatter
       ? dateFormatter(createdAt)
       : createdAt.toDateString();
+
     return (
-      <BlueshiftInboxItemContainer
-        onClick={showInboxMessage(item)}
-        onDelete={deleteInboxMessage(item)}
-      >
-        <View style={styles.listItemContainer}>
-          <View style={styles.listItem}>
-            <View
-              style={
-                item.status == "read"
-                  ? styles.empty_circle
-                  : styles.filled_circle
-              }
-            />
-            <View style={styles.textContainer}>
-              {item.title && <Text style={styles.title}>{item.title}</Text>}
-              {item.details && (
-                <Text style={styles.subtitle}>{item.details}</Text>
-              )}
-              {item.createdAt && (
-                <Text style={styles.date}>{createdAtString}</Text>
-              )}
-            </View>
-            <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      <View style={styles.listItemContainer}>
+        <View style={styles.listItem}>
+          <View
+            style={
+              item.status == "read" ? styles.empty_circle : styles.filled_circle
+            }
+          />
+          <View style={styles.textContainer}>
+            {item.title && <Text style={styles.title}>{item.title}</Text>}
+            {item.details && (
+              <Text style={styles.subtitle}>{item.details}</Text>
+            )}
+            {item.createdAt && (
+              <Text style={styles.date}>{createdAtString}</Text>
+            )}
           </View>
+          <Image source={{ uri: item.imageUrl }} style={styles.image} />
         </View>
-      </BlueshiftInboxItemContainer>
+      </View>
+    );
+  };
+
+  const renderListItem = ({ item }) => {
+    return (
+      <BlueshiftInboxItem
+        renderViews={() => renderViews(item)}
+        onShow={() => showInboxMessage(item)}
+        onRemove={() => deleteInboxMessage(item)}
+        inboxMessage={item}
+      />
     );
   };
 

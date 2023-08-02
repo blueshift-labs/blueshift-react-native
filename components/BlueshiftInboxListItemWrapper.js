@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const BlueshiftInboxItemContainer = ({ children, onDelete, onClick }) => {
+const BlueshiftInboxListItemWrapper = ({ children, onDelete, onClick }) => {
   const position = useRef(new Animated.ValueXY()).current;
   const [isTouched, setIsTouched] = useState(false);
 
@@ -50,17 +50,21 @@ const BlueshiftInboxItemContainer = ({ children, onDelete, onClick }) => {
 
   const animatedStyle = {
     transform: position.getTranslateTransform(),
-    backgroundColor: isTouched ? '#e0e0e0' : '#f0f0f0', // Change background color when touched
+    backgroundColor: isTouched ? "#e0e0e0" : "#f0f0f0", // Change background color when touched
+  };
+
+  const handleDelete = () => {
+    onDelete();
   };
 
   return (
     <View style={styles.stackContainer}>
       <View style={styles.swipableViewBackground}>
-        <TouchableOpacity onPress={() => onDelete()}>
+        <TouchableOpacity onPress={handleDelete}>
           <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
         <View style={{ flex: 1 }} />
-        <TouchableOpacity onPress={() => onDelete()}>
+        <TouchableOpacity onPress={handleDelete}>
           <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -103,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BlueshiftInboxItemContainer;
+export default BlueshiftInboxListItemWrapper;
