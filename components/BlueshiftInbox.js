@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Blueshift from "../index";
-import BlueshiftInboxItem from "./BlueshiftInboxItem";
+import BlueshiftInboxListItem from "./BlueshiftInboxListItem";
 
 const BlueshiftInbox = (
   pullToRefreshColor,
@@ -48,10 +48,6 @@ const BlueshiftInbox = (
     });
   };
 
-  const handleDeleteItem = (item) => {
-    console.log("Deleted item:", item);
-  };
-
   const loadMessages = () => {
     Blueshift.getInboxMessages((res) => {
       setMessages(res.messages);
@@ -61,12 +57,26 @@ const BlueshiftInbox = (
 
   const showInboxMessage = (item) => {
     console.log("show: " + item.title);
-    setIsLoading(true);
+
+    if (Platform.OS == "ios") {
+      setIsLoading(true);
+    }
+
     Blueshift.showInboxMessage(item);
   };
 
-  const deleteInboxMessage = (item) => {
-    console.log("deletexx: " + item.title);
+  const deleteInboxMessage = (item, indexToRemove) => {
+    console.log("delete: " + item);
+
+    Blueshift.deleteInboxMessage(item, (success) => {
+      if (success) {
+        setMessages((oldMessages) =>
+          oldMessages.filter((_, index) => index != indexToRemove)
+        );
+      } else {
+        console.log("could not delete: " + item);
+      }
+    });
   };
 
   useEffect(() => {
@@ -164,12 +174,12 @@ const BlueshiftInbox = (
     );
   };
 
-  const renderListItem = ({ item }) => {
+  const renderListItem = ({ item, index }) => {
     return (
-      <BlueshiftInboxItem
+      <BlueshiftInboxListItem
         renderViews={() => renderViews(item)}
         onShow={() => showInboxMessage(item)}
-        onRemove={() => deleteInboxMessage(item)}
+        onRemove={() => deleteInboxMessage(item, index)}
         inboxMessage={item}
       />
     );
@@ -195,7 +205,6 @@ const BlueshiftInbox = (
       <FlatList
         data={messages}
         renderItem={renderListItem}
-        keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={renderPlaceholderText}
         refreshControl={
           <RefreshControl
