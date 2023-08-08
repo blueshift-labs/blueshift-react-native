@@ -1,17 +1,29 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import BlueshiftInbox from 'blueshift-react-native/components/BlueshiftInbox';
 
 export default function InboxScreen() {
-  return BlueshiftInbox();
-  // return BlueshiftInbox(
-  //   'red',
-  //   'red',
-  //   customStyle,
-  //   'No items to show. Come again later!',
-  //   date => {
-  //     return date.toISOString();
-  //   },
+  // default inbox
+  return <BlueshiftInbox />;
+
+  // customisation example
+  // return (
+  //   <BlueshiftInbox
+  //     unreadIndicatorColor="#ff0000"
+  //     pullToRefreshColor="#00ff00"
+  //     titleStyle={{color: 'green', fontSize: 18, fontWeight: 'bold'}}
+  //     detailsStyle={{color: 'blue', fontSize: 16, fontWeight: 'normal'}}
+  //     timestampStyle={{color: 'red', fontSize: 14, fontWeight: 'normal'}}
+  //     dateFormatter={date => 'unformatted'}
+  //     placeholderComponent={<Text>This is an empty place.</Text>}
+  //     loadingIndicatorComponent={
+  //       <View style={{height: 20, width: 20, backgroundColor: 'yellow'}} />
+  //     }
+  //     listItemSeparatorComponent={
+  //       <View style={{backgroundColor: 'blue', height: 2}} />
+  //     }
+  //     listItemComponent={message => <Text>message.title</Text>}
+  //   />
   // );
 }
 

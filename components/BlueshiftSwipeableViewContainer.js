@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const BlueshiftInboxListItemWrapper = ({ children, onDelete, onClick }) => {
+const BlueshiftSwipeableViewContainer = ({ children, onTap, onDelete }) => {
   const position = useRef(new Animated.ValueXY()).current;
   const [isTouched, setIsTouched] = useState(false);
 
@@ -36,7 +36,7 @@ const BlueshiftInboxListItemWrapper = ({ children, onDelete, onClick }) => {
         }).start(); // Execute callback for swipe left
       } else {
         if (Math.abs(gesture.dx) < 5 && Math.abs(gesture.dy) < 5) {
-          onClick();
+          onTap();
         }
 
         // No significant swipe, reset position to center
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BlueshiftInboxListItemWrapper;
+export default BlueshiftSwipeableViewContainer;

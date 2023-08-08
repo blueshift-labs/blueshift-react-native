@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from "react";
-import {} from "react-native";
+import React from "react";
 
-import BlueshiftInboxListItemWrapper from "./BlueshiftInboxListItemWrapper";
+import BlueshiftSwipeableViewContainer from "./BlueshiftSwipeableViewContainer";
 
 const BlueshiftInboxListItem = ({
   inboxMessage,
-  renderViews,
-  onShow,
+  onTap,
   onRemove,
+  customView,
 }) => {
-  const renderedView = renderViews(inboxMessage);
-
-  const handleShow = (message) => {
-    onShow(message);
+  const handleTap = (message) => {
+    onTap(message);
   };
+
   const handleRemove = (message) => {
     onRemove(message);
   };
 
   return (
-    <BlueshiftInboxListItemWrapper
-      onClick={() => handleShow(inboxMessage)}
+    <BlueshiftSwipeableViewContainer
+      onTap={() => handleTap(inboxMessage)}
       onDelete={() => handleRemove(inboxMessage)}
     >
-      {renderedView}
-    </BlueshiftInboxListItemWrapper>
+      {customView}
+    </BlueshiftSwipeableViewContainer>
   );
 };
 

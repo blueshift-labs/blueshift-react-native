@@ -12,13 +12,18 @@ import {
 import Blueshift from "../index";
 import BlueshiftInboxListItem from "./BlueshiftInboxListItem";
 
-const BlueshiftInbox = (
-  pullToRefreshColor,
-  loaderColor,
-  customStyle,
-  placeholderText,
-  dateFormatter
-) => {
+const BlueshiftInbox = ({
+  pullToRefreshColor = "#00C1C1",
+  unreadIndicatorColor = "#00C1C1",
+  titleStyle,
+  detailsStyle,
+  timestampStyle,
+  dateFormatter,
+  listItemComponent,
+  listItemSeparatorComponent,
+  placeholderComponent,
+  loadingIndicatorComponent,
+}) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -26,7 +31,6 @@ const BlueshiftInbox = (
 
   const inappLoadEvent = "InAppLoadEvent";
   const inboxDataChangeEvent = "InboxDataChangeEvent";
-  const styles = customStyle ?? defaultStyle;
   var cachedInAppScreenName = null;
 
   const handlePullToRefresh = () => {
@@ -56,8 +60,6 @@ const BlueshiftInbox = (
   };
 
   const showInboxMessage = (item) => {
-    console.log("show: " + item.title);
-
     if (Platform.OS == "ios") {
       setIsLoading(true);
     }
@@ -66,8 +68,6 @@ const BlueshiftInbox = (
   };
 
   const deleteInboxMessage = (item, indexToRemove) => {
-    console.log("delete: " + item);
-
     Blueshift.deleteInboxMessage(item, (success) => {
       if (success) {
         setMessages((oldMessages) =>
@@ -145,7 +145,7 @@ const BlueshiftInbox = (
     }
   };
 
-  const renderViews = (item) => {
+  const defaultListItem = (item) => {
     const createdAt = new Date(item.createdAt * 1000);
     const createdAtString = dateFormatter
       ? dateFormatter(createdAt)
@@ -154,18 +154,29 @@ const BlueshiftInbox = (
     return (
       <View style={styles.listItemContainer}>
         <View style={styles.listItem}>
-          <View
-            style={
-              item.status == "read" ? styles.empty_circle : styles.filled_circle
-            }
-          />
+          {item.status == "read" ? (
+            <View style={styles.empty_circle} />
+          ) : (
+            <View
+              style={[
+                styles.filled_circle,
+                { backgroundColor: unreadIndicatorColor },
+              ]}
+            />
+          )}
           <View style={styles.textContainer}>
-            {item.title && <Text style={styles.title}>{item.title}</Text>}
+            {item.title && (
+              <Text style={[styles.title, titleStyle]}>{item.title}</Text>
+            )}
             {item.details && (
-              <Text style={styles.subtitle}>{item.details}</Text>
+              <Text style={[styles.subtitle, detailsStyle]}>
+                {item.details}
+              </Text>
             )}
             {item.createdAt && (
-              <Text style={styles.date}>{createdAtString}</Text>
+              <Text style={[styles.date, timestampStyle]}>
+                {createdAtString}
+              </Text>
             )}
           </View>
           <Image source={{ uri: item.imageUrl }} style={styles.image} />
@@ -175,28 +186,42 @@ const BlueshiftInbox = (
   };
 
   const renderListItem = ({ item, index }) => {
+    var listItemView;
+    if (listItemComponent) {
+      listItemView = listItemComponent(item);
+    } else {
+      listItemView = defaultListItem(item);
+    }
+
     return (
       <BlueshiftInboxListItem
-        renderViews={() => renderViews(item)}
-        onShow={() => showInboxMessage(item)}
+        customView={listItemView}
+        onTap={() => showInboxMessage(item)}
         onRemove={() => deleteInboxMessage(item, index)}
         inboxMessage={item}
       />
     );
   };
 
-  const renderPlaceholderText = () => (
-    <View style={styles.placeholderContainer}>
-      <Text style={styles.placeholderText}>{placeholderText}</Text>
+  const defaultLoadingIndicator = (
+    <View style={styles.loaderContainer}>
+      <ActivityIndicator size="large" color={"#00C1C1"} />
     </View>
   );
 
   const renderLoader = () => {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={loaderColor ?? "#00c0c0"} />
-      </View>
-    );
+    const loadingIndicator =
+      loadingIndicatorComponent ?? defaultLoadingIndicator;
+    return loadingIndicator;
+  };
+
+  const defaultListItemSeparator = (
+    <View style={{ backgroundColor: "gray", height: 0.5 }} />
+  );
+
+  const renderSeparator = () => {
+    const separator = listItemSeparatorComponent ?? defaultListItemSeparator;
+    return separator;
   };
 
   return (
@@ -205,12 +230,13 @@ const BlueshiftInbox = (
       <FlatList
         data={messages}
         renderItem={renderListItem}
-        ListEmptyComponent={renderPlaceholderText}
+        ListEmptyComponent={placeholderComponent}
+        ItemSeparatorComponent={renderSeparator()}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handlePullToRefresh}
-            tintColor={pullToRefreshColor ?? "#00c0c0"}
+            tintColor={pullToRefreshColor ?? "#00C1C1"}
           />
         }
       />
@@ -218,7 +244,7 @@ const BlueshiftInbox = (
   );
 };
 
-const defaultStyle = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -232,8 +258,6 @@ const defaultStyle = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#CCCCCC",
   },
   textContainer: {
     flex: 1,
