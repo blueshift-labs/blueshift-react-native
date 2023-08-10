@@ -409,9 +409,10 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
             BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
             BlueshiftInboxManager.deleteMessage(getReactApplicationContext(), message, status -> {
                 if (status) {
-                    callback.invoke(true);
+                    callback.invoke(true, "");
                 } else {
-                    callback.invoke(false);
+                    String errorMessage = getReactApplicationContext().getString(R.string.bsft_inbox_delete_failure_message);
+                    callback.invoke(false, errorMessage);
                 }
             });
         } else {

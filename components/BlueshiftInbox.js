@@ -55,7 +55,6 @@ const BlueshiftInbox = ({
   const loadMessages = () => {
     Blueshift.getInboxMessages((res) => {
       setMessages(res.messages);
-      console.log(res);
     });
   };
 
@@ -68,19 +67,18 @@ const BlueshiftInbox = ({
   };
 
   const deleteInboxMessage = (item, indexToRemove) => {
-    Blueshift.deleteInboxMessage(item, (success) => {
+    Blueshift.deleteInboxMessage(item, (success, errorMessage) => {
       if (success) {
         setMessages((oldMessages) =>
           oldMessages.filter((_, index) => index != indexToRemove)
         );
       } else {
-        console.log("could not delete: " + item);
+        console.log(errorMessage);
       }
     });
   };
 
   useEffect(() => {
-    console.log("useEffect");
     setupListeners();
     loadMessages();
     if (onLoadComplete == false) {
@@ -90,7 +88,6 @@ const BlueshiftInbox = ({
     handleInitState();
 
     return () => {
-      console.log("unload useEffect");
       Blueshift.removeEventListener(inboxDataChangeEvent);
       Blueshift.removeEventListener(inappLoadEvent);
       handleDispose();
