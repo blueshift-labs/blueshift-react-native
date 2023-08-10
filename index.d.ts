@@ -472,7 +472,17 @@ declare module 'blueshift-react-native' {
    * Blueshift.deleteInboxMessage();
    */
 	function deleteInboxMessage(message: any): void;
-    
+
+	/**
+	* Delete inbox message.
+	*
+	* @param {BlueshiftInboxMessage} message
+	*
+	* Usage -
+	* Blueshift.deleteInboxMessage();
+	*/
+	function deleteInboxMessage(message: any, callback: function): void;
+
 	/**
 	 * Process the Blueshift url and provide the final url to Linking's "url" callback
 	 * 

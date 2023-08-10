@@ -609,6 +609,18 @@ const Blueshift = {
   },
 
   /**
+   * Delete inbox message.
+   *
+   * @param {BlueshiftInboxMessage} message
+   *
+   * Usage -
+   * Blueshift.deleteInboxMessage();
+   */
+  deleteInboxMessage: function (message, callback) {
+    NativeModules.BlueshiftBridge.deleteInboxMessage(message, callback);
+  },
+
+  /**
    * Process the Blueshift url and provide the final url to Linking's "url" callback
    *
    * @param {string} url
