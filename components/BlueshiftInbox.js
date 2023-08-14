@@ -223,7 +223,6 @@ const BlueshiftInbox = ({
 
   return (
     <View style={styles.container}>
-      {isLoading ? renderLoader() : null}
       <FlatList
         data={messages}
         renderItem={renderListItem}
