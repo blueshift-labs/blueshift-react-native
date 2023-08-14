@@ -149,35 +149,29 @@ const BlueshiftInbox = ({
       : createdAt.toDateString();
 
     return (
-      <View style={styles.listItemContainer}>
-        <View style={styles.listItem}>
-          {item.status == 'read' ? (
-            <View style={styles.empty_circle} />
-          ) : (
-            <View
-              style={[
-                styles.filled_circle,
-                {backgroundColor: unreadIndicatorColor},
-              ]}
-            />
+      <View style={styles.listItem}>
+        {item.status == 'read' ? (
+          <View style={styles.empty_circle} />
+        ) : (
+          <View
+            style={[
+              styles.filled_circle,
+              {backgroundColor: unreadIndicatorColor},
+            ]}
+          />
+        )}
+        <View style={styles.textContainer}>
+          {item.title && (
+            <Text style={[styles.title, titleStyle]}>{item.title}</Text>
           )}
-          <View style={styles.textContainer}>
-            {item.title && (
-              <Text style={[styles.title, titleStyle]}>{item.title}</Text>
-            )}
-            {item.details && (
-              <Text style={[styles.subtitle, detailsStyle]}>
-                {item.details}
-              </Text>
-            )}
-            {item.createdAt && (
-              <Text style={[styles.date, timestampStyle]}>
-                {createdAtString}
-              </Text>
-            )}
-          </View>
-          <Image source={{uri: item.imageUrl}} style={styles.image} />
+          {item.details && (
+            <Text style={[styles.subtitle, detailsStyle]}>{item.details}</Text>
+          )}
+          {item.createdAt && (
+            <Text style={[styles.date, timestampStyle]}>{createdAtString}</Text>
+          )}
         </View>
+        <Image source={{uri: item.imageUrl}} style={styles.image} />
       </View>
     );
   };
@@ -202,7 +196,7 @@ const BlueshiftInbox = ({
 
   const defaultLoadingIndicator = (
     <View style={styles.loaderContainer}>
-      <ActivityIndicator size="large" color="#00c0c0" />
+      <ActivityIndicator size="large" color={'#00C1C1'} />
     </View>
   );
 

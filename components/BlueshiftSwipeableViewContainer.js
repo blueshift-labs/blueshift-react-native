@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   PanResponder,
   Animated,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
 const BlueshiftSwipeableViewContainer = ({ children, onTap, onDelete }) => {
   const position = useRef(new Animated.ValueXY()).current;
@@ -50,7 +50,7 @@ const BlueshiftSwipeableViewContainer = ({ children, onTap, onDelete }) => {
 
   const animatedStyle = {
     transform: position.getTranslateTransform(),
-    backgroundColor: isTouched ? "#e0e0e0" : "#f0f0f0", // Change background color when touched
+    backgroundColor: isTouched ? '#e0e0e0' : '#f0f0f0', // Change background color when touched
   };
 
   const handleDelete = () => {
@@ -70,8 +70,7 @@ const BlueshiftSwipeableViewContainer = ({ children, onTap, onDelete }) => {
       </View>
       <Animated.View
         style={[styles.swipeableView, animatedStyle]}
-        {...panResponder.panHandlers}
-      >
+        {...panResponder.panHandlers}>
         {children}
       </Animated.View>
     </View>
@@ -80,28 +79,24 @@ const BlueshiftSwipeableViewContainer = ({ children, onTap, onDelete }) => {
 
 const styles = StyleSheet.create({
   stackContainer: {
-    position: "relative",
-    height: 100,
+    position: 'relative',
   },
   swipableViewBackground: {
-    flexDirection: "row",
-    backgroundColor: "red",
-    height: "100%",
-    width: "100%",
-    alignItems: "center",
+    flexDirection: 'row',
+    backgroundColor: 'red',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    position: 'absolute',
     padding: 10,
   },
   swipeableView: {
-    left: 0,
-    top: 0,
-    justifyContent: "center",
-    position: "absolute",
-    height: "100%",
-    width: "100%",
+    justifyContent: 'center',
+    width: '100%',
   },
   deleteText: {
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
     marginEnd: 8,
     marginStart: 8,
   },

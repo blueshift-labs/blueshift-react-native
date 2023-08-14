@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import BlueshiftSwipeableViewContainer from "./BlueshiftSwipeableViewContainer";
+import BlueshiftSwipeableViewContainer from './BlueshiftSwipeableViewContainer';
 
 const BlueshiftInboxListItem = ({
   inboxMessage,
@@ -8,19 +8,18 @@ const BlueshiftInboxListItem = ({
   onRemove,
   customView,
 }) => {
-  const handleTap = (message) => {
+  const handleTap = message => {
     onTap(message);
   };
 
-  const handleRemove = (message) => {
+  const handleRemove = message => {
     onRemove(message);
   };
 
   return (
     <BlueshiftSwipeableViewContainer
       onTap={() => handleTap(inboxMessage)}
-      onDelete={() => handleRemove(inboxMessage)}
-    >
+      onDelete={() => handleRemove(inboxMessage)}>
       {customView}
     </BlueshiftSwipeableViewContainer>
   );
