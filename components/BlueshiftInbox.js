@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Image,
@@ -8,13 +8,13 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
-} from "react-native";
-import Blueshift from "../index";
-import BlueshiftInboxListItem from "./BlueshiftInboxListItem";
+} from 'react-native';
+import Blueshift from '../index';
+import BlueshiftInboxListItem from './BlueshiftInboxListItem';
 
 const BlueshiftInbox = ({
-  pullToRefreshColor = "#00C1C1",
-  unreadIndicatorColor = "#00C1C1",
+  pullToRefreshColor = '#00C1C1',
+  unreadIndicatorColor = '#00C1C1',
   titleStyle,
   detailsStyle,
   timestampStyle,
@@ -29,37 +29,37 @@ const BlueshiftInbox = ({
   const [messages, setMessages] = useState([]);
   const [onLoadComplete, setOnLoadComplete] = useState(false);
 
-  const inappLoadEvent = "InAppLoadEvent";
-  const inboxDataChangeEvent = "InboxDataChangeEvent";
+  const inappLoadEvent = 'InAppLoadEvent';
+  const inboxDataChangeEvent = 'InboxDataChangeEvent';
   var cachedInAppScreenName = null;
 
   const handlePullToRefresh = () => {
     if (isRefreshing == false) {
       setIsRefreshing(true);
     }
-    Blueshift.syncInboxMessages((res) => {
+    Blueshift.syncInboxMessages(res => {
       setIsRefreshing(false);
     });
   };
 
   const setupListeners = () => {
-    Blueshift.addEventListener(inboxDataChangeEvent, (event) => {
+    Blueshift.addEventListener(inboxDataChangeEvent, event => {
       loadMessages();
     });
 
-    Blueshift.addEventListener(inappLoadEvent, (event) => {
+    Blueshift.addEventListener(inappLoadEvent, event => {
       setIsLoading(false);
     });
   };
 
   const loadMessages = () => {
-    Blueshift.getInboxMessages((res) => {
+    Blueshift.getInboxMessages(res => {
       setMessages(res.messages);
     });
   };
 
-  const showInboxMessage = (item) => {
-    if (Platform.OS == "ios") {
+  const showInboxMessage = item => {
+    if (Platform.OS == 'ios') {
       setIsLoading(true);
     }
 
@@ -69,8 +69,8 @@ const BlueshiftInbox = ({
   const deleteInboxMessage = (item, indexToRemove) => {
     Blueshift.deleteInboxMessage(item, (success, errorMessage) => {
       if (success) {
-        setMessages((oldMessages) =>
-          oldMessages.filter((_, index) => index != indexToRemove)
+        setMessages(oldMessages =>
+          oldMessages.filter((_, index) => index != indexToRemove),
         );
       } else {
         console.log(errorMessage);
@@ -82,7 +82,7 @@ const BlueshiftInbox = ({
     setupListeners();
     loadMessages();
     if (onLoadComplete == false) {
-      Blueshift.syncInboxMessages((data) => {});
+      Blueshift.syncInboxMessages(data => {});
       setOnLoadComplete(true);
     }
     handleInitState();
@@ -95,25 +95,25 @@ const BlueshiftInbox = ({
   }, []);
 
   const handleInitState = () => {
-    Blueshift.getRegisteredForInAppScreenName((screenName) => {
-      if (Platform.OS == "ios") {
+    Blueshift.getRegisteredForInAppScreenName(screenName => {
+      if (Platform.OS == 'ios') {
         handleIOSInAppRegistrationInit(screenName);
-      } else if (Platform.OS == "android") {
+      } else if (Platform.OS == 'android') {
         handleAndroidInAppRegistrationInit(screenName);
       }
     });
   };
 
   const handleDispose = () => {
-    if (Platform.OS == "ios") {
+    if (Platform.OS == 'ios') {
       handleIOSInAppRegistrationCleanup();
-    } else if (Platform.OS == "android") {
+    } else if (Platform.OS == 'android') {
       handleAndroidInAppRegistrationCleanup();
     }
   };
 
-  const handleIOSInAppRegistrationInit = (screenName) => {
-    if (screenName != null && screenName != "") {
+  const handleIOSInAppRegistrationInit = screenName => {
+    if (screenName != null && screenName != '') {
       cachedInAppScreenName = screenName;
       Blueshift.unregisterForInAppMessage();
     }
@@ -126,9 +126,9 @@ const BlueshiftInbox = ({
     }
   };
 
-  const handleAndroidInAppRegistrationInit = (screenName) => {
+  const handleAndroidInAppRegistrationInit = screenName => {
     cachedInAppScreenName = screenName;
-    Blueshift.registerForInAppMessage("blueshift_inbox");
+    Blueshift.registerForInAppMessage('blueshift_inbox');
   };
 
   const handleAndroidInAppRegistrationCleanup = () => {
@@ -142,7 +142,7 @@ const BlueshiftInbox = ({
     }
   };
 
-  const defaultListItem = (item) => {
+  const defaultListItem = item => {
     const createdAt = new Date(item.createdAt * 1000);
     const createdAtString = dateFormatter
       ? dateFormatter(createdAt)
@@ -151,13 +151,13 @@ const BlueshiftInbox = ({
     return (
       <View style={styles.listItemContainer}>
         <View style={styles.listItem}>
-          {item.status == "read" ? (
+          {item.status == 'read' ? (
             <View style={styles.empty_circle} />
           ) : (
             <View
               style={[
                 styles.filled_circle,
-                { backgroundColor: unreadIndicatorColor },
+                {backgroundColor: unreadIndicatorColor},
               ]}
             />
           )}
@@ -176,13 +176,13 @@ const BlueshiftInbox = ({
               </Text>
             )}
           </View>
-          <Image source={{ uri: item.imageUrl }} style={styles.image} />
+          <Image source={{uri: item.imageUrl}} style={styles.image} />
         </View>
       </View>
     );
   };
 
-  const renderListItem = ({ item, index }) => {
+  const renderListItem = ({item, index}) => {
     var listItemView;
     if (listItemComponent) {
       listItemView = listItemComponent(item);
@@ -202,7 +202,7 @@ const BlueshiftInbox = ({
 
   const defaultLoadingIndicator = (
     <View style={styles.loaderContainer}>
-      <ActivityIndicator size="large" color={"#00C1C1"} />
+      <ActivityIndicator size="large" color="#00c0c0" />
     </View>
   );
 
@@ -213,7 +213,7 @@ const BlueshiftInbox = ({
   };
 
   const defaultListItemSeparator = (
-    <View style={{ backgroundColor: "gray", height: 0.5 }} />
+    <View style={{backgroundColor: 'gray', height: 0.5}} />
   );
 
   const renderSeparator = () => {
@@ -233,10 +233,11 @@ const BlueshiftInbox = ({
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handlePullToRefresh}
-            tintColor={pullToRefreshColor ?? "#00C1C1"}
+            tintColor={pullToRefreshColor ?? '#00C1C1'}
           />
         }
       />
+      {isLoading ? renderLoader() : null}
     </View>
   );
 };
@@ -244,16 +245,21 @@ const BlueshiftInbox = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'relative',
   },
   loaderContainer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    justifyContent: "center",
-    alignItems: "center",
+    position: 'absolute', // Positions the loader on top of the UI
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent background
   },
   listItem: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     padding: 10,
   },
   textContainer: {
@@ -262,47 +268,47 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   subtitle: {
     fontSize: 14,
-    color: "#808080",
+    color: '#808080',
   },
   date: {
     fontSize: 12,
-    fontWeight: "300",
-    color: "#808080",
+    fontWeight: '300',
+    color: '#808080',
   },
   image: {
     width: 60,
     height: 60,
     borderRadius: 8,
-    resizeMode: "cover",
+    resizeMode: 'cover',
   },
   filled_circle: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "red",
+    backgroundColor: 'red',
     marginRight: 10,
     marginTop: 5,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   empty_circle: {
     width: 10,
     height: 10,
     marginRight: 10,
     marginTop: 5,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   placeholderContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   placeholderText: {
     fontSize: 16,
-    color: "gray",
+    color: 'gray',
   },
 });
 

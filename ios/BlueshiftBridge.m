@@ -285,7 +285,7 @@ RCT_EXPORT_METHOD(getInboxMessages:(RCTResponseSenderBlock)callback) {
             NSMutableArray* convertedMessages = [[NSMutableArray alloc] init];
             [messages enumerateObjectsUsingBlock:^(BlueshiftInboxMessage * _Nonnull msg, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (msg) {
-                    [convertedMessages addObject:[BlueShiftInAppNotificationHelper convertMessageToDictionary:msg]];
+                    [convertedMessages addObject:[msg toDictionary]];
                 }
             }];
             callback(@[@{@"messages": [convertedMessages copy]}]);
@@ -304,12 +304,12 @@ RCT_EXPORT_METHOD(getUnreadInboxMessageCount:(RCTResponseSenderBlock)callback) {
                 callback(@[[NSNumber numberWithUnsignedInteger:0]]);
             }
         }];
-    } 
+    }
 }
 
 RCT_EXPORT_METHOD(deleteInboxMessage:(NSDictionary*)message callback:(RCTResponseSenderBlock)callback) {
     if ([message isKindOfClass:[NSDictionary class]]) {
-        [BlueshiftInboxManager deleteInboxMessage:[BlueShiftInAppNotificationHelper convertDictionaryToMessage:message] completionHandler:^(BOOL status, NSString * _Nullable errMsg) {
+        [BlueshiftInboxManager deleteInboxMessage:[[BlueshiftInboxMessage alloc] initWithDictionary:message] completionHandler:^(BOOL status, NSString * _Nullable errMsg) {
             if (status) {
                 callback(@[@YES, @""]);
             } else {
@@ -321,7 +321,7 @@ RCT_EXPORT_METHOD(deleteInboxMessage:(NSDictionary*)message callback:(RCTRespons
 
 RCT_EXPORT_METHOD(showInboxMessage:(NSDictionary*)message) {
     if ([message isKindOfClass:[NSDictionary class]]) {
-        [BlueshiftInboxManager showNotificationForInboxMessage:[BlueShiftInAppNotificationHelper convertDictionaryToMessage:message] inboxInAppDelegate:nil];
+        [BlueshiftInboxManager showNotificationForInboxMessage:[[BlueshiftInboxMessage alloc] initWithDictionary:message] inboxInAppDelegate:nil];
     }
 }
 
