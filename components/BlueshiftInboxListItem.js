@@ -7,7 +7,7 @@ const BlueshiftInboxListItem = ({
   onTap,
   onRemove,
   customView,
-  deleteComponent
+  deleteComponent,
 }) => {
   const handleTap = message => {
     onTap(message);

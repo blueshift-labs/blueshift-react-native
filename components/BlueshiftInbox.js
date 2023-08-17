@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -18,8 +18,8 @@ const BlueshiftInbox = ({
   titleStyle,
   detailsStyle,
   timestampStyle,
-  dateFormatterFn = (date) => date.toLocaleString(),
-  sortMessagesFn = (msg1, msg2) => msg1.createdAt < msg2.createdAt ? 1 : -1,
+  dateFormatterFn = date => date.toLocaleString(),
+  sortMessagesFn = (msg1, msg2) => (msg1.createdAt < msg2.createdAt ? 1 : -1),
   listItemComponent,
   listItemSeparatorComponent,
   placeholderComponent,
@@ -69,7 +69,9 @@ const BlueshiftInbox = ({
   };
 
   const deleteInboxMessage = (item, indexToRemove) => {
+    setIsLoading(true);
     Blueshift.deleteInboxMessage(item, (success, errorMessage) => {
+      setIsLoading(false);
       if (success) {
         setMessages(oldMessages =>
           oldMessages.filter((_, index) => index != indexToRemove),
@@ -156,7 +158,7 @@ const BlueshiftInbox = ({
           <View
             style={[
               styles.filled_circle,
-              {backgroundColor: unreadIndicatorColor},
+              { backgroundColor: unreadIndicatorColor },
             ]}
           />
         )}
@@ -171,12 +173,12 @@ const BlueshiftInbox = ({
             <Text style={[styles.date, timestampStyle]}>{createdAtString}</Text>
           )}
         </View>
-        <Image source={{uri: item.imageUrl}} style={styles.image} />
+        <Image source={{ uri: item.imageUrl }} style={styles.image} />
       </View>
     );
   };
 
-  const renderListItem = ({item, index}) => {
+  const renderListItem = ({ item, index }) => {
     var listItemView;
     if (listItemComponent) {
       listItemView = listItemComponent(item);
@@ -208,7 +210,7 @@ const BlueshiftInbox = ({
   };
 
   const defaultListItemSeparator = (
-    <View style={{backgroundColor: 'gray', height: 0.5}} />
+    <View style={{ backgroundColor: 'gray', height: 0.5 }} />
   );
 
   const renderSeparator = () => {
