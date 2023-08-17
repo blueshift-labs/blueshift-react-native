@@ -8,19 +8,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const BlueshiftSwipeableViewContainer = ({ children, onTap, onDelete }) => {
+const BlueshiftSwipeableViewContainer = ({
+  children,
+  onTap,
+  onDelete,
+  deleteComponent,
+}) => {
   const position = useRef(new Animated.ValueXY()).current;
   const [isTouched, setIsTouched] = useState(false);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
+    onPanResponderTerminate: () => {
+      setIsTouched(false);
+    },
     onPanResponderGrant: () => {
       setIsTouched(true);
     },
-    onPanResponderMove: (event, gesture) => {
+    onPanResponderMove: (_, gesture) => {
       position.setValue({ x: gesture.dx, y: 0 });
+
+      if (Math.abs(gesture.dx) > 5 && Math.abs(gesture.dy) > 5) {
+        setIsTouched(false);
+      }
     },
-    onPanResponderRelease: (event, gesture) => {
+    onPanResponderRelease: (_, gesture) => {
       setIsTouched(false);
       if (gesture.dx > 100) {
         // Swipe right action
@@ -61,11 +73,11 @@ const BlueshiftSwipeableViewContainer = ({ children, onTap, onDelete }) => {
     <View style={styles.stackContainer}>
       <View style={styles.swipableViewBackground}>
         <TouchableOpacity onPress={handleDelete}>
-          <Text style={styles.deleteText}>Delete</Text>
+          {deleteComponent ?? <Text style={styles.deleteText}>Delete</Text>}
         </TouchableOpacity>
         <View style={{ flex: 1 }} />
         <TouchableOpacity onPress={handleDelete}>
-          <Text style={styles.deleteText}>Delete</Text>
+          {deleteComponent ?? <Text style={styles.deleteText}>Delete</Text>}
         </TouchableOpacity>
       </View>
       <Animated.View
@@ -88,7 +100,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     position: 'absolute',
-    padding: 10,
+    padding: 16,
   },
   swipeableView: {
     justifyContent: 'center',
@@ -97,8 +109,6 @@ const styles = StyleSheet.create({
   deleteText: {
     color: 'white',
     fontWeight: 'bold',
-    marginEnd: 8,
-    marginStart: 8,
   },
 });
 

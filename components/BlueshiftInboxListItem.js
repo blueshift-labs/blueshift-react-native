@@ -7,6 +7,7 @@ const BlueshiftInboxListItem = ({
   onTap,
   onRemove,
   customView,
+  deleteComponent
 }) => {
   const handleTap = message => {
     onTap(message);
@@ -19,7 +20,8 @@ const BlueshiftInboxListItem = ({
   return (
     <BlueshiftSwipeableViewContainer
       onTap={() => handleTap(inboxMessage)}
-      onDelete={() => handleRemove(inboxMessage)}>
+      onDelete={() => handleRemove(inboxMessage)}
+      deleteComponent={deleteComponent}>
       {customView}
     </BlueshiftSwipeableViewContainer>
   );

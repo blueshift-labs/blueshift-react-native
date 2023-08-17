@@ -18,11 +18,13 @@ const BlueshiftInbox = ({
   titleStyle,
   detailsStyle,
   timestampStyle,
-  dateFormatter,
+  dateFormatterFn = (date) => date.toLocaleString(),
+  sortMessagesFn = (msg1, msg2) => msg1.createdAt < msg2.createdAt ? 1 : -1,
   listItemComponent,
   listItemSeparatorComponent,
   placeholderComponent,
   loadingIndicatorComponent,
+  deleteComponent,
 }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +56,7 @@ const BlueshiftInbox = ({
 
   const loadMessages = () => {
     Blueshift.getInboxMessages(res => {
-      setMessages(res.messages);
+      setMessages(Array.from(res.messages).sort(sortMessagesFn));
     });
   };
 
@@ -144,9 +146,7 @@ const BlueshiftInbox = ({
 
   const defaultListItem = item => {
     const createdAt = new Date(item.createdAt * 1000);
-    const createdAtString = dateFormatter
-      ? dateFormatter(createdAt)
-      : createdAt.toDateString();
+    const createdAtString = dateFormatterFn(createdAt);
 
     return (
       <View style={styles.listItem}>
@@ -190,6 +190,7 @@ const BlueshiftInbox = ({
         onTap={() => showInboxMessage(item)}
         onRemove={() => deleteInboxMessage(item, index)}
         inboxMessage={item}
+        deleteComponent={deleteComponent}
       />
     );
   };
