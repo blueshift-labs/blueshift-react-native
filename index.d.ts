@@ -429,67 +429,67 @@ declare module 'blueshift-react-native' {
 	function resetDeviceId():void;
 
 	/**
-   * Sync Blueshift Inbox messages on the local cache.
-   * This will sync new messges, delete the expired messages, and update the unread status
-   * of the message to the locally cached messges.
-   *
-   * Usage -
-   * Blueshift.syncInboxMessages((status) => {
-   *    if (status) {
-   *        console.log("sync complete");
-   *    }
-   *   });
-   */
-    function syncInboxMessages(callback: function): void;
+     * Sync Blueshift Inbox messages on the local cache.
+     * This will sync new messges, delete the expired messages, and update the unread status
+ 	 * of the message to the locally cached messges.
+	 *
+	 * Usage -
+	 * Blueshift.syncInboxMessages((status) => {
+	 *    if (status) {
+	 *        console.log("sync complete");
+	 *    }
+	 *   });
+	 */
+	function syncInboxMessages(callback: function): void;
 	
 	/**
-   * Get unread messages count to show on the notification badge.
-   *
-   * Usage -
-   * Blueshift.getUnreadInboxMessageCount((count) => {
-   *       console.log("unread messages count"+count);
-   *   });
-   */
+     * Get unread messages count to show on the notification badge.
+     *
+     * Usage -
+     * Blueshift.getUnreadInboxMessageCount((count) => {
+     *       console.log("unread messages count"+count);
+     *   });
+     */
 	function getUnreadInboxMessageCount(callback: function): void;
 
 	/**
-   * Get inbox messages list to show in the list view.
-   *
-   * Usage -
-   * Blueshift.getInboxMessages((messages) => {
-   *       console.log("unread messages count"+count);
-   *   });
-   */
+     * Get inbox messages list to show in the list view.
+     *
+     * Usage -
+     * Blueshift.getInboxMessages((messages) => {
+     *       console.log("unread messages count"+count);
+     *   });
+     */
 	function getInboxMessages(callback: function): void;
 
 	/**
-   * Show in-app notification for the Inbox message.
-   *
-   * @param {BlueshiftInboxMessage} message
-   *
-   * Usage -
-   * Blueshift.showInboxMessage();
-   */
+     * Show in-app notification for the Inbox message.
+     *
+     * @param {BlueshiftInboxMessage} message
+     *
+     * Usage -
+     * Blueshift.showInboxMessage();
+     */
 	function showInboxMessage(message: any): void;
 	
 	/**
-   * Delete inbox message.
-   *
-   * @param {BlueshiftInboxMessage} message
-   *
-   * Usage -
-   * Blueshift.deleteInboxMessage();
-   */
+     * Delete inbox message.
+     *
+     * @param {BlueshiftInboxMessage} message
+     *
+     * Usage -
+     * Blueshift.deleteInboxMessage();
+     */
 	function deleteInboxMessage(message: any): void;
 
 	/**
-	* Delete inbox message.
-	*
-	* @param {BlueshiftInboxMessage} message
-	*
-	* Usage -
-	* Blueshift.deleteInboxMessage();
-	*/
+	 * Delete inbox message.
+	 *
+	 * @param {BlueshiftInboxMessage} message
+	 *
+	 * Usage -
+	 * Blueshift.deleteInboxMessage();
+	 */
 	function deleteInboxMessage(message: any, callback: function): void;
 
 	/**
