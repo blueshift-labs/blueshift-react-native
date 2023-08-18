@@ -190,6 +190,14 @@ export default function HomeScreen({navigation}) {
     Blueshift.unregisterForInAppMessage();
   };
 
+  resetDeviceId = () => {
+    Blueshift.resetDeviceId();
+    Blueshift.getCurrentDeviceId(res => {
+      console.log('deviceid', res);
+      setDeviceId(res);
+    });
+  };
+
   getLiveContentByEmail = () => {
     Blueshift.getLiveContentByEmail(
       'careinappmessagingslot',
@@ -548,8 +556,8 @@ export default function HomeScreen({navigation}) {
 
         <View style={styles.btnStyle}>
           <Button
-            onPress={Blueshift.resetDeviceId()}
-            title="reset UUID type device id"
+            onPress={this.resetDeviceId}
+            title="Reset GUID/UUID type device id"
             color={btnClr}
           />
         </View>
