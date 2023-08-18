@@ -67,6 +67,10 @@ const BlueshiftSwipeableViewContainer = ({
 
   const handleDelete = () => {
     onDelete();
+    Animated.spring(position, {
+      toValue: { x: 0, y: 0 },
+      useNativeDriver: false,
+    }).start();
   };
 
   return (
