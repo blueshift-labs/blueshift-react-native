@@ -296,6 +296,11 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    void resetDeviceId() {
+        Blueshift.resetDeviceId(getReactApplicationContext());
+    }
+
     // LIVE CONTENT
 
     @ReactMethod
