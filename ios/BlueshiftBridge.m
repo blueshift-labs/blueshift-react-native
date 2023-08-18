@@ -221,6 +221,10 @@ RCT_EXPORT_METHOD(getCurrentDeviceId:(RCTResponseSenderBlock)callback)  {
     }
 }
 
+RCT_EXPORT_METHOD(resetDeviceId) {
+    [[BlueShiftDeviceData currentDeviceData] resetDeviceUUID];
+}
+
 #pragma mark Live content
 RCT_EXPORT_METHOD(getLiveContentByEmail:(NSString*)slot context:(NSDictionary*)context callback:(RCTResponseSenderBlock)callback) {
     [BlueShiftLiveContent fetchLiveContentByEmail:slot withContext:context success:^(NSDictionary *result) {

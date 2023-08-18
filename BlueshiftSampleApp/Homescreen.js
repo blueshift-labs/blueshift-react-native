@@ -548,6 +548,14 @@ export default function HomeScreen({navigation}) {
 
         <View style={styles.btnStyle}>
           <Button
+            onPress={Blueshift.resetDeviceId()}
+            title="reset UUID type device id"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
             onPress={this.getLiveContentByEmail}
             title="Live content by Email"
             color={btnClr}

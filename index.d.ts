@@ -420,6 +420,15 @@ declare module 'blueshift-react-native' {
 	function getCurrentDeviceId(callback : function): void;
 
 	/**
+	 * Reset the current device id. This is only applicable if the device id
+	 * source is set to GUID for Android or UUID for iOS.
+	 *
+	 * Usage -
+	 *  Blueshift.resetDeviceId();
+	 */
+	function resetDeviceId():void;
+
+	/**
    * Sync Blueshift Inbox messages on the local cache.
    * This will sync new messges, delete the expired messages, and update the unread status
    * of the message to the locally cached messges.
