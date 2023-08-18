@@ -1,7 +1,6 @@
 # blueshift-react-native
 
-Ract native plugin for integrating Blueshift's iOS and Android SDKs to your React native application.
-
+Official React native plugin for integrating Blueshift's iOS and Android SDKs to your React native application.
 
 ## Installation
 
