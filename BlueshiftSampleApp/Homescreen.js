@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -11,22 +11,11 @@ import {
   ScrollView,
   Button,
   Linking,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import Blueshift, {showInboxMessage} from 'blueshift-react-native';
+} from "react-native";
+import {useNavigation} from "@react-navigation/native";
+import Blueshift from "blueshift-react-native";
 
 export default function HomeScreen({navigation}) {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button
-          onPress={() => navigateToInboxScreen()}
-          title={'Inbox(' + unreadCount + ')'}
-        />
-      ),
-    });
-  }, [navigation]);
-
   useEffect(() => {
     // Get the email deep link when app launched from killed state
     Linking.getInitialURL().then(url => {
@@ -41,7 +30,7 @@ export default function HomeScreen({navigation}) {
     });
 
     // Add event listner for `url` event
-    global.urlListener = Linking.addEventListener('url', event => {
+    global.urlListener = Linking.addEventListener("url", event => {
       var url = event.url;
       if (url) {
         // Check if the URL is a rewritten/shortened URL from Blueshift
@@ -57,7 +46,7 @@ export default function HomeScreen({navigation}) {
 
     // Add custom event listener using Blueshift method
     Blueshift.addEventListener(
-      'PushNotificationClickedEvent',
+      "PushNotificationClickedEvent",
       this.handlePushClick,
     );
 
@@ -68,7 +57,7 @@ export default function HomeScreen({navigation}) {
 
     updateUnreadCount();
 
-    Blueshift.addEventListener('InboxDataChangeEvent', event => {
+    Blueshift.addEventListener("InboxDataChangeEvent", event => {
       updateUnreadCount();
     });
 
@@ -79,8 +68,8 @@ export default function HomeScreen({navigation}) {
       }
 
       // Remove custom event listner using Blueshift method
-      Blueshift.removeEventListener('PushNotificationClickedEvent');
-      Blueshift.removeEventListener('InboxDataChangeEvent');
+      Blueshift.removeEventListener("PushNotificationClickedEvent");
+      Blueshift.removeEventListener("InboxDataChangeEvent");
       // Unregister screen
       this.unRegisterForInApp();
     };
@@ -88,22 +77,22 @@ export default function HomeScreen({navigation}) {
 
   updateUnreadCount = () => {
     Blueshift.getUnreadInboxMessageCount(count => {
-      console.log('unread messages count ' + count);
+      console.log("Unread messages count changed to " + count);
       setUnreadCount(count);
     });
   };
 
   handlePushClick = event => {
-    alert('push payload ' + JSON.stringify(event.bsft_experiment_uuid));
+    alert("push payload " + JSON.stringify(event.bsft_experiment_uuid));
   };
 
   handleDeeplinkUrl = url => {
-    console.log('deeplink: ' + url);
-    navigation.navigate('Deeplink', {deeplink: url});
+    console.log("deeplink: " + url);
+    navigation.navigate("Deeplink", {deeplink: url});
   };
 
   navigateToInboxScreen = () => {
-    navigation.navigate('Inbox');
+    navigation.navigate("Inbox");
   };
 
   saveEmailId = () => {
@@ -124,13 +113,13 @@ export default function HomeScreen({navigation}) {
 
   setExtras = () => {
     Blueshift.setUserInfoExtras({
-      profession: 'software engineer',
-      usertype: 'premium',
+      profession: "software engineer",
+      usertype: "premium",
     });
   };
 
   setIDFA = () => {
-    Blueshift.setIDFA('EA7583CD-A667-48BC-B806-42ECB2B48606');
+    Blueshift.setIDFA("EA7583CD-A667-48BC-B806-42ECB2B48606");
   };
 
   setLocation = () => {
@@ -150,7 +139,7 @@ export default function HomeScreen({navigation}) {
   };
 
   trackScreenView = () => {
-    Blueshift.trackScreenView('ReactNativeTestScreen', {}, false);
+    Blueshift.trackScreenView("ReactNativeTestScreen", {}, false);
   };
 
   removeUserInfo = () => {
@@ -178,12 +167,11 @@ export default function HomeScreen({navigation}) {
   };
 
   displayInAppNotification = () => {
-    navigation.navigate('Second');
     Blueshift.displayInAppNotification();
   };
 
   registerForInApp = () => {
-    Blueshift.registerForInAppMessage('index');
+    Blueshift.registerForInAppMessage("index");
   };
 
   unRegisterForInApp = () => {
@@ -193,14 +181,14 @@ export default function HomeScreen({navigation}) {
   resetDeviceId = () => {
     Blueshift.resetDeviceId();
     Blueshift.getCurrentDeviceId(res => {
-      console.log('deviceid', res);
+      console.log("deviceid", res);
       setDeviceId(res);
     });
   };
 
   getLiveContentByEmail = () => {
     Blueshift.getLiveContentByEmail(
-      'careinappmessagingslot',
+      "careinappmessagingslot",
       {},
       (err, result) => {
         if (result != null) {
@@ -214,7 +202,7 @@ export default function HomeScreen({navigation}) {
 
   getLiveContentByDeviceID = () => {
     Blueshift.getLiveContentByDeviceId(
-      'careinappmessagingslot',
+      "careinappmessagingslot",
       {},
       (err, result) => {
         if (result != null) {
@@ -228,7 +216,7 @@ export default function HomeScreen({navigation}) {
 
   getLiveContentByCustomerID = () => {
     Blueshift.getLiveContentByCustomerId(
-      'careinappmessagingslot',
+      "careinappmessagingslot",
       {},
       (err, result) => {
         if (result != null) {
@@ -243,17 +231,17 @@ export default function HomeScreen({navigation}) {
   const [enableInAppSwitchValue, setEnableInAppSwitchValue] = useState(true);
   const [enableTrackingSwitchValue, setEnableTrackingSwitchValue] =
     useState(true);
-  const [emailId, setEmailId] = useState('');
-  const [customEvent, setCustomEvent] = useState('bsft_send_me_image_push');
-  const [customEvent1, setCustomEvent1] = useState('bsft_send_me_in_app_modal');
-  const [customerId, setCustomerId] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [deviceId, setDeviceId] = useState('');
+  const [emailId, setEmailId] = useState("");
+  const [customEvent, setCustomEvent] = useState("bsft_send_me_image_push");
+  const [customEvent1, setCustomEvent1] = useState("bsft_send_me_in_app_modal");
+  const [customerId, setCustomerId] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [deviceId, setDeviceId] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
 
   setValues = () => {
-    console.log('setValues');
+    console.log("setValues");
     Blueshift.getEnablePushStatus(res => {
       setEnablePushSwitchValue(res);
     });
@@ -264,7 +252,7 @@ export default function HomeScreen({navigation}) {
       setCustomerId(res);
     });
     Blueshift.getUserInfoEmailId(res => {
-      console.log('email', res);
+      console.log("email", res);
       setEmailId(res);
     });
     Blueshift.getEnableTrackingStatus(res => {
@@ -277,23 +265,23 @@ export default function HomeScreen({navigation}) {
       setLastName(res);
     });
     Blueshift.getCurrentDeviceId(res => {
-      console.log('deviceid', res);
+      console.log("deviceid", res);
       setDeviceId(res);
     });
   };
 
-  let w = Dimensions.get('window').width;
-  let btnClr = '#2160D4';
+  let w = Dimensions.get("window").width;
+  let btnClr = "#2160D4";
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#F5FCFF',
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#F5FCFF",
     },
     welcome: {
       flex: 1,
-      borderColor: '#cccccc',
+      borderColor: "#cccccc",
       borderBottomWidth: 1,
       marginBottom: 10,
     },
@@ -308,7 +296,7 @@ export default function HomeScreen({navigation}) {
     txtStyle: {
       flex: 1,
       height: 48,
-      borderColor: '#2160D4',
+      borderColor: "#2160D4",
       borderWidth: 1,
       marginLeft: 16,
       marginRight: 16,
@@ -448,7 +436,7 @@ export default function HomeScreen({navigation}) {
           />
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: "row"}}>
           <Switch
             style={{flex: 1}}
             value={enablePushSwitchValue}
@@ -465,7 +453,7 @@ export default function HomeScreen({navigation}) {
           </View>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: "row"}}>
           <Switch
             style={{flex: 1}}
             value={enableInAppSwitchValue}
@@ -482,7 +470,7 @@ export default function HomeScreen({navigation}) {
           </View>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: "row"}}>
           <Switch
             style={{flex: 1}}
             value={enableTrackingSwitchValue}
@@ -547,7 +535,7 @@ export default function HomeScreen({navigation}) {
           />
         </View>
 
-        <Text style={styles.txtH1Style}>{'Current Device ID'}</Text>
+        <Text style={styles.txtH1Style}>{"Current Device ID"}</Text>
         <TextInput
           style={styles.txtStyle}
           onChangeText={deviceId => setDeviceId(deviceId)}

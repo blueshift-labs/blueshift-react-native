@@ -173,7 +173,9 @@ const BlueshiftInbox = ({
             <Text style={[styles.date, timestampStyle]}>{createdAtString}</Text>
           )}
         </View>
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+        {item.imageUrl && (
+          <Image source={{ uri: item.imageUrl }} style={styles.image} />
+        )}
       </View>
     );
   };
@@ -257,6 +259,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 10,
+    minHeight: 80,
   },
   textContainer: {
     flex: 1,
