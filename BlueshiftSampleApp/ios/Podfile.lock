@@ -1,8 +1,8 @@
 PODS:
-  - BlueShift-iOS-Extension-SDK (2.2.6)
-  - BlueShift-iOS-SDK (2.2.6)
-  - blueshift-react-native (1.0.1):
-    - BlueShift-iOS-SDK (~> 2.2.4)
+  - BlueShift-iOS-Extension-SDK (2.4.0)
+  - BlueShift-iOS-SDK (2.4.0)
+  - blueshift-react-native (1.1.0):
+    - BlueShift-iOS-SDK (~> 2.4.0)
     - React-Core
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
@@ -289,6 +289,12 @@ PODS:
   - React-jsinspector (0.70.5)
   - React-logger (0.70.5):
     - glog
+  - react-native-safe-area-context (4.6.3):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - ReactCommon/turbomodule/core
   - React-perflogger (0.70.5)
   - React-RCTActionSheet (0.70.5):
     - React-Core/RCTActionSheetHeaders (= 0.70.5)
@@ -355,13 +361,17 @@ PODS:
     - React-jsi (= 0.70.5)
     - React-logger (= 0.70.5)
     - React-perflogger (= 0.70.5)
+  - RNScreens (3.21.1):
+    - React-Core
+    - React-RCTImage
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - BlueShift-iOS-Extension-SDK
+  - BlueShift-iOS-Extension-SDK (from `/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK`)
+  - BlueShift-iOS-SDK (from `/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK`)
   - blueshift-react-native (from `../node_modules/blueshift-react-native`)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -405,6 +415,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -417,12 +428,11 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
-    - BlueShift-iOS-Extension-SDK
-    - BlueShift-iOS-SDK
     - CocoaAsyncSocket
     - Flipper
     - Flipper-Boost-iOSX
@@ -440,6 +450,10 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
+  BlueShift-iOS-Extension-SDK:
+    :path: "/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK"
+  BlueShift-iOS-SDK:
+    :path: "/Users/ketanshikhare/Documents/Blueshift-Repository/Blueshift-iOS-SDK"
   blueshift-react-native:
     :path: "../node_modules/blueshift-react-native"
   boost:
@@ -480,6 +494,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -504,13 +520,15 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  BlueShift-iOS-Extension-SDK: 81a015dacc87f18a330369ea3fd2769408fe493c
-  BlueShift-iOS-SDK: 2bbf775d89314c0cc66489dfbbfc85a1aad2e05a
-  blueshift-react-native: 132a7bdab6dba6a9eb3edb4602c87c2f93e6d882
+  BlueShift-iOS-Extension-SDK: 1511ec6bf83ed53fada9016cf29a75f4730154bf
+  BlueShift-iOS-SDK: e9349f0ebce9829d3285b2a4016e822a7ae19269
+  blueshift-react-native: 44f83480f93abd5083dfa9836214272cc557f2d2
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -543,6 +561,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 31564fa6912459921568e8b0e49024285a4d584b
   React-jsinspector: badd81696361249893a80477983e697aab3c1a34
   React-logger: fdda34dd285bdb0232e059b19d9606fa0ec3bb9c
+  react-native-safe-area-context: 5496bfc1fb0f0e096eeb740377d6a3d62597abe2
   React-perflogger: e68d3795cf5d247a0379735cbac7309adf2fb931
   React-RCTActionSheet: 05452c3b281edb27850253db13ecd4c5a65bc247
   React-RCTAnimation: 578eebac706428e68466118e84aeacf3a282b4da
@@ -555,10 +574,11 @@ SPEC CHECKSUMS:
   React-RCTVibration: 8e5c8c5d17af641f306d7380d8d0fe9b3c142c48
   React-runtimeexecutor: 7401c4a40f8728fd89df4a56104541b760876117
   ReactCommon: c9246996e73bf75a2c6c3ff15f1e16707cdc2da9
+  RNScreens: d3675ab2878704de70c9dae57fa5d024802404cc
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 9f275854dd7d000dcefececb83293ce3028bf64f
+PODFILE CHECKSUM: afe1a0a070b303f877fc24b75d25f44c98231881
 
 COCOAPODS: 1.11.2

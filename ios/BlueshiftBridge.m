@@ -14,6 +14,7 @@
 #import "BlueShift.h"
 #import "BlueshiftVersion.h"
 #import "BlueshiftNotificationConstants.h"
+#import "BlueShiftInAppNotificationHelper.h"
 
 @implementation BlueshiftBridge
 
@@ -58,6 +59,17 @@ RCT_EXPORT_METHOD(registerForRemoteNotification) {
 RCT_EXPORT_METHOD(registerForInAppMessage:(NSString *)screenName) {
     if ([screenName isKindOfClass:[NSString class]]) {
         [[BlueShift sharedInstance] registerForInAppMessage:screenName];
+    }
+}
+
+RCT_EXPORT_METHOD(getRegisteredForInAppScreenName:(RCTResponseSenderBlock)callback) {
+    if (callback) {
+        NSString* screenName = [[BlueShift sharedInstance] getRegisteredForInAppScreenName];
+        if (screenName) {
+            callback(@[screenName]);
+        } else {
+            callback(@[@""]);
+        }
     }
 }
 
@@ -209,6 +221,10 @@ RCT_EXPORT_METHOD(getCurrentDeviceId:(RCTResponseSenderBlock)callback)  {
     }
 }
 
+RCT_EXPORT_METHOD(resetDeviceId) {
+    [[BlueShiftDeviceData currentDeviceData] resetDeviceUUID];
+}
+
 #pragma mark Live content
 RCT_EXPORT_METHOD(getLiveContentByEmail:(NSString*)slot context:(NSDictionary*)context callback:(RCTResponseSenderBlock)callback) {
     [BlueShiftLiveContent fetchLiveContentByEmail:slot withContext:context success:^(NSDictionary *result) {
@@ -256,6 +272,61 @@ RCT_EXPORT_METHOD(getLiveContentByDeviceId:(NSString*)slot context:(NSDictionary
             }
         }
     }];
+}
+
+#pragma mark Inbox
+RCT_EXPORT_METHOD(syncInboxMessages:(RCTResponseSenderBlock)callback) {
+    [BlueshiftInboxManager syncInboxMessages:^{
+        if (callback) {
+            callback(@[@YES]);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(getInboxMessages:(RCTResponseSenderBlock)callback) {
+    [BlueshiftInboxManager getCachedInboxMessagesWithHandler:^(BOOL status, NSMutableArray<BlueshiftInboxMessage *> * _Nullable messages) {
+        if (status && messages.count > 0) {
+            NSMutableArray* convertedMessages = [[NSMutableArray alloc] init];
+            [messages enumerateObjectsUsingBlock:^(BlueshiftInboxMessage * _Nonnull msg, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (msg) {
+                    [convertedMessages addObject:[msg toDictionary]];
+                }
+            }];
+            callback(@[@{@"messages": [convertedMessages copy]}]);
+        } else {
+            callback(@[@{@"messages":@[]}]);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(getUnreadInboxMessageCount:(RCTResponseSenderBlock)callback) {
+    if (callback) {
+        [BlueshiftInboxManager getInboxUnreadMessagesCount:^(BOOL status, NSUInteger count) {
+            if (status) {
+                callback(@[[NSNumber numberWithUnsignedInteger:count]]);
+            } else {
+                callback(@[[NSNumber numberWithUnsignedInteger:0]]);
+            }
+        }];
+    }
+}
+
+RCT_EXPORT_METHOD(deleteInboxMessage:(NSDictionary*)message callback:(RCTResponseSenderBlock)callback) {
+    if ([message isKindOfClass:[NSDictionary class]]) {
+        [BlueshiftInboxManager deleteInboxMessage:[[BlueshiftInboxMessage alloc] initWithDictionary:message] completionHandler:^(BOOL status, NSString * _Nullable errMsg) {
+            if (status) {
+                callback(@[@YES, @""]);
+            } else {
+                callback(@[@NO, errMsg]);
+            }
+        }];
+    }
+}
+
+RCT_EXPORT_METHOD(showInboxMessage:(NSDictionary*)message) {
+    if ([message isKindOfClass:[NSDictionary class]]) {
+        [BlueshiftInboxManager showNotificationForInboxMessage:[[BlueshiftInboxMessage alloc] initWithDictionary:message] inboxInAppDelegate:nil];
+    }
 }
 
 RCT_EXPORT_METHOD(processBlueshiftUrl:(NSString*)url) {

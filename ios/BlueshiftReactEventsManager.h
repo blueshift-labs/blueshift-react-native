@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 static NSString *const BlueshiftPushNotificationClickedEvent = @"PushNotificationClickedEvent";
 static NSString *const BlueshiftDeepLinkEvent = @"DeepLinkEvent";
 static NSString *const BlueshiftURLEvent = @"url";
+static NSString *const InboxDataChangeEvent = @"InboxDataChangeEvent";
+static NSString *const InAppLoadEvent = @"InAppLoadEvent";
 
 @interface BlueshiftReactEventsManager : RCTEventEmitter<RCTBridgeModule>
 

@@ -43,6 +43,17 @@ declare module 'blueshift-react-native' {
 	function registerForInAppMessage(screenName : string): void;
 		
 	/**
+	 * Get registered screen name for in-app messages.
+	 *
+	 * Usage -
+	 * Blueshift.getRegisteredForInAppScreenName(screenName = {
+	 * 	console.log("registered screen name - " + screenName);
+	 * });
+	 *
+	 */
+	function getRegisteredForInAppScreenName(callback : function): void;
+
+	/**
 	 * Unregisters a page from showing in-app message.
 	 * 
 	 * Usage -
@@ -407,7 +418,70 @@ declare module 'blueshift-react-native' {
 	 * 
 	 */
 	function getCurrentDeviceId(callback : function): void;
-		
+
+	/**
+	 * Reset the current device id. This is only applicable if the device id
+	 * source is set to GUID for Android or UUID for iOS.
+	 *
+	 * Usage -
+	 *  Blueshift.resetDeviceId();
+	 */
+	function resetDeviceId():void;
+
+	/**
+     * Sync Blueshift Inbox messages on the local cache.
+     * This will sync new messges, delete the expired messages, and update the unread status
+ 	 * of the message to the locally cached messges.
+	 *
+	 * Usage -
+	 * Blueshift.syncInboxMessages((status) => {
+	 *    if (status) {
+	 *        console.log("sync complete");
+	 *    }
+	 *   });
+	 */
+	function syncInboxMessages(callback: function): void;
+	
+	/**
+     * Get unread messages count to show on the notification badge.
+     *
+     * Usage -
+     * Blueshift.getUnreadInboxMessageCount((count) => {
+     *       console.log("unread messages count"+count);
+     *   });
+     */
+	function getUnreadInboxMessageCount(callback: function): void;
+
+	/**
+     * Get inbox messages list to show in the list view.
+     *
+     * Usage -
+     * Blueshift.getInboxMessages((messages) => {
+     *       console.log("unread messages count"+count);
+     *   });
+     */
+	function getInboxMessages(callback: function): void;
+
+	/**
+     * Show in-app notification for the Inbox message.
+     *
+     * @param {BlueshiftInboxMessage} message
+     *
+     * Usage -
+     * Blueshift.showInboxMessage();
+     */
+	function showInboxMessage(message: any): void;
+
+	/**
+	 * Delete inbox message.
+	 *
+	 * @param {BlueshiftInboxMessage} message
+	 *
+	 * Usage -
+	 * Blueshift.deleteInboxMessage();
+	 */
+	function deleteInboxMessage(message: any, callback: function): void;
+
 	/**
 	 * Process the Blueshift url and provide the final url to Linking's "url" callback
 	 * 
@@ -423,4 +497,5 @@ declare module 'blueshift-react-native' {
 	 * @return {boolean}
 	 */
 	function isBlueshiftUrl(url : string): boolean;
+
 }

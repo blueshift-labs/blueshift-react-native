@@ -1,8 +1,9 @@
 package com.blueshift.reactnative;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,9 @@ import com.blueshift.BlueshiftAppPreferences;
 import com.blueshift.BlueshiftConstants;
 import com.blueshift.BlueshiftLinksHandler;
 import com.blueshift.BlueshiftLogger;
+import com.blueshift.inappmessage.InAppManager;
+import com.blueshift.inbox.BlueshiftInboxManager;
+import com.blueshift.inbox.BlueshiftInboxMessage;
 import com.blueshift.model.UserInfo;
 import com.blueshift.util.DeviceUtils;
 import com.facebook.react.bridge.Callback;
@@ -42,7 +46,13 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     public static final String NAME = "BlueshiftBridge";
     private static final String VERSION = BuildConfig.SDK_VERSION + "-RN-" + BuildConfig.PLUGIN_VERSION;
     private static final String DEEP_LINK_URL = "deep_link_url";
-
+    private static final String INBOX_DATA_CHANGE_EVENT = "InboxDataChangeEvent";
+    private static final BroadcastReceiver inboxChangeListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, new HashMap<>());
+        }
+    };
     private static BlueshiftReactNativeModule sInstance = null;
 
     public static BlueshiftReactNativeModule getInstance(ReactApplicationContext context) {
@@ -286,6 +296,11 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    void resetDeviceId() {
+        Blueshift.resetDeviceId(getReactApplicationContext());
+    }
+
     // LIVE CONTENT
 
     @ReactMethod
@@ -350,6 +365,128 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
             // remove the push deep link from intent to avoid
             // duplicate deep linking when onNewIntent is called
             intent.removeExtra(DEEP_LINK_URL);
+        }
+    }
+
+    // MOBILE INBOX
+    @ReactMethod
+    void getInboxMessages(Callback callback) {
+        if (callback != null) {
+            BlueshiftInboxManager.getMessages(getReactApplicationContext(), blueshiftInboxMessages -> {
+                if (blueshiftInboxMessages == null || blueshiftInboxMessages.isEmpty()) {
+                    BlueshiftLogger.d(TAG, "No messages found inside Mobile Inbox.");
+
+                    // return empty list
+                    HashMap<String, Object> messages = new HashMap<>();
+                    messages.put("messages", new ArrayList<>());
+                    callback.invoke(hashMapToWritableMap(messages));
+                } else {
+                    ArrayList<HashMap<String, Object>> messageList = new ArrayList<>();
+
+                    for (BlueshiftInboxMessage message : blueshiftInboxMessages) {
+                        messageList.add(message.toHashMap());
+                    }
+
+                    HashMap<String, Object> messages = new HashMap<>();
+                    messages.put("messages", messageList);
+                    callback.invoke(hashMapToWritableMap(messages));
+                }
+            });
+        }
+
+    }
+
+    /**
+     * The value of "id" (the database id of inbox message) is being read as {@link Double} instead
+     * of {@link Long} when the toHashMap() function is executed with the {@link ReadableMap} of
+     * inbox message. This happens because {@link com.facebook.react.bridge.ReadableType} won't
+     * let us differentiate between Double and Long as it only has one type called Number.
+     * <p>
+     * This method checks for {@link Double} "id" and converts it into {@link Long} and adds back
+     * into the HashMap variable passed-in.
+     *
+     * @param map HashMap with inbox message params.
+     */
+    void fixMessageIdType(HashMap<String, Object> map) {
+        Object oid = map.get("id");
+        if (oid instanceof Double) {
+            Long lid = ((Double) oid).longValue();
+            map.put("id", lid);
+        }
+    }
+
+    @ReactMethod
+    void showInboxMessage(ReadableMap readableMap) {
+        HashMap<String, Object> map = toHashMap(readableMap);
+        if (map != null) {
+            fixMessageIdType(map);
+            BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
+            BlueshiftInboxManager.displayInboxMessage(message);
+        } else {
+            Log.d(TAG, "showInboxMessage: No message found to display.");
+        }
+    }
+
+    @ReactMethod
+    void deleteInboxMessage(ReadableMap readableMap, Callback callback) {
+        HashMap<String, Object> map = toHashMap(readableMap);
+        if (map != null) {
+            fixMessageIdType(map);
+            BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
+            BlueshiftInboxManager.deleteMessage(getReactApplicationContext(), message, status -> {
+                if (status) {
+                    callback.invoke(true, "");
+                } else {
+                    String errorMessage = getReactApplicationContext().getString(R.string.bsft_inbox_delete_failure_message);
+                    callback.invoke(false, errorMessage);
+                }
+            });
+        } else {
+            Log.d(TAG, "deleteInboxMessage: No message found to delete.");
+        }
+    }
+
+    @ReactMethod
+    void syncInboxMessages(Callback callback) {
+        BlueshiftInboxManager.syncMessages(getReactApplicationContext(), callback::invoke);
+    }
+
+    @ReactMethod
+    void sendInboxDataChangeEvent() {
+        BlueshiftReactNativeEventHandler.getInstance().enqueueEvent(INBOX_DATA_CHANGE_EVENT, new HashMap<>());
+    }
+
+    @ReactMethod
+    void getUnreadInboxMessageCount(Callback callback) {
+        BlueshiftInboxManager.getUnreadMessagesCount(getReactApplicationContext(), callback::invoke);
+    }
+
+    @ReactMethod
+    void getRegisteredForInAppScreenName(Callback callback) {
+        String screenName = InAppManager.getRegisteredScreenName();
+        if (callback != null) callback.invoke(screenName);
+    }
+
+
+    /**
+     * Method to register a {@link BroadcastReceiver} for listening inbox's data change events.
+     *
+     * @param context valid context on which broadcast should be registered.
+     */
+    public static void registerForInboxDataChangeEvents(Context context) {
+        if (context != null) {
+            BlueshiftInboxManager.registerForInboxBroadcasts(context, inboxChangeListener);
+        }
+    }
+
+    /**
+     * Method to unregister the {@link BroadcastReceiver} that listen for inbox's data change events.
+     *
+     * @param context valid context from which broadcast should be unregistered.
+     */
+    public static void unregisterForInboxDataChangeEvents(Context context) {
+        if (context != null) {
+            context.unregisterReceiver(inboxChangeListener);
         }
     }
 
