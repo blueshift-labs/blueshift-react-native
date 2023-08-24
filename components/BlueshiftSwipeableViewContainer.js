@@ -20,7 +20,7 @@ const BlueshiftSwipeableViewContainer = ({
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderTerminate: () => {
-      cancelTouch();
+      setIsTouched(false);
     },
     onPanResponderGrant: () => {
       setIsTouched(true);
@@ -29,11 +29,11 @@ const BlueshiftSwipeableViewContainer = ({
       position.setValue({ x: gesture.dx, y: 0 });
 
       if (Math.abs(gesture.dx) > 5 && Math.abs(gesture.dy) > 5) {
-        cancelTouch();
+        setIsTouched(false);
       }
     },
     onPanResponderRelease: (_, gesture) => {
-      cancelTouch();
+      setIsTouched(false);
       if (gesture.dx > 100) {
         // Swipe right action
         Animated.spring(position, {
@@ -67,14 +67,6 @@ const BlueshiftSwipeableViewContainer = ({
 
   const handleDelete = () => {
     onDelete();
-    Animated.spring(position, {
-      toValue: { x: 0, y: 0 },
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const cancelTouch = () => {
-    setIsTouched(false);
     Animated.spring(position, {
       toValue: { x: 0, y: 0 },
       useNativeDriver: false,
