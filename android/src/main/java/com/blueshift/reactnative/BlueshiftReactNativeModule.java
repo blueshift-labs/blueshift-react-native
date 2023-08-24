@@ -396,10 +396,30 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
 
     }
 
+    /**
+     * The value of "id" (the database id of inbox message) is being read as {@link Double} instead
+     * of {@link Long} when the toHashMap() function is executed with the {@link ReadableMap} of
+     * inbox message. This happens because {@link com.facebook.react.bridge.ReadableType} won't
+     * let us differentiate between Double and Long as it only has one type called Number.
+     * <p>
+     * This method checks for {@link Double} "id" and converts it into {@link Long} and adds back
+     * into the HashMap variable passed-in.
+     *
+     * @param map HashMap with inbox message params.
+     */
+    void fixMessageIdType(HashMap<String, Object> map) {
+        Object oid = map.get("id");
+        if (oid instanceof Double) {
+            Long lid = ((Double) oid).longValue();
+            map.put("id", lid);
+        }
+    }
+
     @ReactMethod
     void showInboxMessage(ReadableMap readableMap) {
         HashMap<String, Object> map = toHashMap(readableMap);
         if (map != null) {
+            fixMessageIdType(map);
             BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
             BlueshiftInboxManager.displayInboxMessage(message);
         } else {
@@ -411,15 +431,7 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     void deleteInboxMessage(ReadableMap readableMap, Callback callback) {
         HashMap<String, Object> map = toHashMap(readableMap);
         if (map != null) {
-            // The toHashMap function treats the "id" as Double instead of Long. This is because,
-            // the ReadableType class won't let us differentiate between Long or Double.
-            // So, we need to cast it to Long manually to make it usable by the following code.
-            Object oid = map.get("id");
-            if (oid instanceof Double) {
-                Long lid = ((Double) oid).longValue();
-                map.put("id", lid);
-            }
-
+            fixMessageIdType(map);
             BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
             BlueshiftInboxManager.deleteMessage(getReactApplicationContext(), message, status -> {
                 if (status) {
