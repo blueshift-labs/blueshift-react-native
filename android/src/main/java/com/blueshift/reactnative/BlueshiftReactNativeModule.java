@@ -411,6 +411,15 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     void deleteInboxMessage(ReadableMap readableMap, Callback callback) {
         HashMap<String, Object> map = toHashMap(readableMap);
         if (map != null) {
+            // The toHashMap function treats the "id" as Double instead of Long. This is because,
+            // the ReadableType class won't let us differentiate between Long or Double.
+            // So, we need to cast it to Long manually to make it usable by the following code.
+            Object oid = map.get("id");
+            if (oid instanceof Double) {
+                Long lid = ((Double) oid).longValue();
+                map.put("id", lid);
+            }
+
             BlueshiftInboxMessage message = BlueshiftInboxMessage.fromHashMap(map);
             BlueshiftInboxManager.deleteMessage(getReactApplicationContext(), message, status -> {
                 if (status) {
