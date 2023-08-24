@@ -4,10 +4,10 @@ import {
   NativeEventEmitter,
   NativeModules,
   Platform,
-} from "react-native";
+} from 'react-native';
 
 const BlueshiftEventEmitter = new NativeEventEmitter(
-  NativeModules.BlueshiftReactEventsManager
+  NativeModules.BlueshiftReactEventsManager,
 );
 
 const Blueshift = {
@@ -21,7 +21,7 @@ const Blueshift = {
    *
    */
   init: function () {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       NativeModules.BlueshiftBridge.init();
     }
   },
@@ -41,7 +41,7 @@ const Blueshift = {
       BlueshiftEventEmitter.addListener(eventName, callback);
     }
 
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       NativeModules.BlueshiftBridge.onAddEventListener(eventName);
     }
   },
@@ -296,7 +296,7 @@ const Blueshift = {
    *
    */
   setIDFA: function (IDFAString) {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       NativeModules.BlueshiftBridge.setIDFA(IDFAString);
     }
   },
@@ -310,7 +310,7 @@ const Blueshift = {
    *
    */
   registerForRemoteNotification: function () {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       NativeModules.BlueshiftBridge.registerForRemoteNotification();
     }
   },
@@ -327,7 +327,7 @@ const Blueshift = {
    *
    */
   setCurrentLocation: function (latitude, longitude) {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       NativeModules.BlueshiftBridge.setCurrentLocation(latitude, longitude);
     }
   },
@@ -353,7 +353,7 @@ const Blueshift = {
     NativeModules.BlueshiftBridge.getLiveContentByEmail(
       slot,
       lcContext,
-      callback
+      callback,
     );
   },
 
@@ -378,7 +378,7 @@ const Blueshift = {
     NativeModules.BlueshiftBridge.getLiveContentByCustomerId(
       slot,
       lcContext,
-      callback
+      callback,
     );
   },
 
@@ -403,7 +403,7 @@ const Blueshift = {
     NativeModules.BlueshiftBridge.getLiveContentByDeviceId(
       slot,
       lcContext,
-      callback
+      callback,
     );
   },
 
@@ -590,7 +590,7 @@ const Blueshift = {
    *   });
    */
   getInboxMessages: function (callback) {
-    NativeModules.BlueshiftBridge.getInboxMessages((messages) => {
+    NativeModules.BlueshiftBridge.getInboxMessages(messages => {
       callback(messages);
     });
   },
@@ -615,18 +615,6 @@ const Blueshift = {
    * Usage -
    * Blueshift.deleteInboxMessage();
    */
-  deleteInboxMessage: function (message) {
-    NativeModules.BlueshiftBridge.deleteInboxMessage(message);
-  },
-
-  /**
-   * Delete inbox message.
-   *
-   * @param {BlueshiftInboxMessage} message
-   *
-   * Usage -
-   * Blueshift.deleteInboxMessage();
-   */
   deleteInboxMessage: function (message, callback) {
     NativeModules.BlueshiftBridge.deleteInboxMessage(message, callback);
   },
@@ -638,7 +626,7 @@ const Blueshift = {
    *
    */
   processBlueshiftUrl: function (url) {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       NativeModules.BlueshiftBridge.processBlueshiftUrl(url);
     }
   },
@@ -650,20 +638,16 @@ const Blueshift = {
    */
   isBlueshiftUrl: function (url) {
     if (url) {
-      let hasBlueshiftPath = url.includes("/track") || url.includes("/z/");
+      let hasBlueshiftPath = url.includes('/track') || url.includes('/z/');
       let hasBlueshiftArgs =
-        url.includes("eid=") || (url.includes("mid=") && url.includes("uid="));
+        url.includes('eid=') || (url.includes('mid=') && url.includes('uid='));
 
       return hasBlueshiftPath && hasBlueshiftArgs;
     } else {
-      console.log("Blueshift: The URL is null.");
+      console.log('Blueshift: The URL is null.');
     }
 
     return false;
-  },
-
-  getInbox: function () {
-    return {};
   },
 };
 

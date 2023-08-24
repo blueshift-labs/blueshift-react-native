@@ -471,16 +471,6 @@ declare module 'blueshift-react-native' {
      * Blueshift.showInboxMessage();
      */
 	function showInboxMessage(message: any): void;
-	
-	/**
-     * Delete inbox message.
-     *
-     * @param {BlueshiftInboxMessage} message
-     *
-     * Usage -
-     * Blueshift.deleteInboxMessage();
-     */
-	function deleteInboxMessage(message: any): void;
 
 	/**
 	 * Delete inbox message.
@@ -508,5 +498,4 @@ declare module 'blueshift-react-native' {
 	 */
 	function isBlueshiftUrl(url : string): boolean;
 
-	function getInbox():function; 
 }
