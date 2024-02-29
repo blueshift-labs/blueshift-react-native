@@ -1,0 +1,22 @@
+name: auto-close issues with message
+
+on:
+    issues:
+        types: [opened]
+
+jobs:
+    close_issue:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Add comment and close
+              run: |
+                # Get issue number
+                issue_number=${{ github.event.issue.number }}
+
+                # Add comment
+                gh issue comment --body "This issue is automatically closed. Please refer to [documentation link](your_documentation_link) for further details." $issue_number
+
+                # Close issue
+                gh issue close $issue_number
