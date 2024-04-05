@@ -7,7 +7,7 @@ buildscript {
         }
 
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.5.3'
+            classpath 'com.android.tools.build:gradle:7.3.1'
         }
     }
 }
@@ -22,10 +22,10 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-    compileSdkVersion safeExtGet('BlueshiftReactNative_compileSdkVersion', 29)
+    compileSdkVersion safeExtGet('BlueshiftReactNative_compileSdkVersion', 33)
     defaultConfig {
         minSdkVersion safeExtGet('BlueshiftReactNative_minSdkVersion', 16)
-        targetSdkVersion safeExtGet('BlueshiftReactNative_targetSdkVersion', 29)
+        targetSdkVersion safeExtGet('BlueshiftReactNative_targetSdkVersion', 33)
         versionCode 1
         versionName "1.0"
 
