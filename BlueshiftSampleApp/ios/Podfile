@@ -26,6 +26,19 @@ target 'BlueshiftSampleApp' do
   post_install do |installer|
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    targetsToFix = ["BlueShift-iOS-SDK-BlueShift-iOS-SDK_BlueShift_iOS_SDK"];
+    installer.generated_projects.each do |project|
+      project.targets.each do |target|
+        if targetsToFix.include? target.name
+          puts "Set development team for target #{target.name}"
+          target.build_configurations.each do |config|
+            config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
+            config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
+            config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
+          end
+        end
+      end
+    end
   end
 end
 
@@ -36,3 +49,4 @@ end
 target 'NotificationService' do
   pod 'BlueShift-iOS-Extension-SDK'
 end
+
