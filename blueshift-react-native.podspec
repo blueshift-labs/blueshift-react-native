@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm}"
 
   s.dependency "React-Core"
-  s.dependency 'BlueShift-iOS-SDK' , '~> 2.4.2'
+  s.dependency 'BlueShift-iOS-SDK' , '~> 2.5.0'
 end
