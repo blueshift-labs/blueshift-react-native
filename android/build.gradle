@@ -24,7 +24,7 @@ def safeExtGet(prop, fallback) {
 android {
     compileSdkVersion safeExtGet('BlueshiftReactNative_compileSdkVersion', 33)
     defaultConfig {
-        minSdkVersion safeExtGet('BlueshiftReactNative_minSdkVersion', 16)
+        minSdkVersion safeExtGet('BlueshiftReactNative_minSdkVersion', 21)
         targetSdkVersion safeExtGet('BlueshiftReactNative_targetSdkVersion', 33)
         versionCode 1
         versionName "1.0"
