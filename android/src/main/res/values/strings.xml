@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bsft_inbox_delete_failure_message_react_native">Delete failed. Please check your internet connection.</string>
+</resources>
