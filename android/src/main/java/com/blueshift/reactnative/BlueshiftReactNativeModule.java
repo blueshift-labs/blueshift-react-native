@@ -437,7 +437,9 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
                 if (status) {
                     callback.invoke(true, "");
                 } else {
-                    String errorMessage = getReactApplicationContext().getString(R.string.bsft_inbox_delete_failure_message);
+                    String errorMessage = getReactApplicationContext().getString(
+                            R.string.bsft_inbox_delete_failure_message_react_native
+                    );
                     callback.invoke(false, errorMessage);
                 }
             });
