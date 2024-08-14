@@ -2,7 +2,7 @@
 //  NotificationService.m
 //  NotificationService
 //
-//  Created by Ketan Shikhare on 09/03/22.
+//  Created by Ketan Shikhare on 25/07/24.
 //
 
 #import "NotificationService.h"
@@ -18,12 +18,18 @@
 @implementation NotificationService
 
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
-    
     self.contentHandler = contentHandler;
     self.bestAttemptContent = [request.content mutableCopy];
     
-    // Modify the notification content here.
+    //Check if the notification is from Blueshift
     if([[BlueShiftPushNotification sharedInstance] isBlueShiftPushNotification:request]) {
+        //Update the badge count based on pending notifications
+        NSNumber* updatedBadgeCount = [[BlueShiftPushNotification sharedInstance] getUpdatedBadgeNumberForRequest:request];
+        if (updatedBadgeCount) {
+            self.bestAttemptContent.badge = updatedBadgeCount;
+        }
+        
+        //Download media and assign as attachments
         self.bestAttemptContent.attachments = [[BlueShiftPushNotification sharedInstance] integratePushNotificationWithMediaAttachementsForRequest:request andAppGroupID:nil];
     } else {
         //handle notifications if not from Blueshift
@@ -40,4 +46,5 @@
     }
     self.contentHandler(self.bestAttemptContent);
 }
+
 @end
