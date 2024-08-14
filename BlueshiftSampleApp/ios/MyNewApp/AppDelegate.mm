@@ -35,7 +35,7 @@
   BlueShiftConfig *config = [[BlueShiftConfig alloc] init];
   
   // Set Blueshift API key to SDK
-  config.apiKey = @"5dfe3c9aee8b375bcc616079b08156d9";
+  config.apiKey = @"api key";
  
   // Set launch options to track the push click from killed app state
   config.applicationLaunchOptions = launchOptions;
