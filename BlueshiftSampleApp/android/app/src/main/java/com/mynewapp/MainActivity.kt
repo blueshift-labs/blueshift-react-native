@@ -1,5 +1,8 @@
 package com.mynewapp
 
+import android.content.Intent
+import android.os.Bundle
+import com.blueshift.reactnative.BlueshiftReactNativeModule
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
@@ -18,5 +21,25 @@ class MainActivity : ReactActivity() {
    * which allows you to enable New Architecture with a single boolean flags [fabricEnabled]
    */
   override fun createReactActivityDelegate(): ReactActivityDelegate =
-      DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+    DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    BlueshiftReactNativeModule.processBlueshiftPushUrl(intent)
+  }
+
+  override fun onStart() {
+    super.onStart()
+    BlueshiftReactNativeModule.registerForInboxDataChangeEvents(this)
+  }
+
+  override fun onStop() {
+    BlueshiftReactNativeModule.unregisterForInboxDataChangeEvents(this)
+    super.onStop()
+  }
+
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    BlueshiftReactNativeModule.processBlueshiftPushUrl(intent)
+  }
 }

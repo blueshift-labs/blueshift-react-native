@@ -58,6 +58,7 @@ class MainApplication : Application(), ReactApplication {
     // Enable in-app messages
     configuration.isInAppEnabled = true;
     configuration.isJavaScriptForInAppWebViewEnabled = true;
+    configuration.setEnableAutoAppOpenFiring(true)
     // Set device-id source to Instance Id and package name combo (highly recommended)
     configuration.deviceIdSource = Blueshift.DeviceIdSource.INSTANCE_ID_PKG_NAME;
     // Enable mobile inbox
