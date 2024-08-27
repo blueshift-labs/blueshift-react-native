@@ -14,7 +14,7 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-ext.sdkVersion = '3.4.6'
+ext.sdkVersion = '3.5.1'
 ext.pluginVersion = '1.2.0'
 
 def safeExtGet(prop, fallback) {
