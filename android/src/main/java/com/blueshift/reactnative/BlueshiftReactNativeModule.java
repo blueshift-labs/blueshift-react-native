@@ -221,11 +221,9 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
                 .displayInAppMessages();
     }
 
-    @ReactMethod
-    void registerForInAppMessage() {
-        Blueshift.getInstance(getReactApplicationContext())
-                .registerForInAppMessages(getCurrentActivity());
-    }
+    // React Native no longer supports method overloading for methods exported from Java to JavaScript.
+    // The overloaded registerForInAppMessage() method without parameters has been removed.
+    // Use registerForInAppMessage(String screenName) instead.
 
     @ReactMethod
     void registerForInAppMessage(String screenName) {
