@@ -16,6 +16,7 @@ apply plugin: 'com.android.library'
 
 ext.sdkVersion = '3.5.1'
 ext.pluginVersion = '1.2.1'
+ext.gsonVersion = '2.8.9'
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -42,8 +43,8 @@ android {
         disable 'GradleCompatible'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
@@ -61,5 +62,6 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation "com.blueshift:android-sdk-x:$sdkVersion"  // From node_modules
+    implementation "com.blueshift:android-sdk-x:$sdkVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
 }
