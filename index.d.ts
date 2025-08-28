@@ -225,8 +225,7 @@ declare module 'blueshift-react-native' {
 		
 	/**
 	 * Register for remote notifications using SDK. Calling this method will show push permission dialogue to the user.
-	 * Note - This is only applicable for the iOS devices.
-	 * 
+	 * For Android - This is a helper method to ask for push notification permission when running in Android 13 and above.
 	 * Usage -
 	 * Blueshift.registerForRemoteNotification();
 	 */
