@@ -272,12 +272,12 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
         Blueshift.getInstance(getReactApplicationContext()).trackScreenView(screenName, canBatch);
     }
 
-    // iOS ONLY METHODS
-
     @ReactMethod
     void registerForRemoteNotification() {
-        BlueshiftLogger.d(TAG, "Method not available in Android");
+        Blueshift.requestPushNotificationPermission(getCurrentActivity());
     }
+
+    // iOS ONLY METHODS
 
     @ReactMethod
     void setCurrentLocation(double latitude, double longitude) {

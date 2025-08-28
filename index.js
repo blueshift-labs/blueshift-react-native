@@ -310,9 +310,7 @@ const Blueshift = {
    *
    */
   registerForRemoteNotification: function () {
-    if (Platform.OS === 'ios') {
-      NativeModules.BlueshiftBridge.registerForRemoteNotification();
-    }
+    NativeModules.BlueshiftBridge.registerForRemoteNotification();
   },
 
   /**
