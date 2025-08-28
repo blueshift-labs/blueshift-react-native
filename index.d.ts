@@ -224,8 +224,7 @@ declare module 'blueshift-react-native' {
 	function setIDFA(IDFAString : string): void;
 		
 	/**
-	 * Register for remote notifications using SDK. Calling this method will show push permission dialogue to the user.
-	 * For Android - This is a helper method to ask for push notification permission when running in Android 13 and above.
+	 * Registers the app for remote notifications on iOS and on Android 13 and above.
 	 * Usage -
 	 * Blueshift.registerForRemoteNotification();
 	 */
