@@ -23,6 +23,7 @@ BlueshiftSampleApp/android/.idea/
 BlueshiftSampleApp/android/build/
 BlueshiftSampleApp/android/local.properties
 BlueshiftSampleApp/android/app/build/
+BlueshiftSampleApp/android/app/google-services.json
 
 # example
 example/node_modules/
