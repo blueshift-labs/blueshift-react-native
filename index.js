@@ -438,6 +438,22 @@ const Blueshift = {
   },
 
   /**
+   * Returns true if push notifications are enabled at the device/system level
+   * (i.e., the user has not disabled notifications for the app in system settings).
+   *
+   * Usage -
+   *  Blueshift.isPushPermissionGranted((value) => {
+   *       console.log(value);
+   *   });
+   *
+   * @param {function} callback success callback.
+   *
+   */
+  isPushPermissionGranted: function (callback) {
+    NativeModules.BlueshiftBridge.isPushPermissionGranted(callback)
+  },
+
+  /**
    * Get status of event tracking set in the SDK.
    *
    * Usage -

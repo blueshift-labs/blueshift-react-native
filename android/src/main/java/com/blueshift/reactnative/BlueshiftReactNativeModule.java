@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import android.Manifest;
 
 @SuppressWarnings("unused")
 @ReactModule(name = BlueshiftReactNativeModule.NAME)
@@ -165,6 +166,14 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     // CONFIGURATION
+
+    @ReactMethod
+    boolean isPushPermissionGranted(Callback callback) {
+        if(callback != null) {
+            boolean isGranted = Blueshift.hasPermission(Manifest.permission.POST_NOTIFICATIONS);
+            callback.invoke(isGranted)
+        }
+    }
 
     // APP PREFERENCES
 
