@@ -168,10 +168,13 @@ public class BlueshiftReactNativeModule extends ReactContextBaseJavaModule {
     // CONFIGURATION
 
     @ReactMethod
-    boolean isPushPermissionGranted(Callback callback) {
+    void isPushPermissionGranted(Callback callback) {
         if(callback != null) {
-            boolean isGranted = Blueshift.hasPermission(Manifest.permission.POST_NOTIFICATIONS);
-            callback.invoke(isGranted)
+            boolean isGranted = Blueshift.hasPermission(
+                getReactApplicationContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            );
+            callback.invoke(isGranted);
         }
     }
 
