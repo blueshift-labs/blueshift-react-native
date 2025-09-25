@@ -438,9 +438,8 @@ const Blueshift = {
   },
 
   /**
-   * Returns true if push notifications are currently enabled for the app at the system level.
-	 * true when the user granted permission or later re-enabled notifications in system settings.
-	 * false when the user denied permission or disabled notifications in system settings.
+	 * Returns true when the user granted permission or later re-enabled notifications in system settings.
+	 * Returns false when the user denied permission or disabled notifications in system settings.
    *
    * Usage -
    *  Blueshift.isPushPermissionGranted((value) => {
