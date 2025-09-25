@@ -331,7 +331,6 @@ declare module 'blueshift-react-native' {
 	/**
    	 * Returns true when the user granted permission or later re-enabled notifications in system settings.
 	 * Returns false when the user denied permission or disabled notifications in system settings.
-	 * false when the user denied permission or disabled notifications in system settings.
    	 *
    	 * Usage -
    	 *  Blueshift.isPushPermissionGranted((value) => {
