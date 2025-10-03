@@ -225,6 +225,13 @@ RCT_EXPORT_METHOD(resetDeviceId) {
     [[BlueShiftDeviceData currentDeviceData] resetDeviceUUID];
 }
 
+RCT_EXPORT_METHOD(isPushPermissionGranted:(RCTResponseSenderBlock)callback) {
+    if (callback) {
+        BOOL isEnabled = [[BlueShiftAppData currentAppData].currentUNAuthorizationStatus boolValue];
+        callback(@[@(isEnabled)]);
+    }
+}
+
 #pragma mark Live content
 RCT_EXPORT_METHOD(getLiveContentByEmail:(NSString*)slot context:(NSDictionary*)context callback:(RCTResponseSenderBlock)callback) {
     [BlueShiftLiveContent fetchLiveContentByEmail:slot withContext:context success:^(NSDictionary *result) {
