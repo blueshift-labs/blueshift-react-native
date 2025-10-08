@@ -178,6 +178,12 @@ export default function HomeScreen({navigation}) {
     Blueshift.unregisterForInAppMessage();
   };
 
+  isPushPermissionGranted = () => {
+    Blueshift.isPushPermissionGranted(res => {
+      alert("Push permission status " + res);
+    });
+  };
+
   resetDeviceId = () => {
     Blueshift.resetDeviceId();
     Blueshift.getCurrentDeviceId(res => {
@@ -424,6 +430,14 @@ export default function HomeScreen({navigation}) {
           <Button
             onPress={this.trackScreenView}
             title="Track screen view"
+            color={btnClr}
+          />
+        </View>
+
+        <View style={styles.btnStyle}>
+          <Button
+            onPress={this.isPushPermissionGranted}
+            title="Is push permission granted"
             color={btnClr}
           />
         </View>

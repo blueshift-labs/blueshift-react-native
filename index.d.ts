@@ -327,6 +327,20 @@ declare module 'blueshift-react-native' {
 	 * 
 	 */
 	function getEnablePushStatus(callback : function): void;
+
+	/**
+   	 * Returns true when the user granted permission or later re-enabled notifications in system settings.
+	 * Returns false when the user denied permission or disabled notifications in system settings.
+   	 *
+   	 * Usage -
+   	 *  Blueshift.isPushPermissionGranted((value) => {
+   	 *       console.log(value);
+   	 *   });
+   	 *
+   	 * @param {function} callback success callback.
+   	 *
+   	 */
+  	function isPushPermissionGranted (callback : function): void;
 		
 	/**
 	 * Get status of event tracking set in the SDK.

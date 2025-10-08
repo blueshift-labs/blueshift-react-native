@@ -438,6 +438,22 @@ const Blueshift = {
   },
 
   /**
+	 * Returns true when the user granted permission or later re-enabled notifications in system settings.
+	 * Returns false when the user denied permission or disabled notifications in system settings.
+   *
+   * Usage -
+   *  Blueshift.isPushPermissionGranted((value) => {
+   *       console.log(value);
+   *   });
+   *
+   * @param {function} callback success callback.
+   *
+   */
+  isPushPermissionGranted: function (callback) {
+    NativeModules.BlueshiftBridge.isPushPermissionGranted(callback)
+  },
+
+  /**
    * Get status of event tracking set in the SDK.
    *
    * Usage -
