@@ -302,17 +302,13 @@ const Blueshift = {
   },
 
   /**
-   * Register for remote notifications using SDK. Calling this method will show push permission dialogue to the user.
-   * Note - This is only applicable for the iOS devices.
-   *
+   * Registers the app for remote notifications on iOS and on Android 13 and above.
    * Usage -
    * Blueshift.registerForRemoteNotification();
    *
    */
   registerForRemoteNotification: function () {
-    if (Platform.OS === 'ios') {
-      NativeModules.BlueshiftBridge.registerForRemoteNotification();
-    }
+    NativeModules.BlueshiftBridge.registerForRemoteNotification();
   },
 
   /**
