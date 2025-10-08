@@ -14,7 +14,7 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-ext.sdkVersion = '3.5.1'
+ext.sdkVersion = '4.1.0'
 ext.pluginVersion = '1.2.2'
 ext.gsonVersion = '2.8.9'
 
